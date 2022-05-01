@@ -2,5 +2,5 @@ body {
 	background-image:url('../img/background.jpg');
 	background-size:100% 575pt;
 	background-repeat:no-repeat;
-　	background-attachment: fixed!important;
+/* 　	background-attachment: fixed!important; */
 }
