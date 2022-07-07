@@ -1,6 +1,6 @@
 body {
 	font-family: 'Source Han Sans CN', 'WenQuanYi Zen Hei', 'WenQuanYi Micro Hei', 'Microsoft YaHei', 'Helvetica', 'Arial', sans-serif;
-	margin: 60px auto;
+	margin: 180px auto;
 	width: 70%;
 	background-color: #CAE4C4;
 }
@@ -14,9 +14,9 @@ nav ul, footer ul {
 nav ul li, footer ul li {
 	display: inline;
 	background-color: #CAE4C4;
-	border: 3px solid #64C9FF;
+	border: 3px solid #37524b;
 	border-radius: 14px;
-	box-shadow: 3px 3px 8px 0px #64C9FF;
+	box-shadow: 3px 3px 8px 0px #37524b;
 	padding: 4px 10px 4px 10px;
 	margin: 0 1ex 0 0;
 }
