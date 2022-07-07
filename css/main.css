@@ -22,12 +22,12 @@ nav ul li, footer ul li {
 }
 a {
 	text-decoration: none;
-	color: #009;
+	color: #228B22;
 	-webkit-transition: all 0.3s ease-out;
 }
 a:hover {
-	color: #39F !important;
-	text-shadow:-5px 3px 18px #39F !important;
+	color: #00EE00 !important;
+	text-shadow:-5px 3px 18px #00EE00 !important;
 	-webkit-transition: all 0.3s ease-out;
 }
 p {
