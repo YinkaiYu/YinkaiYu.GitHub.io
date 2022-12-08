@@ -1,0 +1,21 @@
+TARGET = SuNF.out
+OBJS = blockc.o  block_obs.o SuNF.o sli.o salph.o sproj.o sthop.o  inconfc.o  \
+       ortho.o  calcgr.o obser.o mmuur.o mmuurm1.o mmthr.o mmthrm1.o \
+       mmuul.o mmuulm1.o mmthl.o mmthlm1.o nranf.o upgradeU.o  upgradeJ.o preq.o \
+       outconfc.o dyn.o proprm1.o propr.o obsert.o prtau.o  seth.o sethproj.o
+
+# blockc.o block_obs.o block_tau.o sli.o  npbc.o sltpf.o salph.o  \
+#	thop_mag.o   \
+#       outconfc.o  mmuur.o ortho.o  obser.o calcgr.o  upgradeU.o  upgradeJ.o \
+#         mmthl.o  mmthlm1.o  preq.o   \
+#          prgrt.o SuNF.o Sdimer.o
+
+  
+.SUFFIXES: .f90 
+.f90.o:
+	$(FC)  $(SUFFIX) $(FLAGS) $<
+$(TARGET): $(OBJS)
+	$(FC) $(LF) -o $(TARGET) $(OBJS) $(LIBS)
+clean:
+	rm  $(OBJS)
+
