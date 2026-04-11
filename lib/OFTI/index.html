@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OFTI 非标准人格测试</title>
+    <meta
+      name="description"
+      content="一套古怪但认真的互联网人格测试。别想太多，先做完再说。"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="site-noise" aria-hidden="true"></div>
+    <header class="masthead">
+      <a class="brandmark" href="#introScreen">
+        <span class="brandmark__code">OFTI</span>
+        <span class="brandmark__text">非标准人格测试中心</span>
+      </a>
+      <div class="masthead__meta">
+        <span class="stamp">限时开放</span>
+        <button class="link-button" id="jumpMethodBtn" type="button">测试说明</button>
+      </div>
+    </header>
+
+    <main class="page-shell">
+      <section id="introScreen" class="screen screen--active">
+        <section class="hero">
+          <div class="hero__content">
+            <p class="eyebrow">OFTI Internet Persona Test</p>
+            <h1>一个比你朋友更懂你嘴硬程度的人格测试</h1>
+            <p class="hero__lede">
+              欢迎参加 <strong>OFTI 非标准人格测试</strong>。这套题会从关系习惯、表达方式、
+              决策姿态与互联网生存风格四个方向，给你一个不太温柔但大概率有点准的结论。
+            </p>
+            <div class="hero__actions">
+              <button id="startBtn" class="button button--primary" type="button">开始测试</button>
+              <button id="peekLibraryBtn" class="button button--ghost" type="button">先看说明</button>
+            </div>
+          </div>
+          <div class="hero__rail">
+            <div class="rail-card">
+              <span class="rail-card__label">测试声明</span>
+              <p>这套题不打算治愈你，也不准备把你夸成稀有物种。它只是想把你的嘴硬、体面、拖延和内耗说得像回事。</p>
+            </div>
+            <div class="rail-card rail-card--accent">
+              <span class="rail-card__label">结果形式</span>
+              <p>你将获得一个荒诞但似乎很懂你的网络人格称号，以及一份一本正经的解读报告。</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="overview">
+          <article class="overview__block">
+            <p class="overview__index">01</p>
+            <h2>像平常那样答</h2>
+            <p>
+              你会看到一组语义充分、意义未必充分的问题。请保持镇定，像平时做测试那样做测试。
+            </p>
+          </article>
+          <article class="overview__block">
+            <p class="overview__index">02</p>
+            <h2>题目会故作深刻</h2>
+            <p>
+              有些题很正经，有些题很像在阴阳你。不要试图拆题，先按直觉答，后悔也是正常人格的一部分。
+            </p>
+          </article>
+          <article class="overview__block">
+            <p class="overview__index">03</p>
+            <h2>结果会很不客气</h2>
+            <p>
+              如果最后那句评价让你一秒想转发给朋友，说明这套测试已经完成了它的职责。
+            </p>
+          </article>
+        </section>
+
+        <section class="method-strip" id="methodSection">
+          <div class="method-strip__head">
+            <p class="eyebrow eyebrow--dark">测试说明</p>
+            <h2>它会综合你的选择、偏好与整体表现</h2>
+          </div>
+          <div class="metric-grid">
+            <div class="metric-card">
+              <span>关系温度</span>
+              <strong>你更擅长靠近别人，还是先给自己留台阶</strong>
+            </div>
+            <div class="metric-card">
+              <span>表达习惯</span>
+              <strong>你更像直给型、端水型，还是会在心里重写三遍的人</strong>
+            </div>
+            <div class="metric-card">
+              <span>决策姿态</span>
+              <strong>你通常是一秒拍板，还是总要先和自己开个会</strong>
+            </div>
+            <div class="metric-card">
+              <span>互联网生存风格</span>
+              <strong>你在群聊、待办、热搜和日常推拉里，最像哪一类现代人</strong>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <section id="testScreen" class="screen">
+        <div class="test-chrome">
+          <div class="test-chrome__left">
+            <p class="eyebrow eyebrow--dark">测试进度</p>
+            <span id="sampleId" class="sample-id">会话 OFTI-0427</span>
+          </div>
+          <div class="test-chrome__right">
+            <div class="progress-shell" aria-hidden="true">
+              <span id="progressBar" class="progress-shell__fill"></span>
+            </div>
+            <p id="progressText" class="progress-text">第 1 / 20 题</p>
+          </div>
+        </div>
+
+        <div class="question-stage">
+          <aside class="question-side">
+            <p class="question-side__label">当前题号</p>
+            <div class="question-side__number" id="questionNumber">01</div>
+            <p class="question-side__caption">按第一直觉回答，别为了显得成熟故意演。</p>
+          </aside>
+
+          <section class="question-panel">
+            <div class="question-panel__meta">
+              <span class="stamp">标准化题面</span>
+              <span id="questionTag" class="question-tag">社交场景</span>
+            </div>
+            <h2 id="questionPrompt" class="question-prompt"></h2>
+            <div id="optionList" class="option-list" role="list"></div>
+
+            <div class="question-footer">
+              <button id="prevBtn" class="button button--ghost" type="button">上一题</button>
+              <div class="question-footer__right">
+                <p id="stageHint" class="stage-hint">按第一直觉回答就好。</p>
+                <div id="actionTray" class="action-tray">
+                  <button id="nextBtn" class="button button--primary" type="button" disabled>下一题</button>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section id="resultScreen" class="screen">
+        <section class="result-hero">
+          <div class="result-hero__main">
+            <p class="eyebrow">个体报告已生成</p>
+            <h2 id="resultName" class="result-name">已读装死型</h2>
+            <div class="result-meta">
+              <span id="resultCode" class="result-code">GHOST</span>
+              <span id="matchScore" class="match-badge">匹配度 93%</span>
+            </div>
+            <p id="resultOpening" class="result-opening">你不是没看见，你是在给关系降噪。</p>
+            <p id="resultDescription" class="result-description"></p>
+          </div>
+          <div class="result-hero__side">
+            <div class="report-card">
+              <span class="report-card__label">结论摘要</span>
+              <p id="resultSummary">
+                这份报告会从你的整体选择倾向出发，给你一个不太客气的结论。
+              </p>
+            </div>
+            <div class="report-card report-card--soft">
+              <span class="report-card__label">实验备注</span>
+              <p>以下解读仅供娱乐，不适合面试、相亲、拉踩朋友或重新发明命运。</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="result-body">
+          <div class="diagnostic-block">
+            <div class="section-head">
+              <p class="eyebrow eyebrow--dark">综合维度</p>
+              <h3>这几项指标尤其说明问题</h3>
+            </div>
+            <div id="metricRows" class="metric-rows"></div>
+          </div>
+
+          <div class="evidence-block">
+            <div class="section-head">
+              <p class="eyebrow eyebrow--dark">报告摘录</p>
+              <h3>以下几条最像你自己</h3>
+            </div>
+            <ul id="evidenceList" class="evidence-list"></ul>
+          </div>
+
+          <details class="methods-note">
+            <summary>方法补充：为什么它有时离谱得很准</summary>
+            <div class="methods-note__content">
+              <p>
+                OFTI 不是传统量表。它除了看你选了什么，也会综合你在测试过程中的整体表现来生成判断。
+                前面没明说，是因为人一旦知道自己正在被看，往往就会立刻开始表演。
+              </p>
+              <p>
+                所以结果里除了你的题目选择，也混进了你的停顿、回头、确认与推进方式。这既是玩笑，
+                也是对当代人格测试的一个小小讽刺：很多人以为自己在发现真我，其实更像在展示真我想被看见的样子。
+              </p>
+            </div>
+          </details>
+        </section>
+
+        <section class="result-actions">
+          <button id="restartBtn" class="button button--ghost" type="button">重新受测</button>
+          <button id="backHomeBtn" class="button button--primary" type="button">返回首页</button>
+        </section>
+      </section>
+    </main>
+
+    <div id="focusOverlay" class="overlay" hidden>
+      <div class="overlay__panel">
+        <p class="eyebrow eyebrow--dark">体验建议</p>
+        <h2>建议开启沉浸模式</h2>
+        <p>
+          为了让测试过程更完整，建议你切换为全屏。跳过也没关系，不会影响你拿到结果。
+        </p>
+        <div class="overlay__actions">
+          <button id="focusAcceptBtn" class="button button--primary" type="button">进入沉浸模式</button>
+          <button id="focusSkipBtn" class="button button--ghost" type="button">直接开始</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="loadOverlay" class="overlay overlay--loading" hidden>
+      <div class="overlay__panel overlay__panel--compact">
+        <div class="spinner" aria-hidden="true"></div>
+        <p class="overlay__kicker">正在载入下一组题目</p>
+        <h2>请稍候，测试内容即将继续</h2>
+      </div>
+    </div>
+
+    <div id="ethicsOverlay" class="overlay" hidden>
+      <div class="overlay__panel">
+        <p class="eyebrow eyebrow--dark">界面提示</p>
+        <h2>测试中可能出现轻微刷新</h2>
+        <p>
+          如遇短暂等待，请不要连续点击。不是你的问题，也不一定是我们的。
+        </p>
+        <div class="overlay__actions">
+          <button id="ethicsConfirmBtn" class="button button--primary" type="button">已知悉，继续</button>
+          <button id="ethicsLaterBtn" class="button button--ghost" type="button">我先缓一下</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="submitOverlay" class="overlay" hidden>
+      <div class="overlay__panel">
+        <p class="eyebrow eyebrow--dark">提交确认</p>
+        <h2>请确认以上回答足以代表你的稳定人格</h2>
+        <p>如果你已经开始后悔，现在返回检查还来得及。若没有，系统将按当前作答生成结果。</p>
+        <div class="overlay__actions">
+          <button id="submitConfirmBtn" class="button button--primary" type="button">确认提交</button>
+          <button id="submitCancelBtn" class="button button--ghost" type="button">我再看看</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="./app.js" defer></script>
+  </body>
+</html>
