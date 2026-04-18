@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 900" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="44" x2="654" y1="32" y2="877" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#261600" />
+      <stop offset=".36" stop-color="#5D1A00" />
+      <stop offset=".7" stop-color="#A1290A" />
+      <stop offset="1" stop-color="#FFCB51" />
+    </linearGradient>
+    <radialGradient id="hot" cx="0" cy="0" r="1" gradientTransform="matrix(0 248 -210 0 510 240)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFD989" stop-opacity=".8" />
+      <stop offset="1" stop-color="#FFD989" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="skin" x1="372" x2="565" y1="170" y2="648" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFE2CA" />
+      <stop offset=".52" stop-color="#F2B88A" />
+      <stop offset="1" stop-color="#8D4A26" />
+    </linearGradient>
+  </defs>
+  <rect width="720" height="900" fill="url(#bg)" rx="28" />
+  <rect width="720" height="900" fill="url(#hot)" rx="28" />
+  <rect width="192" height="44" x="44" y="44" fill="#FFF6D8" fill-opacity=".18" rx="22" />
+  <text x="140" y="73" fill="#FFF4E0" font-family="'Arial Black', Arial, sans-serif" font-size="20" text-anchor="middle">同城热聊速配</text>
+  <ellipse cx="506" cy="365" fill="#220F05" fill-opacity=".52" rx="130" ry="212" />
+  <ellipse cx="506" cy="250" fill="#FFE5CF" fill-opacity=".9" rx="56" ry="60" />
+  <path fill="#3A1706" fill-opacity=".62" d="M454 249c8-43 32-66 67-66 41 0 61 24 72 73-20-13-40-19-67-19s-52 4-72 12Z" />
+  <path fill="url(#skin)" d="M395 505c29-58 73-92 127-92 47 0 87 17 125 55-31 24-70 40-125 40-47 0-89-3-127-3Z" fill-opacity=".88" />
+  <rect width="124" height="32" x="498" y="173" fill="#FFF3E3" rx="16" />
+  <text x="560" y="195" fill="#BF2A06" font-family="'Arial Black', Arial, sans-serif" font-size="18" text-anchor="middle">刚刚上线</text>
+  <text x="52" y="598" fill="#FFF7E9" font-family="'Arial Black', Arial, sans-serif" font-size="80" letter-spacing="-2">附近今晚</text>
+  <text x="53" y="662" fill="#FFF0D1" font-family="'Arial Black', Arial, sans-serif" font-size="42">可直接开聊 ・ 只显示活跃用户</text>
+  <text x="54" y="721" fill="#FFF4E6" font-family="Arial, sans-serif" font-size="29">真人主页 / 即时回复 / 进入前可先看简介</text>
+  <rect width="296" height="82" x="52" y="770" fill="#FFF4E2" rx="18" />
+  <text x="200" y="823" fill="#A82300" font-family="'Arial Black', Arial, sans-serif" font-size="34" text-anchor="middle">立即查看</text>
+  <rect width="180" height="56" x="368" y="783" fill="#000" fill-opacity=".18" rx="16" />
+  <text x="458" y="819" fill="#FFF0DD" font-family="Arial, sans-serif" font-size="24" text-anchor="middle">7 秒后可关闭</text>
+  <rect width="98" height="32" x="576" y="52" fill="#FFF3DD" fill-opacity=".18" rx="16" />
+  <text x="625" y="73" fill="#FFF1E2" font-family="Arial, sans-serif" font-size="17" text-anchor="middle">热门</text>
+</svg>

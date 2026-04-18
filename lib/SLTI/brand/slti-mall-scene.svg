@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 980" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="178" x2="1388" y1="74" y2="932" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0E141C" />
+      <stop offset=".34" stop-color="#202B39" />
+      <stop offset=".7" stop-color="#445062" />
+      <stop offset="1" stop-color="#D8D6D0" />
+    </linearGradient>
+    <radialGradient id="atriumGlow" cx="0" cy="0" r="1" gradientTransform="matrix(0 308 -356 0 1106 382)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF8EF" />
+      <stop offset=".28" stop-color="#F2F1EE" stop-opacity=".84" />
+      <stop offset=".64" stop-color="#BAC3CF" stop-opacity=".22" />
+      <stop offset="1" stop-color="#BAC3CF" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="floor" x1="315" x2="1331" y1="882" y2="620" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1B232E" />
+      <stop offset=".42" stop-color="#2B3441" />
+      <stop offset=".82" stop-color="#AAA39A" />
+      <stop offset="1" stop-color="#DCD7CE" />
+    </linearGradient>
+    <linearGradient id="screen" x1="855" x2="1040" y1="206" y2="358" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F9F5ED" />
+      <stop offset=".52" stop-color="#E0E6EF" />
+      <stop offset="1" stop-color="#A2B1C5" />
+    </linearGradient>
+    <linearGradient id="escalator" x1="1040" x2="1380" y1="440" y2="718" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E7ECEF" />
+      <stop offset=".26" stop-color="#A8B5C7" />
+      <stop offset=".72" stop-color="#465364" />
+      <stop offset="1" stop-color="#1F2935" />
+    </linearGradient>
+    <linearGradient id="glass" x1="910" x2="1502" y1="200" y2="540" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF8F1" stop-opacity=".86" />
+      <stop offset=".36" stop-color="#D7E2EE" stop-opacity=".42" />
+      <stop offset="1" stop-color="#D7E2EE" stop-opacity=".02" />
+    </linearGradient>
+    <filter id="softBlur" width="602" height="502" x="940" y="248" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+      <feGaussianBlur stdDeviation="24" />
+    </filter>
+  </defs>
+  <rect width="1600" height="980" fill="url(#bg)" />
+  <rect width="1600" height="980" fill="url(#atriumGlow)" />
+  <path fill="url(#floor)" d="M0 980V714l301-32 320-18 276 42 265 28 438 246H0Z" />
+  <path fill="#141B24" d="M0 980V0h435l-54 980H0Z" opacity=".74" />
+  <path fill="#0C1219" d="M0 980V0h302l-18 980H0Z" opacity=".88" />
+  <path fill="#2A3240" d="M758 108 1100 72l140 548-360-34-122-478Z" opacity=".58" />
+  <path fill="url(#glass)" d="M808 124 1116 92l130 508-336-28-102-448Z" />
+  <path fill="#283241" d="M840 182h218l-10 96H854l-14-96Z" opacity=".72" />
+  <rect width="232" height="122" x="824" y="196" fill="url(#screen)" rx="18" />
+  <path fill="#232D39" d="m860 330 164-4 16 62H878l-18-58Z" />
+  <path fill="#10161E" d="M836 384h234l30 130-262-12-2-118Z" opacity=".66" />
+  <rect width="184" height="26" x="884" y="154" fill="#111822" rx="10" />
+  <rect width="70" height="10" x="910" y="162" fill="#FFF1DE" rx="5" opacity=".72" />
+  <rect width="42" height="10" x="994" y="162" fill="#D7E3EF" rx="5" opacity=".56" />
+  <path fill="#EAD8C3" d="M1008 168h18l-10 9-8-9Z" opacity=".78" />
+  <path fill="#202B37" d="M1034 432h282l110 236-246 20-146-256Z" />
+  <path fill="url(#escalator)" d="M1048 424h310l92 198-270 22-132-220Z" />
+  <path fill="#F5EFE4" d="m1094 448 236-8 56 120-220 18-72-130Z" opacity=".34" />
+  <path fill="#1C2430" d="M1128 470h38l116 202h-44l-110-202Z" opacity=".86" />
+  <path fill="#1C2430" d="M1184 468h40l110 194h-44l-106-194Z" opacity=".76" />
+  <rect width="144" height="250" x="462" y="268" fill="#0F161F" rx="18" opacity=".34" />
+  <rect width="128" height="176" x="470" y="288" fill="#DDE6F0" rx="14" opacity=".16" />
+  <rect width="92" height="18" x="488" y="312" fill="#FFF0DC" rx="9" opacity=".42" />
+  <rect width="78" height="118" x="496" y="338" fill="#FFF7ED" rx="10" opacity=".2" />
+  <path fill="#F2E6D8" d="M534 354c18 0 32 16 32 38v44h-64v-44c0-22 14-38 32-38Z" opacity=".2" />
+  <rect width="152" height="222" x="154" y="314" fill="#111822" rx="18" opacity=".42" />
+  <rect width="128" height="170" x="166" y="330" fill="#F0E7DA" rx="14" opacity=".14" />
+  <rect width="98" height="16" x="182" y="354" fill="#FFF0DE" rx="8" opacity=".28" />
+  <rect width="42" height="96" x="190" y="384" fill="#FFE7CF" rx="16" opacity=".18" />
+  <rect width="42" height="96" x="242" y="384" fill="#D6E3EE" rx="16" opacity=".14" />
+  <path fill="#F0E2CF" d="M118 180h210l-28 400H110l8-400Z" opacity=".12" />
+  <path fill="#FFF6EA" d="M104 202h226v28H104z" opacity=".08" />
+  <path fill="#F1E7DB" d="M440 236h214l-24 310H456l-16-310Z" opacity=".12" />
+  <path fill="#131A23" d="M1336 128h264v852h-214l-50-852Z" opacity=".48" />
+  <path fill="#D4C9BA" d="M1266 256h160l14 270h-152l-22-270Z" opacity=".18" />
+  <path fill="#0D1219" d="M1040 578h282l74 58-338 26-18-84Z" opacity=".64" />
+  <path fill="#F7F0E8" d="m816 268 212-4v16l-210 4-2-16Z" opacity=".6" />
+  <path fill="#F7F0E8" d="m820 292 130-4v12l-128 2-2-10Z" opacity=".44" />
+  <g opacity=".44">
+    <path fill="#FFF7EF" d="M522 628 786 606 768 634 508 656l14-28Z" />
+    <path fill="#FFF7EF" d="M822 642 1142 626 1120 654 804 670l18-28Z" />
+    <path fill="#FFF7EF" d="M1180 660 1394 650 1380 676 1164 688l16-28Z" />
+  </g>
+  <g opacity=".9">
+    <ellipse cx="1112" cy="406" fill="#F6F2EC" rx="78" ry="42" />
+    <ellipse cx="1112" cy="406" fill="#F6F2EC" opacity=".38" rx="154" ry="94" />
+  </g>
+  <g filter="url(#softBlur)" opacity=".56">
+    <ellipse cx="1241" cy="498" fill="#FFF8F0" rx="181" ry="127" />
+  </g>
+  <path fill="#0E141B" d="M768 980V626l198-20 378 34 256 340H768Z" opacity=".44" />
+  <g opacity=".92">
+    <path fill="#EDE4D5" d="M1052 720c0-26 18-46 42-46s42 20 42 46-18 48-42 48-42-22-42-48Z" />
+    <path fill="#121822" d="M1076 764h34l24 124h-86l28-124Z" />
+    <path fill="#121822" d="M1094 790c28 0 48 18 62 54l-16 4c-10-28-22-40-46-40-22 0-34 10-48 34l-16-8c18-30 40-44 64-44Z" />
+  </g>
+  <g opacity=".82">
+    <path fill="#D9D0C4" d="M1292 690c0-21 14-38 34-38s34 17 34 38-14 40-34 40-34-19-34-40Z" />
+    <path fill="#10161E" d="M1308 728h30l18 98h-70l22-98Z" />
+    <path fill="#10161E" d="M1322 750c20 0 38 12 52 34l-12 8c-10-16-22-24-40-24-16 0-26 8-38 24l-12-8c16-22 32-34 50-34Z" />
+  </g>
+  <g opacity=".74">
+    <path fill="#D3C7B7" d="M862 742c0-18 13-34 30-34s30 16 30 34-13 36-30 36-30-18-30-36Z" />
+    <path fill="#0F151D" d="M876 776h24l20 88h-66l22-88Z" />
+  </g>
+  <path fill="#FFF8EF" d="M0 0h1600v146H0z" opacity=".06" />
+  <path fill="#FFF7ED" d="M1150 132h86v14h-86z" opacity=".44" />
+  <path fill="#FFF7ED" d="M1150 162h126v10h-126z" opacity=".26" />
+</svg>

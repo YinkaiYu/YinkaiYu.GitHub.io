@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 900" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="57" x2="620" y1="54" y2="840" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#100A16" />
+      <stop offset=".44" stop-color="#33193D" />
+      <stop offset=".8" stop-color="#6D1D44" />
+      <stop offset="1" stop-color="#FF8A55" />
+    </linearGradient>
+    <linearGradient id="screen" x1="394" x2="596" y1="160" y2="628" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFD8D8" />
+      <stop offset=".45" stop-color="#FEB0CB" />
+      <stop offset="1" stop-color="#914665" />
+    </linearGradient>
+    <radialGradient id="halo" cx="0" cy="0" r="1" gradientTransform="matrix(0 216 -182 0 510 260)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFC6D5" stop-opacity=".86" />
+      <stop offset="1" stop-color="#FFC6D5" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="720" height="900" fill="url(#bg)" rx="28" />
+  <rect width="720" height="900" fill="url(#halo)" rx="28" />
+  <rect width="132" height="38" x="48" y="50" fill="#FFF" fill-opacity=".1" rx="19" />
+  <text x="114" y="75" fill="#FFE8F0" font-family="'Arial Black', Arial, sans-serif" font-size="18" text-anchor="middle">私密视讯</text>
+  <rect width="246" height="500" x="378" y="138" fill="#141018" fill-opacity=".78" rx="38" />
+  <rect width="226" height="474" x="388" y="151" fill="url(#screen)" rx="28" />
+  <ellipse cx="503" cy="365" fill="#200D17" fill-opacity=".58" rx="100" ry="164" />
+  <ellipse cx="502" cy="262" fill="#FFE2D4" fill-opacity=".88" rx="48" ry="50" />
+  <path fill="#381321" fill-opacity=".72" d="M460 259c10-36 31-56 60-56s50 21 59 61c-10-9-29-15-55-15-25 0-47 3-64 10Z" />
+  <path fill="#FFD4D9" fill-opacity=".62" d="M425 465c18-54 58-86 88-86s69 23 96 72c-28 21-60 31-96 31-32 0-60-6-88-17Z" />
+  <circle cx="593" cy="192" r="22" fill="#FF5F7B" />
+  <text x="593" y="199" fill="#FFF" font-family="'Arial Black', Arial, sans-serif" font-size="16" text-anchor="middle">LIVE</text>
+  <text x="48" y="620" fill="#FFF6FB" font-family="'Arial Black', Arial, sans-serif" font-size="74" letter-spacing="-2">今晚只聊你</text>
+  <text x="50" y="678" fill="#FFD3DE" font-family="'Arial Black', Arial, sans-serif" font-size="38">在线 24 人 ・ 接通率 96%</text>
+  <text x="52" y="730" fill="#FFF0F6" font-family="Arial, sans-serif" font-size="28">真人出镜 / 一对一 / 进入后自动接续</text>
+  <rect width="280" height="82" x="50" y="772" fill="#FFF4F8" rx="18" />
+  <text x="190" y="824" fill="#8A1033" font-family="'Arial Black', Arial, sans-serif" font-size="34" text-anchor="middle">继续观看</text>
+  <rect width="194" height="56" x="350" y="784" fill="#000" fill-opacity=".16" rx="16" />
+  <text x="447" y="820" fill="#FFE5EE" font-family="Arial, sans-serif" font-size="24" text-anchor="middle">关闭倒计时 09 秒</text>
+  <text x="50" y="124" fill="#FFE7F0" font-family="Arial, sans-serif" font-size="22">附近推荐</text>
+</svg>
