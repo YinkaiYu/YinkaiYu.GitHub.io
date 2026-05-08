@@ -191,12 +191,26 @@
 
     .hero-stats {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 18px;
+      grid-template-columns: 1fr;
+      gap: 12px;
       margin-top: clamp(42px, 10vw, 78px);
-      max-width: 620px;
+      max-width: 270px;
       border-top: 1px solid rgba(255, 249, 239, .22);
       padding-top: 20px;
+    }
+
+    .hero-stat {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 14px;
+      align-items: baseline;
+      border-bottom: 1px solid rgba(255, 249, 239, .14);
+      padding-bottom: 10px;
+    }
+
+    .hero-stat:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
     }
 
     .hero-stat strong {
@@ -210,7 +224,6 @@
 
     .hero-stat span {
       display: block;
-      margin-top: 8px;
       color: rgba(255, 249, 239, .5);
       font-size: 12px;
       line-height: 1.35;
@@ -491,52 +504,233 @@
       background: #e7e2d8;
     }
 
-    .podium {
-      margin-top: clamp(34px, 8vw, 60px);
+    .friend-wall {
+      margin-top: 34px;
+      border-top: 1px solid var(--line);
+      padding-top: 22px;
+    }
+
+    .friend-wall-title {
+      margin-bottom: 14px;
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 950;
+      letter-spacing: .08em;
+    }
+
+    .friend-names {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+    }
+
+    .friend-name {
+      display: inline-block;
+      color: var(--ink);
+      font-size: clamp(24px, 7vw, 46px);
+      font-weight: 950;
+      line-height: .98;
+      overflow-wrap: anywhere;
+    }
+
+    .friend-name:nth-child(3n + 2) {
+      color: var(--accent);
+    }
+
+    .friend-wall-copy {
+      margin-top: 16px;
+      color: var(--soft);
+      font-size: 15px;
+      line-height: 1.8;
+    }
+
+    .fan-metrics {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 30px;
+      border-top: 1px solid var(--line);
+      padding-top: 18px;
+    }
+
+    .fan-metric strong {
+      display: block;
+      color: var(--accent);
+      font-size: clamp(30px, 8vw, 54px);
+      font-weight: 950;
+      line-height: 1;
+    }
+
+    .fan-metric span {
+      display: block;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .fan-block {
+      margin-top: 34px;
+      border-top: 1px solid var(--line);
+      padding-top: 18px;
+    }
+
+    .fan-block-title {
+      margin-bottom: 12px;
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 950;
+      letter-spacing: .08em;
+    }
+
+    .top-list,
+    .mvp-list,
+    .henry-list {
       border-top: 1px solid var(--line);
     }
 
-    .podium-row {
+    .top-row,
+    .mvp-row,
+    .henry-row {
       display: grid;
+      gap: 10px;
+      border-bottom: 1px solid var(--line);
+      padding: 12px 0;
+      color: var(--ink);
+      line-height: 1.5;
+    }
+
+    .top-row {
       grid-template-columns: 42px minmax(0, 1fr) auto;
       gap: 14px;
       align-items: center;
       min-height: 78px;
-      border-bottom: 1px solid var(--line);
     }
 
-    .podium-rank {
+    .top-rank {
       color: var(--accent);
-      font-size: 22px;
       font-weight: 950;
+      font-size: 22px;
     }
 
-    .podium-name {
+    .top-name {
+      min-width: 0;
       font-size: clamp(19px, 5vw, 30px);
       font-weight: 950;
       line-height: 1.15;
       overflow-wrap: anywhere;
     }
 
-    .podium-note {
-      margin-top: 5px;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.5;
-    }
-
-    .podium-count {
+    .top-count {
       color: var(--accent);
       font-size: clamp(18px, 4.2vw, 28px);
       font-weight: 950;
       white-space: nowrap;
     }
 
-    .fan-cloud {
-      margin-top: 28px;
+    .mvp-row {
+      padding: 20px 0 24px;
+    }
+
+    .mvp-year {
+      color: var(--accent);
+      font-size: clamp(24px, 7vw, 42px);
+      font-weight: 950;
+      line-height: 1;
+    }
+
+    .mvp-podium {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      align-items: end;
+      min-width: 0;
+    }
+
+    .mvp-place {
+      display: flex;
+      min-width: 0;
+      flex-direction: column;
+      justify-content: flex-end;
+      border: 1px solid var(--line);
+      border-bottom: 4px solid currentColor;
+      border-radius: 6px 6px 0 0;
+      padding: 10px 8px 12px;
+      background: rgba(255, 253, 248, .48);
+    }
+
+    .mvp-place.gold {
+      order: -1;
+      grid-column: 1 / -1;
+      min-height: 96px;
+      color: #d1840f;
+      background: rgba(255, 219, 128, .18);
+    }
+
+    .mvp-place.silver {
+      min-height: 78px;
+      color: #6d7680;
+      background: rgba(255, 253, 248, .58);
+    }
+
+    .mvp-place.bronze {
+      min-height: 70px;
+      color: #a55332;
+      background: rgba(216, 141, 92, .12);
+    }
+
+    .mvp-medal {
+      margin-bottom: 6px;
+      font-size: 12px;
+      font-weight: 950;
+      line-height: 1;
+    }
+
+    .mvp-name {
+      min-width: 0;
+      color: var(--ink);
+      font-size: clamp(20px, 6vw, 30px);
+      font-weight: 950;
+      line-height: 1.18;
+      overflow-wrap: anywhere;
+    }
+
+    .henry-card {
+      margin-top: 30px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: rgba(255, 253, 248, .52);
+      padding: clamp(18px, 5vw, 30px);
+    }
+
+    .henry-card h3 {
+      margin: 0;
+      color: var(--ink);
+      font-size: clamp(24px, 6vw, 40px);
+      font-weight: 950;
+      line-height: 1.16;
+    }
+
+    .henry-card p {
+      margin-top: 10px;
       color: var(--soft);
       font-size: 14px;
-      line-height: 1.95;
+      line-height: 1.75;
+    }
+
+    .henry-row {
+      grid-template-columns: 72px minmax(0, 1fr);
+      font-size: 14px;
+    }
+
+    .henry-grade {
+      color: var(--accent);
+      font-weight: 950;
+    }
+
+    .henry-issues {
+      color: var(--soft);
+      overflow-wrap: anywhere;
     }
 
     .qa {
@@ -672,6 +866,58 @@
         padding-right: 46px;
       }
 
+      .hero-stats {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 28px;
+        max-width: 680px;
+      }
+
+      .hero-stat {
+        display: block;
+        border-bottom: 0;
+        border-left: 1px solid rgba(255, 249, 239, .16);
+        padding-bottom: 0;
+        padding-left: 18px;
+      }
+
+      .hero-stat:first-child {
+        border-left: 0;
+        padding-left: 0;
+      }
+
+      .hero-stat span {
+        margin-top: 8px;
+      }
+
+      .mvp-row {
+        grid-template-columns: 120px minmax(0, 1fr);
+        align-items: end;
+        gap: 24px;
+      }
+
+      .mvp-podium {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .mvp-place {
+        padding: 12px 12px 14px;
+      }
+
+      .mvp-place.gold {
+        order: 0;
+        grid-column: auto;
+        min-height: 118px;
+      }
+
+      .mvp-place.silver {
+        min-height: 96px;
+      }
+
+      .mvp-place.bronze {
+        min-height: 82px;
+      }
+
       .year-row {
         grid-template-columns: 112px minmax(0, 1fr);
         gap: 26px;
@@ -716,7 +962,7 @@
         <div class="hero-stats reveal" aria-label="正经玩 1 到 499 期统计概览">
           <div class="hero-stat"><strong>499</strong><span>期已统计</span></div>
           <div class="hero-stat"><strong>1520万+</strong><span>总阅读</span></div>
-          <div class="hero-stat"><strong>1938</strong><span>个投稿昵称</span></div>
+          <div class="hero-stat"><strong>1938</strong><span>个名字</span></div>
         </div>
       </div>
       <div class="hero-arrow" aria-hidden="true">↓</div>
@@ -934,36 +1180,153 @@
       <div class="wrap">
         <div class="section-kicker reveal">Chapter 04</div>
         <h2 class="chapter-title reveal">老朋友<br>点名</h2>
-        <p class="chapter-copy reveal">1938 个昵称出现在投稿记录里。排行榜不重要，重要的是这些名字真的陪我们玩了很久。</p>
+        <p class="chapter-copy reveal">3603 份投稿，1938 个名字。第 500 期最该感谢的，不是数据，是每次真的把实验做了一遍、拍下来、发给我们的你们。</p>
 
-        <div class="podium reveal">
-          <div class="podium-row">
-            <div class="podium-rank">01</div>
-            <div>
-              <div class="podium-name">我的世界666</div>
-              <div class="podium-note">平均每 4 期就出现一次，最长连续 10 期。</div>
-            </div>
-            <div class="podium-count">122 次</div>
-          </div>
-          <div class="podium-row">
-            <div class="podium-rank">02</div>
-            <div>
-              <div class="podium-name">夏目漱石</div>
-              <div class="podium-note">横跨 7 个年份段，最长连续 9 期。</div>
-            </div>
-            <div class="podium-count">106 次</div>
-          </div>
-          <div class="podium-row">
-            <div class="podium-rank">03</div>
-            <div>
-              <div class="podium-name">廖鑫</div>
-              <div class="podium-note">从 2017 到 2021，最长连续 8 期。</div>
-            </div>
-            <div class="podium-count">74 次</div>
+        <div class="fan-metrics reveal">
+          <div class="fan-metric"><strong>3603</strong><span>份投稿</span></div>
+          <div class="fan-metric"><strong>1938</strong><span>个名字</span></div>
+        </div>
+
+        <div class="fan-block reveal">
+          <div class="fan-block-title">总榜前 10</div>
+          <div class="top-list">
+            <div class="top-row"><span class="top-rank">01</span><span class="top-name">我的世界666</span><span class="top-count">122 次</span></div>
+            <div class="top-row"><span class="top-rank">02</span><span class="top-name">夏目漱石</span><span class="top-count">106 次</span></div>
+            <div class="top-row"><span class="top-rank">03</span><span class="top-name">廖鑫</span><span class="top-count">74 次</span></div>
+            <div class="top-row"><span class="top-rank">04</span><span class="top-name">小姝</span><span class="top-count">47 次</span></div>
+            <div class="top-row"><span class="top-rank">05</span><span class="top-name">刘宝菊</span><span class="top-count">32 次</span></div>
+            <div class="top-row"><span class="top-rank">06</span><span class="top-name">Henry</span><span class="top-count">30 次</span></div>
+            <div class="top-row"><span class="top-rank">07</span><span class="top-name">laukial</span><span class="top-count">29 次</span></div>
+            <div class="top-row"><span class="top-rank">08</span><span class="top-name">tiān³</span><span class="top-count">27 次</span></div>
+            <div class="top-row"><span class="top-rank">09</span><span class="top-name">碳纤维</span><span class="top-count">21 次</span></div>
+            <div class="top-row"><span class="top-rank">10</span><span class="top-name">蓝思</span><span class="top-count">19 次</span></div>
           </div>
         </div>
 
-        <p class="fan-cloud reveal">小姝 47 次 · 刘宝菊 32 次 · laukial 29 次 · tiān³ 27 次 · 碳纤维 21 次 · 蓝思 19 次 · 陈孝镟 15 次 · 朱玉屏 14 次 · yuping 14 次 · 原子 13 次 · 帅残了 12 次 · Alan霖霖 11 次 · 武群 11 次 · 高山流水 11 次 · 汤小路 10 次 · Daisy 10 次 · 独立团团长 10 次</p>
+        <div class="fan-block reveal">
+          <div class="fan-block-title">年度MVP</div>
+          <div class="mvp-list">
+            <div class="mvp-row">
+              <div class="mvp-year">2016</div>
+              <div class="mvp-podium" aria-label="2016 年度 MVP">
+                <div class="mvp-place silver"><span class="mvp-medal">银牌</span><span class="mvp-name">玉玺</span></div>
+                <div class="mvp-place gold"><span class="mvp-medal">金牌</span><span class="mvp-name">陈孝镟</span></div>
+                <div class="mvp-place bronze"><span class="mvp-medal">铜牌</span><span class="mvp-name">Sally</span></div>
+              </div>
+            </div>
+            <div class="mvp-row">
+              <div class="mvp-year">2017</div>
+              <div class="mvp-podium" aria-label="2017 年度 MVP">
+                <div class="mvp-place silver"><span class="mvp-medal">银牌</span><span class="mvp-name">laukial</span></div>
+                <div class="mvp-place gold"><span class="mvp-medal">金牌</span><span class="mvp-name">廖鑫</span></div>
+                <div class="mvp-place bronze"><span class="mvp-medal">铜牌</span><span class="mvp-name">夏目漱石</span></div>
+              </div>
+            </div>
+            <div class="mvp-row">
+              <div class="mvp-year">2018</div>
+              <div class="mvp-podium" aria-label="2018 年度 MVP">
+                <div class="mvp-place silver"><span class="mvp-medal">银牌</span><span class="mvp-name">廖鑫</span></div>
+                <div class="mvp-place gold"><span class="mvp-medal">金牌</span><span class="mvp-name">夏目漱石</span></div>
+                <div class="mvp-place bronze"><span class="mvp-medal">铜牌</span><span class="mvp-name">我的世界666</span></div>
+              </div>
+            </div>
+            <div class="mvp-row">
+              <div class="mvp-year">2019</div>
+              <div class="mvp-podium" aria-label="2019 年度 MVP">
+                <div class="mvp-place silver"><span class="mvp-medal">银牌</span><span class="mvp-name">我的世界666</span></div>
+                <div class="mvp-place gold"><span class="mvp-medal">金牌</span><span class="mvp-name">夏目漱石</span></div>
+                <div class="mvp-place bronze"><span class="mvp-medal">铜牌</span><span class="mvp-name">廖鑫</span></div>
+              </div>
+            </div>
+            <div class="mvp-row">
+              <div class="mvp-year">2020</div>
+              <div class="mvp-podium" aria-label="2020 年度 MVP">
+                <div class="mvp-place silver"><span class="mvp-medal">银牌</span><span class="mvp-name">Alan霖霖</span></div>
+                <div class="mvp-place gold"><span class="mvp-medal">金牌</span><span class="mvp-name">我的世界666</span></div>
+                <div class="mvp-place bronze"><span class="mvp-medal">铜牌</span><span class="mvp-name">夏目漱石</span></div>
+              </div>
+            </div>
+            <div class="mvp-row">
+              <div class="mvp-year">2021</div>
+              <div class="mvp-podium" aria-label="2021 年度 MVP">
+                <div class="mvp-place silver"><span class="mvp-medal">银牌</span><span class="mvp-name">朱玉屏</span></div>
+                <div class="mvp-place gold"><span class="mvp-medal">金牌</span><span class="mvp-name">我的世界666</span></div>
+                <div class="mvp-place bronze"><span class="mvp-medal">铜牌</span><span class="mvp-name">碳纤维</span></div>
+              </div>
+            </div>
+            <div class="mvp-row">
+              <div class="mvp-year">2022</div>
+              <div class="mvp-podium" aria-label="2022 年度 MVP">
+                <div class="mvp-place silver"><span class="mvp-medal">银牌</span><span class="mvp-name">yuping</span></div>
+                <div class="mvp-place gold"><span class="mvp-medal">金牌</span><span class="mvp-name">我的世界666</span></div>
+                <div class="mvp-place bronze"><span class="mvp-medal">铜牌</span><span class="mvp-name">Henry</span></div>
+              </div>
+            </div>
+            <div class="mvp-row">
+              <div class="mvp-year">2023</div>
+              <div class="mvp-podium" aria-label="2023 年度 MVP">
+                <div class="mvp-place silver"><span class="mvp-medal">银牌</span><span class="mvp-name">高山流水</span></div>
+                <div class="mvp-place gold"><span class="mvp-medal">金牌</span><span class="mvp-name">Henry</span></div>
+                <div class="mvp-place bronze"><span class="mvp-medal">铜牌</span><span class="mvp-name">多多太多</span></div>
+              </div>
+            </div>
+            <div class="mvp-row">
+              <div class="mvp-year">2024</div>
+              <div class="mvp-podium" aria-label="2024 年度 MVP">
+                <div class="mvp-place silver"><span class="mvp-medal">银牌</span><span class="mvp-name">蓝思</span></div>
+                <div class="mvp-place gold"><span class="mvp-medal">金牌</span><span class="mvp-name">小姝</span></div>
+                <div class="mvp-place bronze"><span class="mvp-medal">铜牌</span><span class="mvp-name">薤叶芸香</span></div>
+              </div>
+            </div>
+            <div class="mvp-row">
+              <div class="mvp-year">2025</div>
+              <div class="mvp-podium" aria-label="2025 年度 MVP">
+                <div class="mvp-place silver"><span class="mvp-medal">银牌</span><span class="mvp-name">小姝</span></div>
+                <div class="mvp-place gold"><span class="mvp-medal">金牌</span><span class="mvp-name">刘宝菊</span></div>
+                <div class="mvp-place bronze"><span class="mvp-medal">铜牌</span><span class="mvp-name">蓝思</span></div>
+              </div>
+            </div>
+            <div class="mvp-row">
+              <div class="mvp-year">2026</div>
+              <div class="mvp-podium" aria-label="2026 年度 MVP">
+                <div class="mvp-place silver"><span class="mvp-medal">银牌</span><span class="mvp-name">小姝</span></div>
+                <div class="mvp-place gold"><span class="mvp-medal">金牌</span><span class="mvp-name">刘宝菊</span></div>
+                <div class="mvp-place bronze"><span class="mvp-medal">铜牌</span><span class="mvp-name">赵巍</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="henry-card reveal">
+          <div class="fan-block-title">Henry 成长线 · 陪 Henry 一路长大</div>
+          <h3>从小学三年级的Henry，到七年级的Henry。</h3>
+          <p>Henry 第一次出现在第 300 期，一共留下 30 次投稿。昵称从“小学三年级”一路长到“七年级”，正经玩也跟着他从冰美式瀑布玩到菠菜叶冒泡。</p>
+          <div class="henry-list">
+            <div class="henry-row"><span class="henry-grade">三年级</span><span class="henry-issues">#300 冰美式瀑布 · #301 生日蜡烛 · #303 小磁铁 · #304 冰冰快乐水 · #306 玫瑰花 · #307 可达鸭 · #309 合成大西瓜 · #310 盐 · #312 纸巾</span></div>
+            <div class="henry-row"><span class="henry-grade">四年级</span><span class="henry-issues">#331 水也能当胶水 · #334 喷雾加湿器 · #344 油腻实验 · #345 好燃 · #348 做着做着就吃饱 · #349 海底火山 · #351 秘密武器 · #352 学校很无聊 · #363 蛋黄分离器</span></div>
+            <div class="henry-row"><span class="henry-grade">五年级</span><span class="henry-issues">#374 球球再水一期 · #378 空气大炮 · #380 火柴科目三 · #383 自制熔岩灯 · #385 你为何不避 · #387 腊八装蒜 · #400 薛定谔的橘 · #401 开放题</span></div>
+            <div class="henry-row"><span class="henry-grade">六年级</span><span class="henry-issues">#449 光盘和 A4 纸 · #450 雨窗量子叠加态</span></div>
+            <div class="henry-row"><span class="henry-grade">七年级</span><span class="henry-issues">#473 辣椒案板水散开 · #496 菠菜叶冒泡</span></div>
+          </div>
+        </div>
+
+        <div class="friend-wall reveal">
+          <div class="friend-wall-title">还有这些老朋友</div>
+          <div class="friend-names">
+            <span class="friend-name">陈孝镟</span>
+            <span class="friend-name">朱玉屏</span>
+            <span class="friend-name">yuping</span>
+            <span class="friend-name">原子</span>
+            <span class="friend-name">帅残了</span>
+            <span class="friend-name">Alan霖霖</span>
+            <span class="friend-name">武群</span>
+            <span class="friend-name">高山流水</span>
+            <span class="friend-name">汤小路</span>
+            <span class="friend-name">Daisy</span>
+            <span class="friend-name">独立团团长</span>
+          </div>
+          <p class="friend-wall-copy">每一个名字都带着一次真的动手、一次拍照、一次发来投稿箱的“我也试了”。</p>
+        </div>
       </div>
     </section>
 
