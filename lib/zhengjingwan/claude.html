@@ -1,0 +1,1068 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <link rel="icon" href="data:,">
+  <title>正经玩 500</title>
+  <style>
+    :root {
+      --ink: #1a1814;
+      --soft: #554e43;
+      --muted: #887e72;
+      --line: rgba(26, 24, 20, .13);
+      --paper: #f5f1e8;
+      --cream: #fffdf7;
+      --dark: #13120f;
+      --dark-soft: rgba(255, 249, 239, .74);
+      --dark-muted: rgba(255, 249, 239, .48);
+      --accent: #df452b;
+      --jade: #0d8972;
+      --blue: #2f6fd0;
+      --gold: #b98218;
+      --rose: #b33262;
+      --violet: #7254d6;
+      --page: min(100%, 750px);
+      --font: "PingFang SC", "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: var(--font);
+      line-height: 1.6;
+      overflow-x: hidden;
+      letter-spacing: 0;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    a:focus-visible {
+      outline: 2px solid currentColor;
+      outline-offset: 4px;
+    }
+
+    .page {
+      width: var(--page);
+      margin: 0 auto;
+      background: var(--paper);
+      overflow: hidden;
+      box-shadow: 0 0 0 1px rgba(26, 24, 20, .04);
+    }
+
+    .wrap {
+      width: 100%;
+      padding: 0 clamp(20px, 5vw, 40px);
+    }
+
+    section {
+      position: relative;
+      padding: clamp(64px, 14vw, 112px) 0;
+    }
+
+    .section-kicker {
+      margin-bottom: 12px;
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3, p { margin: 0; }
+
+    .chapter-title {
+      margin: 0 0 14px;
+      max-width: 620px;
+      font-size: clamp(38px, 10vw, 82px);
+      font-weight: 950;
+      line-height: .96;
+      letter-spacing: 0;
+    }
+
+    .chapter-copy {
+      max-width: 520px;
+      color: var(--soft);
+      font-size: clamp(15px, 3.8vw, 19px);
+      line-height: 1.75;
+    }
+
+    .reveal {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .hero .reveal {
+      animation: hero-rise .7s ease both;
+    }
+
+    @keyframes hero-rise {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero {
+      min-height: 100svh;
+      display: flex;
+      align-items: center;
+      color: #fff9ef;
+      background:
+        linear-gradient(135deg, rgba(255, 249, 239, .05) 0 1px, transparent 1px 18px),
+        linear-gradient(155deg, #191612 0%, #221d18 45%, #090807 100%);
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(0, 0, 0, .5), rgba(0, 0, 0, .08)),
+        linear-gradient(180deg, transparent 68%, rgba(0, 0, 0, .28));
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: "水 纸 剪刀 杯子 火 手抓饼 DNA";
+      position: absolute;
+      right: clamp(16px, 5vw, 34px);
+      bottom: 12%;
+      width: min(360px, calc(100% - 40px));
+      color: rgba(255, 249, 239, .075);
+      font-size: clamp(34px, 10vw, 86px);
+      font-weight: 950;
+      line-height: 1.02;
+      text-align: right;
+      word-spacing: .28em;
+      pointer-events: none;
+    }
+
+    .hero .wrap {
+      position: relative;
+      z-index: 1;
+      padding-top: 58px;
+      padding-bottom: 74px;
+    }
+
+    .brand-line {
+      margin-bottom: 18px;
+      color: rgba(255, 249, 239, .66);
+      font-size: clamp(14px, 3.5vw, 18px);
+      font-weight: 800;
+    }
+
+    .hero h1 {
+      max-width: 640px;
+      font-size: clamp(82px, 24vw, 184px);
+      font-weight: 950;
+      line-height: .82;
+      letter-spacing: 0;
+    }
+
+    .hero-question {
+      margin-top: 26px;
+      max-width: 520px;
+      font-size: clamp(24px, 6vw, 42px);
+      font-weight: 900;
+      line-height: 1.22;
+    }
+
+    .hero-note {
+      margin-top: 14px;
+      max-width: 460px;
+      color: rgba(255, 249, 239, .66);
+      font-size: clamp(15px, 3.5vw, 17px);
+      line-height: 1.8;
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: clamp(42px, 10vw, 78px);
+      max-width: 620px;
+      border-top: 1px solid rgba(255, 249, 239, .22);
+      padding-top: 20px;
+    }
+
+    .hero-stat strong {
+      display: block;
+      color: #fff9ef;
+      font-size: clamp(28px, 7vw, 52px);
+      font-weight: 950;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .hero-stat span {
+      display: block;
+      margin-top: 8px;
+      color: rgba(255, 249, 239, .5);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .hero-arrow {
+      position: absolute;
+      left: 50%;
+      bottom: 22px;
+      z-index: 2;
+      color: rgba(255, 249, 239, .42);
+      font-size: 24px;
+      animation: arrow-bounce 1.8s ease-in-out infinite;
+    }
+
+    @keyframes arrow-bounce {
+      0%, 100% { transform: translate(-50%, 0); }
+      50% { transform: translate(-50%, 10px); }
+    }
+
+    .years {
+      background: var(--cream);
+    }
+
+    .year-list {
+      margin-top: clamp(34px, 8vw, 62px);
+      border-top: 1px solid var(--line);
+    }
+
+    .year-row {
+      display: grid;
+      grid-template-columns: 82px minmax(0, 1fr);
+      gap: 16px;
+      align-items: start;
+      min-height: 98px;
+      padding: 22px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .year {
+      color: var(--accent);
+      font-size: clamp(28px, 7vw, 42px);
+      font-weight: 950;
+      line-height: .95;
+      white-space: nowrap;
+    }
+
+    .year-title {
+      color: var(--ink);
+      font-size: clamp(17px, 4.2vw, 23px);
+      font-weight: 900;
+      line-height: 1.28;
+      overflow-wrap: anywhere;
+    }
+
+    .year-title:hover {
+      color: var(--accent);
+    }
+
+    .year-quip {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .awards {
+      background: #f0ece3;
+    }
+
+    .award-stage {
+      margin-top: clamp(34px, 8vw, 60px);
+      display: grid;
+      gap: 18px;
+    }
+
+    .award-panel {
+      background: var(--cream);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: clamp(20px, 5.5vw, 38px);
+    }
+
+    .award-label {
+      margin-bottom: 10px;
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .award-heading {
+      color: var(--ink);
+      font-size: clamp(23px, 6vw, 38px);
+      font-weight: 950;
+      line-height: 1.18;
+      overflow-wrap: anywhere;
+    }
+
+    .award-heading:hover {
+      color: var(--accent);
+    }
+
+    .award-number {
+      margin-top: 13px;
+      color: var(--ink);
+      font-size: clamp(42px, 12vw, 84px);
+      font-weight: 950;
+      line-height: .9;
+      letter-spacing: 0;
+    }
+
+    .award-text {
+      margin-top: 12px;
+      color: var(--soft);
+      font-size: 14px;
+      line-height: 1.75;
+    }
+
+    .versus {
+      display: grid;
+      gap: 16px;
+      align-items: stretch;
+      text-align: left;
+    }
+
+    .versus-side {
+      min-width: 0;
+      border-top: 1px solid var(--line);
+      padding-top: 16px;
+    }
+
+    .versus-tag {
+      color: var(--accent);
+      font-size: clamp(42px, 12vw, 78px);
+      font-weight: 950;
+      line-height: .9;
+    }
+
+    .versus-line {
+      margin-top: 18px;
+      color: var(--ink);
+      font-size: clamp(24px, 6vw, 42px);
+      font-weight: 950;
+      line-height: 1.14;
+    }
+
+    .title-wall,
+    .ten-wall,
+    .quote-wall,
+    .catch-list {
+      border-top: 1px solid var(--line);
+      margin-top: 18px;
+    }
+
+    .title-link,
+    .ten-item,
+    .quote-item,
+    .catch-item {
+      display: block;
+      border-bottom: 1px solid var(--line);
+      padding: 15px 0;
+      overflow-wrap: anywhere;
+    }
+
+    .title-link {
+      font-size: clamp(18px, 4.7vw, 27px);
+      font-weight: 900;
+      line-height: 1.28;
+    }
+
+    .title-link:hover,
+    .ten-item:hover,
+    .catch-item:hover {
+      color: var(--accent);
+    }
+
+    .ten-item {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: baseline;
+    }
+
+    .ten-title {
+      min-width: 0;
+      font-size: clamp(15px, 3.7vw, 19px);
+      font-weight: 850;
+      line-height: 1.35;
+    }
+
+    .ten-reads {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 950;
+      white-space: nowrap;
+    }
+
+    .quote-item {
+      color: var(--soft);
+      font-size: 15px;
+      line-height: 1.72;
+    }
+
+    .quote-item strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--ink);
+      font-size: 13px;
+    }
+
+    .lab {
+      color: #fff9ef;
+      background: var(--dark);
+    }
+
+    .lab .section-kicker {
+      color: #ff735f;
+    }
+
+    .lab .chapter-copy {
+      color: var(--dark-soft);
+    }
+
+    .checklist {
+      margin: clamp(32px, 7vw, 54px) 0 0;
+      border-top: 1px solid rgba(255, 249, 239, .16);
+    }
+
+    .check-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      min-height: 56px;
+      border-bottom: 1px solid rgba(255, 249, 239, .16);
+      color: #fff9ef;
+      font-size: clamp(17px, 4.2vw, 23px);
+      font-weight: 900;
+    }
+
+    .check-row span {
+      color: rgba(255, 249, 239, .52);
+      font-size: 13px;
+      font-weight: 850;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .food-box {
+      margin-top: 28px;
+      border: 1px solid rgba(255, 249, 239, .16);
+      border-radius: 6px;
+      padding: clamp(18px, 5vw, 30px);
+      background: rgba(255, 249, 239, .055);
+    }
+
+    .food-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 16px;
+    }
+
+    .food-tag {
+      border: 1px solid rgba(255, 249, 239, .18);
+      border-radius: 999px;
+      padding: 6px 11px;
+      color: #fff9ef;
+      background: rgba(255, 249, 239, .08);
+      font-size: 13px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .fans {
+      background: #e7e2d8;
+    }
+
+    .podium {
+      margin-top: clamp(34px, 8vw, 60px);
+      border-top: 1px solid var(--line);
+    }
+
+    .podium-row {
+      display: grid;
+      grid-template-columns: 42px minmax(0, 1fr) auto;
+      gap: 14px;
+      align-items: center;
+      min-height: 78px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .podium-rank {
+      color: var(--accent);
+      font-size: 22px;
+      font-weight: 950;
+    }
+
+    .podium-name {
+      font-size: clamp(19px, 5vw, 30px);
+      font-weight: 950;
+      line-height: 1.15;
+      overflow-wrap: anywhere;
+    }
+
+    .podium-note {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .podium-count {
+      color: var(--accent);
+      font-size: clamp(18px, 4.2vw, 28px);
+      font-weight: 950;
+      white-space: nowrap;
+    }
+
+    .fan-cloud {
+      margin-top: 28px;
+      color: var(--soft);
+      font-size: 14px;
+      line-height: 1.95;
+    }
+
+    .qa {
+      background: var(--cream);
+    }
+
+    .qa-intro {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .qa-list {
+      margin-top: clamp(34px, 8vw, 58px);
+      display: grid;
+      gap: 30px;
+    }
+
+    .qa-pair {
+      display: grid;
+      gap: 12px;
+    }
+
+    .bubble {
+      max-width: 88%;
+      border-radius: 6px;
+      padding: 13px 15px;
+      font-size: 14px;
+      line-height: 1.72;
+      overflow-wrap: anywhere;
+    }
+
+    .bubble small {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 11px;
+      font-weight: 950;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .bubble.q {
+      justify-self: start;
+      background: #ebe6db;
+      color: var(--ink);
+    }
+
+    .bubble.q small {
+      color: var(--muted);
+    }
+
+    .bubble.a {
+      justify-self: end;
+      background: var(--accent);
+      color: #fffdf8;
+    }
+
+    .bubble.a small {
+      color: rgba(255, 253, 248, .7);
+    }
+
+    .qa-cta {
+      margin-top: 22px;
+      border-top: 1px solid var(--line);
+      padding-top: 18px;
+      color: var(--soft);
+      font-size: 15px;
+      font-weight: 850;
+      text-align: center;
+    }
+
+    .catch-up {
+      background: #f3efe6;
+    }
+
+    .catch-item {
+      color: var(--ink);
+    }
+
+    .catch-item strong {
+      display: block;
+      font-size: clamp(17px, 4.1vw, 22px);
+      line-height: 1.35;
+    }
+
+    .catch-item span {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .final {
+      min-height: 70svh;
+      display: flex;
+      align-items: center;
+      text-align: center;
+      color: #fff9ef;
+      background:
+        linear-gradient(135deg, rgba(255, 249, 239, .05) 0 1px, transparent 1px 18px),
+        var(--dark);
+    }
+
+    .final h2 {
+      margin: 0 auto;
+      max-width: 610px;
+      font-size: clamp(28px, 7vw, 54px);
+      font-weight: 950;
+      line-height: 1.25;
+    }
+
+    .final p {
+      margin: 18px auto 0;
+      max-width: 520px;
+      color: var(--dark-soft);
+      font-size: clamp(15px, 3.8vw, 18px);
+      line-height: 1.85;
+    }
+
+    .final-number {
+      margin-top: 34px;
+      color: var(--accent);
+      font-size: clamp(80px, 22vw, 180px);
+      font-weight: 950;
+      line-height: .82;
+    }
+
+    @media (min-width: 640px) {
+      .wrap {
+        padding-left: 46px;
+        padding-right: 46px;
+      }
+
+      .year-row {
+        grid-template-columns: 112px minmax(0, 1fr);
+        gap: 26px;
+      }
+
+      .versus {
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+        align-items: center;
+      }
+
+      .versus-line {
+        grid-column: 1 / -1;
+      }
+
+      .bubble {
+        max-width: 76%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+        animation: none;
+      }
+      .hero-arrow {
+        animation: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="hero">
+      <div class="wrap">
+        <div class="brand-line reveal">中科院物理所 · 正经玩</div>
+        <h1 class="reveal">500</h1>
+        <p class="hero-question reveal">你是哪一年入坑的？</p>
+        <p class="hero-note reveal">从倒着流的水到手抓饼测光速，我们玩了 499 期。</p>
+        <div class="hero-stats reveal" aria-label="正经玩 1 到 499 期统计概览">
+          <div class="hero-stat"><strong>499</strong><span>期已统计</span></div>
+          <div class="hero-stat"><strong>1520万+</strong><span>总阅读</span></div>
+          <div class="hero-stat"><strong>1938</strong><span>个投稿昵称</span></div>
+        </div>
+      </div>
+      <div class="hero-arrow" aria-hidden="true">↓</div>
+    </header>
+
+    <section class="years" id="years">
+      <div class="wrap">
+        <div class="section-kicker reveal">Chapter 01</div>
+        <h2 class="chapter-title reveal">入坑年份<br>回忆录</h2>
+        <p class="chapter-copy reveal">每年只选一个名场面。不是年度总结，是给老读者找入口。</p>
+
+        <div class="year-list reveal">
+          <div class="year-row">
+            <div class="year">2016</div>
+            <div>
+              <a class="year-title" href="https://mp.weixin.qq.com/s/hajKD-He8dNZY4pXCH_cZw" target="_blank" rel="noreferrer">#30 马格努斯滑翔机</a>
+              <p class="year-quip">那年正经玩还没长出标题党人格。</p>
+            </div>
+          </div>
+          <div class="year-row">
+            <div class="year">2017</div>
+            <div>
+              <a class="year-title" href="https://mp.weixin.qq.com/s/jTOvtq4TlJVeIqA_N0BaOw" target="_blank" rel="noreferrer">#86 用微波炉烧开水？小师妹你还是学乖点用水壶吧！</a>
+              <p class="year-quip">小师妹开始出场，热水壶保住了厨房秩序。</p>
+            </div>
+          </div>
+          <div class="year-row">
+            <div class="year">2018</div>
+            <div>
+              <a class="year-title" href="https://mp.weixin.qq.com/s/DAxHGsDBuKYAHrn07Ig9Nw" target="_blank" rel="noreferrer">#135 上坡要刹车，下坡踩油门</a>
+              <p class="year-quip">这届物理定律看起来不太听话。</p>
+            </div>
+          </div>
+          <div class="year-row">
+            <div class="year">2019</div>
+            <div>
+              <a class="year-title" href="https://mp.weixin.qq.com/s/fE7TpJvnDwDXJ5bZ9U9VOQ" target="_blank" rel="noreferrer">#163 用过的吸管不要扔，在火上烤一下，隔壁的小孩都...</a>
+              <p class="year-quip">隔壁的小孩第一次进入正经玩宇宙。</p>
+            </div>
+          </div>
+          <div class="year-row">
+            <div class="year">2020</div>
+            <div>
+              <a class="year-title" href="https://mp.weixin.qq.com/s/gA3VnaQmJtidFFkDl5OqEA" target="_blank" rel="noreferrer">#218 刚喝完的汽水瓶不要扔，吸管伸进去，隔壁的小孩都...</a>
+              <p class="year-quip">隔壁的小孩又来了，吸管也更忙了。</p>
+            </div>
+          </div>
+          <div class="year-row">
+            <div class="year">2021</div>
+            <div>
+              <a class="year-title" href="https://mp.weixin.qq.com/s/nxMrV7YN0e9FfG7Ime38qQ" target="_blank" rel="noreferrer">#258 高考刚结束，这道数学填空题你做对了吗？</a>
+              <p class="year-quip">数学：物理你先别过来。</p>
+            </div>
+          </div>
+          <div class="year-row">
+            <div class="year">2022</div>
+            <div>
+              <a class="year-title" href="https://mp.weixin.qq.com/s/0wCBqqCpTeW4cmP3PivPEQ" target="_blank" rel="noreferrer">#318 除了拉环，还能怎么开可乐罐啊？</a>
+              <p class="year-quip">一年 49 期，每期都在给动手找借口。</p>
+            </div>
+          </div>
+          <div class="year-row">
+            <div class="year">2023</div>
+            <div>
+              <a class="year-title" href="https://mp.weixin.qq.com/s/WgwZ7LwjsGC-9ifPHi5gHA" target="_blank" rel="noreferrer">#359 没空调怎么办？物理学知识教你降暑</a>
+              <p class="year-quip">物理能不能救命不知道，至少能救夏天。</p>
+            </div>
+          </div>
+          <div class="year-row">
+            <div class="year">2024</div>
+            <div>
+              <a class="year-title" href="https://mp.weixin.qq.com/s/qW-rJizrEEQK3t-1iOJopA" target="_blank" rel="noreferrer">#427 如何在没有剪刀的情况下弄断绳子？你一定想不到</a>
+              <p class="year-quip">“你一定想不到”成为年度最强钩子。</p>
+            </div>
+          </div>
+          <div class="year-row">
+            <div class="year" style="color: var(--gold)">2025</div>
+            <div>
+              <a class="year-title" href="https://mp.weixin.qq.com/s/UBrFdehMfnJi7HflObyVqQ" target="_blank" rel="noreferrer">#440 如何在不脱外裤的情况下穿上内裤？</a>
+              <p class="year-quip">正经玩的阅读天花板，不太正经。23.3 万阅读。</p>
+            </div>
+          </div>
+          <div class="year-row">
+            <div class="year" style="color: var(--jade)">2026</div>
+            <div>
+              <a class="year-title" href="https://mp.weixin.qq.com/s/1SwCLIfLGzyo_1hckDYzfA" target="_blank" rel="noreferrer">#498 一个纸杯敲一下就会吐烟圈？！</a>
+              <p class="year-quip">第 500 期在路上，纸杯先开始吐圈。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="awards" id="awards">
+      <div class="wrap">
+        <div class="section-kicker reveal">Chapter 02</div>
+        <h2 class="chapter-title reveal">名场面<br>颁奖</h2>
+        <p class="chapter-copy reveal">不念报表，只发奖。数字放小一点，离谱放大一点。</p>
+
+        <div class="award-stage">
+          <article class="award-panel reveal">
+            <div class="award-label">全场围观王 · 阅读最高</div>
+            <a class="award-heading" href="https://mp.weixin.qq.com/s/UBrFdehMfnJi7HflObyVqQ" target="_blank" rel="noreferrer">#440 如何在不脱外裤的情况下穿上内裤？</a>
+            <div class="award-number">233,597</div>
+            <p class="award-text">所有正经玩里最不正经的标题，拿下全场最高。</p>
+          </article>
+
+          <article class="award-panel reveal">
+            <div class="award-label">标题的力量 · 反差对比</div>
+            <div class="versus">
+              <div class="versus-side">
+                <a class="award-heading" href="https://mp.weixin.qq.com/s/UBrFdehMfnJi7HflObyVqQ" target="_blank" rel="noreferrer">不脱裤子穿内裤</a>
+                <div class="award-number">23.3万</div>
+              </div>
+              <div class="versus-tag">VS</div>
+              <div class="versus-side">
+                <a class="award-heading" href="https://mp.weixin.qq.com/s/PjGJDPcae5U-_siAlwpxkQ" target="_blank" rel="noreferrer">清明雨落，思绪随烟起</a>
+                <div class="award-number">4219</div>
+              </div>
+              <div class="versus-line">差 55 倍。标题真的有力量。</div>
+            </div>
+          </article>
+
+          <article class="award-panel reveal">
+            <div class="award-label">朋友圈跑路王 · 转发率最高</div>
+            <a class="award-heading" href="https://mp.weixin.qq.com/s/OsUNssLAz7mbiB5ttI0_-g" target="_blank" rel="noreferrer">#491 怎样提取草莓的 DNA？</a>
+            <div class="award-number">9.45%</div>
+            <p class="award-text">你转发它，大概率不是因为收藏知识点，是因为真的想让朋友也试试。亚军是 #479 世界最远纸飞机，转发率 8.96%。</p>
+          </article>
+
+          <article class="award-panel reveal">
+            <div class="award-label">评论区开锅奖 · 评论密度最高</div>
+            <a class="award-heading" href="https://mp.weixin.qq.com/s/WSEeWY48wPtqRIKpuMH9Bw" target="_blank" rel="noreferrer">#230 如何在饭桌上敲盆而不被妈妈打</a>
+            <div class="award-number">1.04%</div>
+            <p class="award-text">妈妈和餐桌，是评论区永恒的两大生产力。亚军 #356 压水花，贡献了 468 条评论。</p>
+          </article>
+
+          <article class="award-panel reveal">
+            <div class="award-label">观众席金句 · 读者才是真正的编剧</div>
+            <div class="quote-wall">
+              <div class="quote-item"><strong>#459 最高赞 300</strong>上喷枪，看导热快还是加热快</div>
+              <div class="quote-item"><strong>#458 最高赞 61</strong>我还以为道长你会教我正经御水术呢，原来是科学修仙</div>
+              <div class="quote-item"><strong>#456 最高赞 67</strong>毕导觉得很赞</div>
+              <div class="quote-item"><strong>#457 有意思 65</strong>我还以为要做封面那种炸弹，有那种爆炸效果，有点小失望。</div>
+            </div>
+          </article>
+
+          <article class="award-panel reveal">
+            <div class="award-label">神标题集锦 · 看到就想点</div>
+            <div class="title-wall">
+              <a class="title-link" href="https://mp.weixin.qq.com/s/WSEeWY48wPtqRIKpuMH9Bw" target="_blank" rel="noreferrer">如何在饭桌上敲盆而不被妈妈打</a>
+              <a class="title-link" href="https://mp.weixin.qq.com/s/SXXs9b6mI-htrhtH2fQ1-w" target="_blank" rel="noreferrer">用物理学教你如何拉屎的时候压水花</a>
+              <a class="title-link" href="https://mp.weixin.qq.com/s/7dnSgXOfsydlsKQxnblIxA" target="_blank" rel="noreferrer">宇宙是一根摇摆的呆毛。</a>
+              <a class="title-link" href="https://mp.weixin.qq.com/s/UBrFdehMfnJi7HflObyVqQ" target="_blank" rel="noreferrer">如何在不脱外裤的情况下穿上内裤？</a>
+              <a class="title-link" href="https://mp.weixin.qq.com/s/EIhDoD2fJA9l6WPIeBLrHw" target="_blank" rel="noreferrer">把一张图片喂给 AI 500 次会发生什么？</a>
+            </div>
+          </article>
+
+          <article class="award-panel reveal">
+            <div class="award-label">10 万+ 俱乐部 · 499 期仅 10 期入选</div>
+            <div class="ten-wall">
+              <a class="ten-item" href="https://mp.weixin.qq.com/s/UBrFdehMfnJi7HflObyVqQ" target="_blank" rel="noreferrer"><span class="ten-title">#440 不脱裤子穿内裤</span><span class="ten-reads">23.3万</span></a>
+              <a class="ten-item" href="https://mp.weixin.qq.com/s/HV3h35kynr0cV7hUwMv61Q" target="_blank" rel="noreferrer"><span class="ten-title">#453 运送高考试卷为什么用步枪</span><span class="ten-reads">21.4万</span></a>
+              <a class="ten-item" href="https://mp.weixin.qq.com/s/qW-rJizrEEQK3t-1iOJopA" target="_blank" rel="noreferrer"><span class="ten-title">#427 弄断绳子你一定想不到</span><span class="ten-reads">19.9万</span></a>
+              <a class="ten-item" href="https://mp.weixin.qq.com/s/kuPVSaCpOPyFQUyxFaG_9A" target="_blank" rel="noreferrer"><span class="ten-title">#480 铁丝网挡火焰，矿井安全灯</span><span class="ten-reads">17.8万</span></a>
+              <a class="ten-item" href="https://mp.weixin.qq.com/s/8G98_aVtR3vsYFrUuSMZ9g" target="_blank" rel="noreferrer"><span class="ten-title">#441 永不落地的纸飞机</span><span class="ten-reads">12.2万</span></a>
+              <a class="ten-item" href="https://mp.weixin.qq.com/s/QsjIaNETDzyxfmzJaN5C8g" target="_blank" rel="noreferrer"><span class="ten-title">#431 煮水饺要点三次凉水？</span><span class="ten-reads">11.6万</span></a>
+              <a class="ten-item" href="https://mp.weixin.qq.com/s/PSjxs9rcGqqsOV6gQAkrjQ" target="_blank" rel="noreferrer"><span class="ten-title">#459 烧装有水的塑料袋</span><span class="ten-reads">11.5万</span></a>
+              <a class="ten-item" href="https://mp.weixin.qq.com/s/EIhDoD2fJA9l6WPIeBLrHw" target="_blank" rel="noreferrer"><span class="ten-title">#455 把图片喂给 AI 500 次</span><span class="ten-reads">11.1万</span></a>
+              <a class="ten-item" href="https://mp.weixin.qq.com/s/8m3dNb3ZfGZW8BvYyPB3uw" target="_blank" rel="noreferrer"><span class="ten-title">#418 上海中心大厦硬刚台风</span><span class="ten-reads">10.6万</span></a>
+              <a class="ten-item" href="https://mp.weixin.qq.com/s/oyOxXeeZ3kvedq-JoSzpPA" target="_blank" rel="noreferrer"><span class="ten-title">#469 手抓饼测光速</span><span class="ten-reads">10.2万</span></a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="lab" id="lab">
+      <div class="wrap">
+        <div class="section-kicker reveal">Chapter 03</div>
+        <h2 class="chapter-title reveal">实验桌<br>清单</h2>
+        <p class="chapter-copy reveal">半数实验都离不开水，剪刀也忙了 111 次。</p>
+
+        <div class="checklist reveal">
+          <div class="check-row">水 <span>246 期出现</span></div>
+          <div class="check-row">杯子家族 <span>161 次</span></div>
+          <div class="check-row">纸类 <span>147 次</span></div>
+          <div class="check-row">剪刀/刀具 <span>139 次</span></div>
+          <div class="check-row">火源 <span>90 次</span></div>
+          <div class="check-row">食物乱入 <span>86 次</span></div>
+          <div class="check-row">气球 <span>47 次</span></div>
+          <div class="check-row">乒乓球 <span>18 次</span></div>
+        </div>
+
+        <div class="food-box reveal">
+          <div class="award-label" style="color:#ff735f">食物客串区</div>
+          <h3 class="award-heading" style="color:#fff9ef">看起来像做饭，其实在搞物理。</h3>
+          <div class="food-tags">
+            <span class="food-tag">鸡蛋</span>
+            <span class="food-tag">食盐</span>
+            <span class="food-tag">醋</span>
+            <span class="food-tag">草莓 DNA</span>
+            <span class="food-tag">手抓饼测光速</span>
+            <span class="food-tag">可乐</span>
+            <span class="food-tag">牛奶</span>
+            <span class="food-tag">柠檬</span>
+            <span class="food-tag">菠菜</span>
+          </div>
+          <p class="award-text" style="color:var(--dark-soft)">火出现了 60 期，大约每 8 期来一次。每次来，桌面都要先做安全检查。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="fans" id="fans">
+      <div class="wrap">
+        <div class="section-kicker reveal">Chapter 04</div>
+        <h2 class="chapter-title reveal">老朋友<br>点名</h2>
+        <p class="chapter-copy reveal">1938 个昵称出现在投稿记录里。排行榜不重要，重要的是这些名字真的陪我们玩了很久。</p>
+
+        <div class="podium reveal">
+          <div class="podium-row">
+            <div class="podium-rank">01</div>
+            <div>
+              <div class="podium-name">我的世界666</div>
+              <div class="podium-note">平均每 4 期就出现一次，最长连续 10 期。</div>
+            </div>
+            <div class="podium-count">122 次</div>
+          </div>
+          <div class="podium-row">
+            <div class="podium-rank">02</div>
+            <div>
+              <div class="podium-name">夏目漱石</div>
+              <div class="podium-note">横跨 7 个年份段，最长连续 9 期。</div>
+            </div>
+            <div class="podium-count">106 次</div>
+          </div>
+          <div class="podium-row">
+            <div class="podium-rank">03</div>
+            <div>
+              <div class="podium-name">廖鑫</div>
+              <div class="podium-note">从 2017 到 2021，最长连续 8 期。</div>
+            </div>
+            <div class="podium-count">74 次</div>
+          </div>
+        </div>
+
+        <p class="fan-cloud reveal">小姝 47 次 · 刘宝菊 32 次 · laukial 29 次 · tiān³ 27 次 · 碳纤维 21 次 · 蓝思 19 次 · 陈孝镟 15 次 · 朱玉屏 14 次 · yuping 14 次 · 原子 13 次 · 帅残了 12 次 · Alan霖霖 11 次 · 武群 11 次 · 高山流水 11 次 · 汤小路 10 次 · Daisy 10 次 · 独立团团长 10 次</p>
+      </div>
+    </section>
+
+    <section class="qa" id="qa">
+      <div class="wrap">
+        <div class="section-kicker reveal">Chapter 05</div>
+        <h2 class="chapter-title reveal">粉丝问<br>小编答</h2>
+        <p class="chapter-copy reveal">我们替评论区预判了一些问题。形式像粉丝提问，回答肯定不太正经。</p>
+        <p class="qa-intro reveal">真正的问题，还是以你们评论区为准。</p>
+
+        <div class="qa-list">
+          <div class="qa-pair reveal">
+            <div class="bubble q"><small>粉丝问</small>水出现在 246 期里，你们是不是每次选题遇到瓶颈就往桌上倒杯水说“来，今天玩这个”？</div>
+            <div class="bubble a"><small>小编答</small>水不是偷懒，是物理世界的默认素材包。它能流、能浮、能折射、能被加热，还能在关键时刻把桌面变得很忙。</div>
+          </div>
+          <div class="qa-pair reveal">
+            <div class="bubble q"><small>粉丝问</small>剪刀出场 111 次，请问它有工资吗？是不是该给它发终身成就奖？</div>
+            <div class="bubble a"><small>小编答</small>它没有工资，但剪过纸、线、胶带和小编的退路。第 500 期以后，我们会考虑给它配一个专属收纳位。</div>
+          </div>
+          <div class="qa-pair reveal">
+            <div class="bubble q"><small>粉丝问</small>“我的世界666”投了 122 次稿，你们有没有怀疑过这是编辑部自己的小号？</div>
+            <div class="bubble a"><small>小编答</small>不是。要是编辑部有这种毅力，我们早就把桌面收拾干净了。122 次投稿，是真正的长期实验。</div>
+          </div>
+          <div class="qa-pair reveal">
+            <div class="bubble q"><small>粉丝问</small>最高阅读那期是不脱外裤穿内裤。说实话，这个标题是谁先提出来的？</div>
+            <div class="bubble a"><small>小编答</small>会议纪要已经进入保护性封存。我们本来想讲约束和空间关系，结果标题先冲出实验室了。</div>
+          </div>
+          <div class="qa-pair reveal">
+            <div class="bubble q"><small>粉丝问</small>所标杯作为奖品出现 413 期。它到底是杯子、道具，还是物理所精神图腾？</div>
+            <div class="bubble a"><small>小编答</small>三者都是。它最大的物理性质是：无论前面做了什么实验，最后都能稳定出现在奖品里。</div>
+          </div>
+          <div class="qa-pair reveal">
+            <div class="bubble q"><small>粉丝问</small>最低阅读那期标题很文艺。你们是不是一认真抒情，读者就以为账号被盗了？</div>
+            <div class="bubble a"><small>小编答</small>这条假设值得继续实验。结果目前看起来很明确：正经玩可以认真，但标题最好先别太安静。</div>
+          </div>
+          <div class="qa-pair reveal">
+            <div class="bubble q"><small>粉丝问</small>“如何在饭桌上敲盆而不被妈妈打”评论密度最高，所以你们到底给出可行方案了吗？</div>
+            <div class="bubble a"><small>小编答</small>理论上可以讲声学、共振和阻尼。实践上建议先洗碗，再申请实验许可。</div>
+          </div>
+          <div class="qa-pair reveal">
+            <div class="bubble q"><small>粉丝问</small>转发率最高的是提取草莓 DNA。提完之后，那个草莓还能吃吗？</div>
+            <div class="bubble a"><small>小编答</small>实验前可以，实验后不建议。科学牺牲了那颗草莓的甜品生涯，但换来了朋友圈的转发率。</div>
+          </div>
+          <div class="qa-pair reveal">
+            <div class="bubble q"><small>粉丝问</small>499 期只有 10 篇 10 万+，是什么支撑你们走过那些没爆款的日子？</div>
+            <div class="bubble a"><small>小编答</small>投稿、评论、还有对家里小物件的错误信任。爆款是惊喜，能继续玩才是正经玩。</div>
+          </div>
+          <div class="qa-pair reveal">
+            <div class="bubble q"><small>粉丝问</small>第 500 期能不能把剪刀、气球、乒乓球、食盐和所标杯全请出来？</div>
+            <div class="bubble a"><small>小编答</small>可以列入愿望清单。但在那之前，安全提示、桌面清洁和拍摄机位要先入场。</div>
+          </div>
+        </div>
+
+        <div class="qa-cta reveal">以上只是热身。真正的问题，评论区见。</div>
+      </div>
+    </section>
+
+    <section class="catch-up" id="catch-up">
+      <div class="wrap">
+        <div class="section-kicker reveal">Chapter 06</div>
+        <h2 class="chapter-title reveal">补课<br>清单</h2>
+        <p class="chapter-copy reveal">当时可能没刷到，但现在值得补票。这里不判输赢，只负责把宝藏再摆出来一次。</p>
+
+        <div class="catch-list reveal">
+          <a class="catch-item" href="https://mp.weixin.qq.com/s/7dnSgXOfsydlsKQxnblIxA" target="_blank" rel="noreferrer"><strong>#462 宇宙是一根摇摆的呆毛。</strong><span>点赞率 4.39%，看过的人很给面子。</span></a>
+          <a class="catch-item" href="https://mp.weixin.qq.com/s/PjGJDPcae5U-_siAlwpxkQ" target="_blank" rel="noreferrer"><strong>#495 清明雨落，思绪随烟起</strong><span>正经玩少见的安静时刻，适合补一张票。</span></a>
+          <a class="catch-item" href="https://mp.weixin.qq.com/s/Ujky9t8OwqlgBS67L0M2hg" target="_blank" rel="noreferrer"><strong>#477 网球拍也能当“天宫课堂”的平替道具？</strong><span>阅读不高，但创意值很高。</span></a>
+          <a class="catch-item" href="https://mp.weixin.qq.com/s/keYXwwbS4MkooMeV71hxTQ" target="_blank" rel="noreferrer"><strong>#497 这个大漏勺有话要说</strong><span>十周年纪念，也值得在 500 期前后再看一次。</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="final" id="final">
+      <div class="wrap">
+        <h2 class="reveal">水 + 纸 + 剪刀 + 一点火 + 很多投稿。</h2>
+        <p class="reveal">500 期不是终点，只是又找到一个借口，把杯子、剪刀、纸和你一起请上桌。</p>
+        <div class="final-number reveal">501</div>
+        <p class="reveal" style="margin-top: 8px; font-weight: 850;">期见。</p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var items = document.querySelectorAll(".reveal");
+      if (!("IntersectionObserver" in window)) {
+        items.forEach(function (el) { el.classList.add("visible"); });
+        return;
+      }
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      items.forEach(function (el) { observer.observe(el); });
+    });
+  </script>
+</body>
+</html>
