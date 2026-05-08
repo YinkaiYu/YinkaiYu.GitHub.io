@@ -1417,7 +1417,7 @@
           ${DATA.period.map(row => {
             const value = row[key] || 0;
             const alpha = .08 + Math.log10(value + 1) / Math.log10(max + 1) * .52;
-            return `<div class="heat-cell" style="background: rgba(228, 71, 46, ${alpha.toFixed(3)})"><span class="label">${wan(Math.round(value))}<small>${label}</small></span></div>`;
+            return `<div class="heat-cell" style="background: rgba(228, 71, 46, ${alpha.toFixed(3)})"><span class="label">${wan(Math.round(value))}<small>${row.period} · ${label}</small></span></div>`;
           }).join("")}
         </div>
       `).join("");
