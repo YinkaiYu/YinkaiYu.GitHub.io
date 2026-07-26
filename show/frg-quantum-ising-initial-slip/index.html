@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="一维与二维量子 Ising 模型临界虚时间短时初始滑移指数的泛函重整化群计算。">
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="data:,">
   <title>量子 Ising 临界虚时间短时指数：三种时间边界的 FRG 计算</title>
   <style>
     :root {
@@ -305,9 +306,9 @@
         以及随机 \(+\!/\!-\) fixed 三种虚时间初始边界的统一比较。
       </p>
       <div class="meta">
-        <span class="status">版本 1.1 · 已勘误</span>
+        <span class="status">版本 1.2 · 已勘误并修订术语</span>
         <span>发布日期：2026-07-26</span>
-        <span>方法：全局 LPA′ FRG + 一圈 Dirichlet 边界投影</span>
+        <span>方法：全局 LPA′ FRG + Dirichlet 边界 one-loop 投影</span>
         <span>代码与数据：本报告同仓库</span>
       </div>
     </div>
@@ -320,8 +321,8 @@
       \(x_1-\Delta_\phi\) 写成了共轭边界场响应指数
       \(y_{h_1}-\Delta_\phi\)，从而令 ordinary 与随机 fixed 在二维量子
       Ising 中错误地重合。版本 1.0 的参考文献第 2、5 条还包含错误的作者与题名。
-      二维随机边界响应的边缘对数因子也经原文重核，由旧稿的负半次方改为
-      正半次方。
+      二维随机边界响应的对数修正也经原文重核：旧稿误写成指数为
+      \(-1/2\) 的因子，正确结果的指数是 \(+1/2\)。
       这些错误不符合学术写作应有的可核查标准。本版重新推导并重算全部结果，
       将本仓库 FRG 数值与外部对照严格分栏，并逐条按论文原文、arXiv 与 DOI
       核验书目信息；可机器检查的核验表见
@@ -334,14 +335,18 @@
         在量子临界点，虚时间演化会把初态变成欧几里得路径积分的一条“时间边界”。
         因而短时磁化率不是只由体相临界点决定；初态属于哪一种边界固定点同样关键。
         本报告从精确 Wetterich 泛函流方程出发，自行数值积分 \(D=2,3\) Ising
-        的全局 LPA′ 固定点；在半空间上把所得非微扰体顶角代入 ordinary
-        Dirichlet 边界首个奇算符
-        \(\mathcal O_1=\partial_n\phi\) 的一圈波函数重整化投影，并另外处理冻结
-        随机边界场。结果是三个定义不同、不能互换的有符号短时指数。
+        的全局 LPA′ 固定点；在半空间上把所得非微扰体相 four-point vertex
+        （有效四点相互作用）代入 ordinary
+        Dirichlet 边界最低维的 \(\mathbb Z_2\)-odd operator
+        （在自旋翻转下变号的算符）
+        \(\mathcal O_1=\partial_n\phi\) 的 one-loop 波函数重整化投影，并另外处理
+        quenched（随虚时间固定不变的）随机边界场。结果是三个定义不同、不能互换的
+        短时指数；按下文的对数斜率定义，这些指数可以为正，也可以为负。
       </p>
       <div class="result-band">
         <strong>本仓库 FRG 主结果。</strong>
-        在“全局体相 LPA′ + FRG 改进的一圈边界顶角”截断和势极小值投影下，
+        在“全局体相 LPA′ + FRG-improved one-loop 边界 vertex”截断和势极小值
+        投影下，
         一维量子模型得到
         \(\theta_+=-0.116797\)、
         \(\theta_{\rm ord}^{\rm FRG}=0.517767\)、
@@ -354,10 +359,12 @@
       </div>
       <p>
         上述小数是数值求解值，不等于同等精度的物理预测：边界投影仍是低阶截断。
-        将边界顶角从势极小值改投影到原点时，一维量子 ordinary/random 分别变为
+        将边界 vertex 的求值点从势极小值改到原点时，一维量子 ordinary/random
+        分别变为
         \(0.944976/-0.178570\)，二维量子分别变为
         \(0.865926/0.089802\)。这组投影漂移是必须公开的系统误差诊断。
-        作为独立、绝不回填 FRG 流的外部对照，二维 Ising 精确值给出一维量子
+        作为独立、且不用于校准或替换 FRG 计算的外部对照，二维 Ising 精确值给出
+        一维量子
         \((-1/8,\,3/8,\,3/8)\)；已发表高阶体相 NPRG 与经核验的三维
         ordinary 边界数据组合给出二维量子
         \((-0.5181(6),\,0.7571(8),\,0.2069(8))\)。
@@ -379,7 +386,7 @@
     </nav>
 
     <section id="problem">
-      <h2>1. 问题：一次“虚时间淬火”测量什么？</h2>
+      <h2>1. 问题：临界虚时间演化测量什么？</h2>
       <p>
         横场量子 Ising 模型在 \(d\) 维空间格点上的哈密顿量写成
       </p>
@@ -425,9 +432,11 @@
         \left|\frac{\partial\overline M}{\partial m_0}\right|_{m_0=0}.
       \]
       <p>
-        \(a_1\) 是 ordinary 边界短距离展开中首个奇边界算符
+        \(a_1\) 是 ordinary 边界短距离展开中最低维
+        \(\mathbb Z_2\)-odd 边界算符
         \(\mathcal O_1\) 的振幅；它不是共轭边界场。
-        \(m_0=P(+)-P(-)\) 是随机 fixed 符号的平均概率偏置；横线表示冻结无序平均。
+        \(m_0=P(+)-P(-)\) 是随机 fixed 符号的平均概率偏置；横线表示对
+        quenched disorder（在虚时间演化中不随时间改变的随机变量）进行样本平均。
         完全对称的 ordinary 边界和零偏置随机集合本身都有 \(M=0\)，因此必须说明
         对哪一个小量取系数。对任一已经定义的 \(Q_\alpha\)，本报告采用
       </p>
@@ -445,7 +454,8 @@
         Suzuki–Trotter 分解把 \(d\) 维量子模型映射成
         \(D=d+1\) 维经典 Ising 场论；新增的一维正是虚时间。
         \(|\psi_0\rangle\) 不在体内重复出现，而只规定 \(\tau=0\) 处的场，因此它是
-        余维一的时间边界。长尺度下，微观上不同的初态会流向少数几类边界固定点。
+        codimension-one 边界（余维为 1，即边界比体相少一个维度）。长尺度下，
+        微观上不同的初态会流向少数几类边界 fixed point（固定点）。
       </p>
 
       <div class="definition-grid">
@@ -461,7 +471,7 @@
           <p>
             边界保持 \(\mathbb Z_2\) 自旋翻转对称；连续场论中是 ordinary
             Dirichlet 固定点。本报告测量其边界算符振幅 \(a_1\) 向体内传播时的
-            磁化轮廓；若不插入奇算符，平均磁化为零。
+            磁化轮廓；若不插入 \(\mathbb Z_2\)-odd operator，平均磁化为零。
           </p>
         </article>
         <article>
@@ -480,7 +490,8 @@
         <figcaption>
           <strong>图 1｜三种初态不是同一种边界。</strong>
           横轴为空间，纵轴为虚时间。底行是 \(\tau=0\) 的边界条件，向上表示逐步
-          粗粒化后的长尺度描述。(a) 同号固定边界保留非零一阶磁化；
+          coarse-graining（逐步忽略短尺度细节）后的长尺度描述。
+          (a) 同号固定边界保留非零磁化；
           (b) ordinary 边界不选取 \(+\) 或 \(-\)；
           (c) 随机 fixed 在单个样本中钉扎，但零均值无序平均恢复
           \(\mathbb Z_2\) 对称。圆点只作概念示意，不是蒙特卡洛构型。
@@ -491,9 +502,9 @@
         <strong>容易混淆之处：</strong>
         “固定边界条件”是对微观路径积分变量的约束；“ordinary”是一个长尺度边界
         普适类。均匀 \(+\) fixed 流向有序边界，而零均值随机 fixed 在这里流向
-        ordinary（精确 \(D=2\) 情形为边缘地流向它），但本报告比较的两个响应
-        分别对 \(a_1\) 与 \(m_0\) 求导；即使终点固定点相同，两个指数也不应被
-        机械地设成相等。
+        ordinary；在精确 \(D=2\) 情形，这一流动缓慢到会产生对数修正。但本报告
+        比较的两个响应分别对 \(a_1\) 与 \(m_0\) 求导；即使最终流向同一个
+        fixed point，两个指数也不应被机械地设成相等。
       </div>
     </section>
 
@@ -592,13 +603,13 @@
       </figcaption>
       </figure>
 
-      <h3>自产 FRG 与外部对照为什么必须分栏？</h3>
+      <h3>本项目直接计算的 FRG 结果与外部对照为什么必须分栏？</h3>
       <div class="table-wrap">
         <table>
           <thead>
             <tr>
               <th>经典维数</th>
-              <th>本仓库 FRG 主值</th>
+              <th>本项目 FRG 默认投影值</th>
               <th>外部高精度对照</th>
               <th>解释</th>
             </tr>
@@ -608,21 +619,22 @@
               <td>\(D=2\)</td>
               <td>\(\eta_{\rm LPA'}=0.2335938751\)</td>
               <td>\(\eta=1/4\)（精确）</td>
-              <td>精确值只评估误差，不回填 FRG 流</td>
+              <td>精确值只用于评估误差，不校准或替换 FRG 流</td>
             </tr>
             <tr>
               <td>\(D=3\)</td>
               <td>\(\eta_{\rm LPA'}=0.0442723373\)</td>
               <td>\(\eta_{\partial^6}=0.0361(11)\)</td>
-              <td>后者是已发表 NPRG，不冒充本仓库计算</td>
+              <td>后者是已发表的 NPRG 结果，与本项目计算分开列出</td>
             </tr>
           </tbody>
         </table>
       </div>
       <p class="fineprint">
-        数值积分残差和最后几位稳定性只说明“给定截断被解准了”，不说明截断等于
-        完整理论。以下主表首先报告本仓库自产 FRG；精确、Monte Carlo、bootstrap
-        或其他论文的 NPRG 数值统一放在“外部对照”列。
+        数值积分残差和最后几位稳定性只说明“给定截断已达到所报数值精度”，
+        不说明该截断等于完整理论。以下主表首先报告本项目直接计算的 FRG 结果；
+        精确、Monte Carlo、bootstrap 或其他论文的 NPRG 数值统一放在
+        “外部对照”列。
       </p>
     </section>
 
@@ -635,7 +647,7 @@
         \Delta_\phi=\frac{D-2+\eta}{2}.
       \]
       <p>
-        ordinary 边界上最低的 \(\mathbb Z_2\)-奇算符记为
+        ordinary 边界上最低维的 \(\mathbb Z_2\)-odd operator 记为
         \(\mathcal O_1\)，其尺度维数
         \(x_1=\beta_1/\nu\)。与它共轭的均匀边界场 \(h_1\) 的 RG
         本征值不是 \(x_1\)，而是
@@ -647,13 +659,15 @@
         <strong>本次错误的核心就在这里：</strong>
         \(x_1\) 控制 ordinary 的边界算符振幅；\(y_{h_1}\) 控制小均匀边界场，
         也控制随机 fixed 符号的平均偏置。把两者混成一个数，只有在
-        \(x_1=y_{h_1}=s/2\) 的特殊情形才不会立刻露出矛盾。
+        \(x_1=y_{h_1}=s/2\) 的特殊情形才不会产生明显矛盾。
       </div>
 
       <h3 class="fixed">4.1 严格 \(+\) fixed：没有独立的正滑移指数</h3>
       <p>
-        一个已经有序的边界在距离 \(\tau\) 处诱导临界一阶轮廓
-        \(M(\tau)\sim\tau^{-\Delta_\phi}\)。由于 \(z=1\)，有符号斜率为
+        一个已经有序的边界在距离 \(\tau\) 处诱导临界 magnetization profile
+        （磁化轮廓）
+        \(M(\tau)\sim\tau^{-\Delta_\phi}\)。由于 \(z=1\)，按定义可正可负的
+        对数斜率为
       </p>
       \[
         \boxed{\theta_+=-\Delta_\phi
@@ -661,7 +675,7 @@
       \]
       <p>
         这就是为什么均匀 \(+\) 初态的曲线下降。把 ordinary 情形的正
-        \(\theta\) 硬套给它，会混淆两个边界固定点。
+        \(\theta\) 套用到这里，会混淆两个边界 fixed point。
       </p>
 
       <h3 class="ordinary">4.2 ordinary：由 \(x_1=\beta_1/\nu\) 控制</h3>
@@ -705,9 +719,11 @@
 
       <h3>4.3 本仓库怎样用 FRG 自己求 \(x_1\)？</h3>
       <p>
-        在半空间 Dirichlet 传播子上投影 \(\mathcal O_1=\partial_n\phi\) 的二点
-        顶角。本计算保留该顶角的一圈表面壳层项，但把其中四点顶角替换为前节
-        全局 Wetterich 固定点给出的 \(g_4\)。这个“FRG 改进的一圈边界投影”
+        在半空间 Dirichlet 传播子上投影 \(\mathcal O_1=\partial_n\phi\) 的
+        two-point vertex（二点 vertex，即二阶有效关联函数）。本计算保留其
+        one-loop 表面动量壳贡献，并把其中的 four-point vertex 替换为前节
+        全局 Wetterich 固定点给出的 \(g_4\)。这个“FRG-improved one-loop
+        边界投影”
         给出边界重整化异常维数
       </p>
       \[
@@ -721,8 +737,8 @@
         系数 \(3=N+2\) 来自 Ising 的单分量收缩。表面壳层测度 \(K_s\)
         来自与边界平行的 \(s\) 维动量积分。这个归一化在
         \(D=4-\epsilon\) 自动恢复
-        \(\eta_1=-\epsilon/3+O(\epsilon^2)\)，不是由三维文献值反调出来的。
-        但离开 \(D=4\) 后，它并不是完整的场依赖边界 FRG：边界高阶顶角、
+        \(\eta_1=-\epsilon/3+O(\epsilon^2)\)；这一系数未使用三维文献值校准。
+        但离开 \(D=4\) 后，它并不是完整的场依赖边界 FRG：边界高阶 vertex、
         阈值函数的场依赖和更多法向导数算符都被舍弃。因此以下十位数字仅表示
         这个明确截断被精确求解，不能当作十位物理精度。
         由
@@ -732,7 +748,7 @@
         x_1=\frac{D-2+\eta_\parallel}{2}
       \]
       <p>
-        得到本仓库的中心投影
+        得到本项目的默认投影（在势极小值处求值）
       </p>
       \[
         \begin{array}{c|ccc}
@@ -744,7 +760,8 @@
       <p>
         把 \(g_4\) 从势极小值改到原点投影，\(D=2\) 的
         \(x_1\) 变为 \(1.0617726341\)，\(D=3\) 变为
-        \(1.3880617527\)。尤其在 \(D=2\)，如此大的漂移明确说明这一圈边界截断
+        \(1.3880617527\)。尤其在 \(D=2\)，如此大的漂移明确说明 one-loop
+        边界截断
         尚未定量收敛；它不能用数值求根的十位稳定性来掩盖。
       </p>
 
@@ -782,15 +799,16 @@
         y_\Delta=2y_{h_1}-s=2y_w .
       \]
       <p>
-        本仓库中心 FRG 投影给出
+        本项目的默认 FRG 投影给出
         \(D=2\) 的 \(y_w=-0.1345642\)、
-        \(D=3\) 的 \(y_w=-0.3294375\)，因此在该低阶截断内两者都无关，
-        方差修正指数分别为
+        \(D=3\) 的 \(y_w=-0.3294375\)。因此在该低阶截断内，两者的随机场振幅
+        都随 RG 尺度衰减，方差修正指数分别为
         \(\omega_{\rm dis}=0.2691284\) 与 \(0.6588749\)。
       </p>
       <p>
         对精确的二维经典 Ising 边界，\(x_1=y_{h_1}=1/2\)，故 \(y_w=0\)；
-        随机方差实际是边缘无关变量。把非普适正系数吸收到 \(g\) 中，
+        随机方差是 marginally irrelevant：它在 RG 流中只缓慢趋于零，并产生
+        对数修正。把非普适正系数吸收到 \(g\) 中，
         二阶 replica RG 流为
       </p>
       \[
@@ -817,8 +835,8 @@
         \longrightarrow \frac38 .
       \]
       <p>
-        因此有效斜率从 \(3/8\) 上方缓慢趋近。正半次方的符号可由 Pleimling
-        等人原文的
+        因此有效斜率从 \(3/8\) 上方缓慢趋近。修正因子的指数 \(+1/2\) 可由
+        Pleimling 等人原文的
         \(h_s(\ell)=h_s e^{\ell/2}[1+\kappa h^2\ell]^{1/2}\)
         直接核对；这里把非普适 \(\kappa\) 吸收到 \(g_0\) 中。
       </p>
@@ -848,8 +866,9 @@
         <img src="./figures/disorder_rg_flow.png" alt="随机边界耦合在一维和二维量子 Ising 模型中的 RG 流">
         <figcaption>
           <strong>图 3｜无序流也暴露边界截断误差。</strong>
-          (a) 一维量子模型的 FRG 改进一圈投影误判为幂律无关
-          \(y_w=-0.1346\)；精确二维 Ising 边界应为边缘无关，
+          (a) 一维量子模型的 FRG-improved one-loop 投影误给出
+          \(y_w=-0.1346\) 的幂律衰减；精确二维 Ising 边界应为
+          marginally irrelevant，
           \(w\sim\ell^{-1/2}\)。两条线没有被强行重合。
           (b) 二维量子模型中，本仓库同一投影给出
           \(w(\ell)=w_0e^{-0.3294\ell}\)。不同曲线只改变非普适初始振幅。
@@ -858,7 +877,7 @@
     </section>
 
     <section id="results">
-      <h2>5. 数值结果：先看自产 FRG，再看外部对照</h2>
+      <h2>5. 数值结果：先看本项目 FRG，再看外部对照</h2>
       <h3>5.1 本仓库 FRG 主结果</h3>
       <div class="table-wrap">
         <table aria-label="本仓库 FRG 临界初始滑移指数">
@@ -866,9 +885,9 @@
             <tr>
               <th>量子空间维数</th>
               <th>时间边界／协议</th>
-              <th class="num">中心截断 \(\theta\)</th>
+              <th class="num">默认投影 \(\theta\)</th>
               <th>边界投影区间</th>
-              <th>中心截断内的领先标度</th>
+              <th>默认投影下的主导标度</th>
             </tr>
           </thead>
           <tbody>
@@ -876,7 +895,7 @@
               <td rowspan="3">\(d=1\)<br><span class="fineprint">\(D=2\) 经典</span></td>
               <td class="fixed">严格 \(+\) fixed</td>
               <td class="num">\(-0.11679694\)</td>
-              <td>不涉及边界顶角投影</td>
+              <td>不涉及边界 vertex 投影</td>
               <td>\(M\sim\tau^{-0.11679694}\)</td>
             </tr>
             <tr>
@@ -896,7 +915,7 @@
               <td rowspan="3">\(d=2\)<br><span class="fineprint">\(D=3\) 经典</span></td>
               <td class="fixed">严格 \(+\) fixed</td>
               <td class="num">\(-0.52213617\)</td>
-              <td>不涉及边界顶角投影</td>
+              <td>不涉及边界 vertex 投影</td>
               <td>\(M\sim\tau^{-0.52213617}\)</td>
             </tr>
             <tr>
@@ -916,16 +935,18 @@
         </table>
       </div>
       <p class="fineprint">
-        “边界投影区间”只是在同一 FRG 改进一圈边界截断中，将 \(u''\) 分别投影于势极小值和
-        原点所得的跨度；它不是统计置信区间，也不保证覆盖完整理论。中心值采用与
-        体相 LPA′ 一致的势极小值投影。小数后很多位用于复现，不代表物理精度。
+        “边界投影区间”只是在同一 FRG-improved one-loop 边界截断中，将 \(u''\)
+        分别投影于势极小值和原点所得的跨度；它不是统计置信区间，也不保证覆盖
+        完整理论。默认值采用与体相 LPA′ 一致的势极小值投影。小数后很多位用于
+        复现，不代表物理精度。
       </p>
 
       <figure>
         <img src="./figures/exponent_comparison.png" alt="一维与二维量子 Ising 模型三种边界的指数对比">
         <figcaption>
           <strong>图 4｜本仓库截断与对照都要求二维 ordinary/random 分开。</strong>
-          实心点是本仓库 FRG 改进一圈截断，空心点是外部高精度对照；ordinary
+          实心点是本项目 FRG-improved one-loop 截断，空心点是外部高精度对照；
+          ordinary
           和随机点后的
           半透明竖线是两个边界投影之间的跨度。低阶 FRG 的绝对误差明显，但它已经
           正确区分 \(x_1-\Delta_\phi\) 与 \(y_{h_1}-\Delta_\phi\)。
@@ -941,7 +962,7 @@
               <th class="num">\(\theta_+\)</th>
               <th class="num">\(\theta_{\rm ord}\)</th>
               <th class="num">\(\theta_{\rm rand}\)</th>
-              <th>来源与领先随机修正</th>
+              <th>来源与主导随机修正</th>
             </tr>
           </thead>
           <tbody>
@@ -989,14 +1010,14 @@
         \(\theta_{\rm ord}=0.7524(8)\)。但它引用的 Hasenbusch 原始论文直接给出
         \(y_{h_1}=0.7249(6)\)，其标度关系要求
         \(\beta_1/\nu=2-y_{h_1}=1.2751(6)\)，并在原文中给出
-        \((\beta_1-\beta)/\nu=0.7570(7)\)。本报告不静默选择更顺眼的数：
+        \((\beta_1-\beta)/\nu=0.7570(7)\)。本报告不在未说明的情况下选择其中一组：
         表中采用直接核验的原始量 \(y_{h_1}\)，同时把预印本 v1 的替代结果完整列出。
       </div>
 
       <figure>
         <img src="./figures/scaling_curves.png" alt="三种边界下磁化或响应随虚时间的预测曲线">
         <figcaption>
-          <strong>图 5｜本仓库中心 FRG 所预测的方向。</strong>
+          <strong>图 5｜本项目 FRG 默认投影所预测的趋势。</strong>
           曲线按 \(\tau=\tau_{\rm mic}\) 归一化，振幅与修正系数仅作示意。
           红线是均匀 \(+\) fixed 的衰减；青线是 ordinary 边界算符振幅；
           紫色虚线是随机 fixed 平均偏置响应。它们使用本仓库 FRG 主表，而非
@@ -1011,9 +1032,10 @@
         \(C(\tau)=\lim_{M_0\to0}M(\tau)/M_0\) 测量小初始磁化响应，给出一维量子
         \(\theta=0.3734(2)\)、二维量子 \(\theta=0.209(4)\)。
         该工作没有直接抽样 quenched 随机 \(+\!/\!-\) fixed 时间边界，因此不能
-        冒充本报告随机协议的直接模拟。不过它测量的是同一个 ordinary 固定点的
-        共轭场本征方向 \(y_{h_1}-\Delta_\phi\)；在随机表面场无关、随机 fixed
-        渐近流向 ordinary 的前提下，可作为 random/bias 主幂次的间接核对。
+        视为本报告随机协议的直接模拟。不过它测量的是同一个 ordinary 固定点的
+        共轭场本征方向 \(y_{h_1}-\Delta_\phi\)；当随机表面场的振幅在 RG 流中
+        趋于零、随机 fixed 渐近流向 ordinary 时，可作为 random/bias 主幂次的
+        间接核对。
         它不检验随机边界特有的修正项。数值分别与精确 \(3/8\) 和外部对照
         \(0.2069(8)\) 相容。版本 1.0 把这两个 QMC 数误标成 ordinary-profile
         基准，本版已更正。
@@ -1043,17 +1065,19 @@
         <li>
           <div>
             <strong>边界截断误差是 ordinary/random 的主导误差。</strong>
-            本仓库只保留 \(\partial_n\phi\) 的 FRG 改进一圈边界波函数重整化。
+            本项目只保留 \(\partial_n\phi\) 的 FRG-improved one-loop 边界波函数
+            重整化。
             势极小值与原点投影在 \(D=2\) 给出巨大的跨度，且精确值甚至不落在
-            random 的跨度内；因此不能为自产边界投影伪造一个很小的“误差棒”。
+            random 的跨度内；因此没有依据为本项目的边界投影给出很小的误差条。
           </div>
         </li>
         <li>
           <div>
-            <strong>一维量子模型是截断的压力测试。</strong>
-            FRG 改进一圈边界投影得到 \(y_w=-0.1346\)，但精确二维 Ising 边界要求
+            <strong>一维量子模型对该截断构成严格检验。</strong>
+            FRG-improved one-loop 边界投影得到 \(y_w=-0.1346\)，但精确二维 Ising
+            边界要求
             \(y_w=0\) 与对数流。报告同时给出两者，不把精确答案称为 FRG，
-            也不把低阶 FRG 的错误判据藏起来。
+            也明确报告低阶 FRG 给出的错误判据。
           </div>
         </li>
         <li>
@@ -1098,7 +1122,7 @@ python -m http.server 8000</code></pre>
         <li><a href="./data/lpa_convergence_D3.json">\(D=3\) LPA′ 阶数收敛序列</a></li>
         <li><a href="./data/reference_audit.json">逐条书目核验记录</a></li>
         <li><a href="./src/frg_initial_slip/bulk_lpa.py">固定点与稳定性矩阵实现</a></li>
-        <li><a href="./src/frg_initial_slip/surface_frg.py">全局势与半空间一圈边界投影实现</a></li>
+        <li><a href="./src/frg_initial_slip/surface_frg.py">全局势与半空间 one-loop 边界投影实现</a></li>
         <li><a href="./src/frg_initial_slip/boundary_rg.py">三类边界标度恒等式实现</a></li>
         <li><a href="./src/frg_initial_slip/figures.py">全部图形的可重复绘图代码</a></li>
       </ul>
@@ -1106,7 +1130,7 @@ python -m http.server 8000</code></pre>
         软件环境：Python 3.12；NumPy、SciPy、SymPy、Matplotlib、Pandas 与 Jinja2。
         图形同时交付矢量 PDF 和 \(320\,{\rm dpi}\) PNG。随机示意图使用固定种子
         \(20260726\)，不参与任何指数估计。报告中的所有小数均可在
-        <code>results.json</code> 中追溯到“自产 FRG”或“外部对照”字段。
+        <code>results.json</code> 中追溯到“本项目 FRG”或“外部对照”字段。
       </p>
     </section>
 
@@ -1176,7 +1200,7 @@ python -m http.server 8000</code></pre>
           M. Pleimling, F. A. Bagaméry, L. Turban, and F. Iglói,
           “Logarithmic corrections in the two-dimensional Ising model in a random surface field,”
           <a href="https://doi.org/10.1088/0305-4470/37/37/003">J. Phys. A 37, 8801 (2004)</a>。
-          推导 \(D=2\) 随机表面场的边缘无关流与对数修正。
+          推导 \(D=2\) 随机表面场的 marginally irrelevant RG 流与对数修正。
         </li>
         <li>
           A. Maciołek, O. Vasilyev, V. Dotsenko, and S. Dietrich,

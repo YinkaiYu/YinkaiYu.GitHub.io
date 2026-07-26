@@ -374,7 +374,7 @@ def disorder_flow_figure(results: dict, output_directory: Path) -> None:
         np.exp(y_w_1d * ell),
         color=COLORS["random"],
         linewidth=1.5,
-        label=rf"领先边界投影：$y_w={y_w_1d:.4f}$",
+        label=rf"最低阶 FRG 投影：$y_w={y_w_1d:.4f}$",
     )
     axis.semilogy(
         ell,
@@ -386,7 +386,7 @@ def disorder_flow_figure(results: dict, output_directory: Path) -> None:
     )
     axis.set_xlabel(r"RG “时间”  $\ell=\ln b$")
     axis.set_ylabel(r"归一化随机场均方根  $w(\ell)/w_0$", labelpad=7)
-    axis.set_title("1D 量子：领先投影的局限", pad=7)
+    axis.set_title("1D 量子：最低阶投影的局限", pad=7)
     axis.legend(loc="lower left")
     _panel_label(axis, "a")
 
@@ -406,7 +406,7 @@ def disorder_flow_figure(results: dict, output_directory: Path) -> None:
         )
     axis.set_xlabel(r"RG “时间”  $\ell=\ln b$")
     axis.set_ylabel(r"随机场均方根  $w(\ell)$", labelpad=7)
-    axis.set_title("2D 量子：领先投影判定为无关", pad=7)
+    axis.set_title(r"2D 量子：最低阶投影给出 $y_w<0$", pad=7)
     axis.legend(loc="upper right")
     axis.text(
         0.96,
