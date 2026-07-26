@@ -2,7 +2,13 @@
   "metadata": {
     "model": "critical transverse-field Ising model",
     "dynamic_exponent_z": 1.0,
-    "definition": "theta = d ln M / d ln tau in the indicated scaling protocol"
+    "definition": "theta is the signed logarithmic slope in each explicitly defined protocol",
+    "primary_result": "numbers produced by this repository's stated FRG truncation",
+    "protocols": {
+      "fixed_plus": "bulk magnetization from a uniformly ordered fixed boundary",
+      "ordinary": "ordinary boundary-to-bulk profile per unit amplitude of the leading odd boundary operator",
+      "random_fixed": "disorder-averaged magnetization response to a small mean probability bias of fixed random signs"
+    }
   },
   "bulk_lpa_prime_convergence_D3": [
     {
@@ -93,11 +99,34 @@
       "relevant_eigenvalue": -1.5698789871515182
     }
   ],
-  "raw_bulk": {
+  "frg_bulk": {
     "D2_global_LPA_prime": {
-      "eta": 0.2336,
-      "nu": 1.327,
-      "source": "Chen, Tan & Fu, Eur. Phys. J. C 84, 570 (2024)"
+      "dimension": 2.0,
+      "eta": 0.23359387512608182,
+      "asymptotic_amplitude": 3483.1479162893147,
+      "kappa": 0.1975138626791812,
+      "lambda2_minimum": 8.079887079344418,
+      "lambda2_origin": 0.9219410529152646,
+      "regularity_residual": -4.459030159553734e-07,
+      "self_consistency_residual": 1.3360582085120143e-10,
+      "iterations": 5,
+      "rho_large": 2.0,
+      "rho_epsilon": 1e-06,
+      "source": "this repository: global large-field integration"
+    },
+    "D3_global_LPA_prime": {
+      "dimension": 3.0,
+      "eta": 0.044272337321529916,
+      "asymptotic_amplitude": 17.517099981026956,
+      "kappa": 0.030592776235393547,
+      "lambda2_minimum": 6.457395917260847,
+      "lambda2_origin": 4.492876803954478,
+      "regularity_residual": -3.976567297669931e-06,
+      "self_consistency_residual": -2.6323716817433507e-10,
+      "iterations": 9,
+      "rho_large": 10.0,
+      "rho_epsilon": 1e-06,
+      "source": "this repository: global large-field integration"
     },
     "D3_polynomial_LPA_prime": {
       "eta": 0.04425693708821099,
@@ -106,47 +135,277 @@
       "source": "this repository"
     }
   },
-  "bulk_inputs": {
+  "benchmark_bulk_inputs": {
     "2": {
       "eta": {
         "value": 0.25,
         "uncertainty": 0.0
       },
-      "frg_raw_eta": {
-        "value": 0.2336,
-        "uncertainty": 0.0
-      },
-      "kind": "exact 2D Ising calibration"
+      "kind": "exact 2D Ising benchmark"
     },
     "3": {
       "eta": {
         "value": 0.0361,
         "uncertainty": 0.0011
       },
-      "frg_raw_eta": {
-        "value": 0.04425693708821099,
-        "uncertainty": 0.0
-      },
-      "kind": "NPRG derivative expansion O(partial^6)"
+      "kind": "published NPRG derivative expansion O(partial^6)"
     }
   },
-  "surface_inputs": {
+  "benchmark_surface_inputs": {
     "2": {
+      "x_1": {
+        "value": 0.5,
+        "uncertainty": 0.0
+      },
       "y_h1": {
         "value": 0.5,
         "uncertainty": 0.0
       },
-      "kind": "exact 2D Ising ordinary boundary"
+      "kind": "exact 2D Ising ordinary-boundary benchmark"
     },
     "3": {
+      "x_1": {
+        "value": 1.2751,
+        "uncertainty": 0.0006
+      },
       "y_h1": {
         "value": 0.7249,
         "uncertainty": 0.0006
       },
-      "kind": "precision ordinary-boundary calibration"
+      "kind": "Monte Carlo ordinary-boundary benchmark"
     }
   },
   "dimensions": {
+    "1": {
+      "classical_dimension": 2,
+      "frg_truncation": "global bulk LPA-prime plus FRG-improved one-loop Dirichlet boundary wave-function projection",
+      "eta": {
+        "value": 0.23359387512608182,
+        "uncertainty": 0.0
+      },
+      "delta_phi": {
+        "value": 0.11679693756304091,
+        "uncertainty": 0.0
+      },
+      "boundary_operator_dimension": {
+        "value": 0.6345641994497904,
+        "uncertainty": 0.0
+      },
+      "y_h1": {
+        "value": 0.36543580055020963,
+        "uncertainty": 0.0
+      },
+      "theta_fixed_plus": {
+        "value": -0.11679693756304091,
+        "uncertainty": 0.0
+      },
+      "theta_ordinary": {
+        "value": 0.5177672618867495,
+        "uncertainty": 0.0
+      },
+      "theta_random_fixed": {
+        "value": 0.24863886298716872,
+        "uncertainty": 0.0
+      },
+      "random_amplitude_eigenvalue": {
+        "value": -0.13456419944979037,
+        "uncertainty": 0.0
+      },
+      "random_variance_correction_exponent": {
+        "value": 0.26912839889958073,
+        "uncertainty": 0.0
+      },
+      "random_correction": "tau^(-0.2691)",
+      "boundary_frg": {
+        "central_projection": {
+          "projection": "minimum",
+          "lambda2": 8.079887079344418,
+          "quartic_vertex": 24.239661238033257,
+          "eta_1": -0.9644654762265011,
+          "eta_parallel": 1.2691283988995807,
+          "boundary_operator_dimension": 0.6345641994497904,
+          "surface_field_eigenvalue": 0.36543580055020963,
+          "theta_ordinary": 0.5177672618867495,
+          "theta_random_fixed": 0.24863886298716872,
+          "random_amplitude_eigenvalue": -0.13456419944979037,
+          "random_variance_correction_exponent": 0.26912839889958073
+        },
+        "alternative_projection": {
+          "projection": "origin",
+          "lambda2": 0.9219410529152646,
+          "quartic_vertex": 2.765823158745794,
+          "eta_1": -0.11004860685810827,
+          "eta_parallel": 2.1235452682679736,
+          "boundary_operator_dimension": 1.0617726341339868,
+          "surface_field_eigenvalue": -0.061772634133986815,
+          "theta_ordinary": 0.9449756965709459,
+          "theta_random_fixed": -0.17856957169702772,
+          "random_amplitude_eigenvalue": -0.5617726341339868,
+          "random_variance_correction_exponent": 1.1235452682679736
+        },
+        "projection_intervals": {
+          "theta_ordinary": [
+            0.5177672618867495,
+            0.9449756965709459
+          ],
+          "theta_random_fixed": [
+            -0.17856957169702772,
+            0.24863886298716872
+          ],
+          "random_variance_correction_exponent": [
+            0.26912839889958073,
+            1.1235452682679736
+          ]
+        }
+      }
+    },
+    "2": {
+      "classical_dimension": 3,
+      "frg_truncation": "global bulk LPA-prime plus FRG-improved one-loop Dirichlet boundary wave-function projection",
+      "eta": {
+        "value": 0.044272337321529916,
+        "uncertainty": 0.0
+      },
+      "delta_phi": {
+        "value": 0.522136168660765,
+        "uncertainty": 0.0
+      },
+      "boundary_operator_dimension": {
+        "value": 1.329437453710736,
+        "uncertainty": 0.0
+      },
+      "y_h1": {
+        "value": 0.6705625462892639,
+        "uncertainty": 0.0
+      },
+      "theta_fixed_plus": {
+        "value": -0.522136168660765,
+        "uncertainty": 0.0
+      },
+      "theta_ordinary": {
+        "value": 0.8073012850499711,
+        "uncertainty": 0.0
+      },
+      "theta_random_fixed": {
+        "value": 0.14842637762849897,
+        "uncertainty": 0.0
+      },
+      "random_amplitude_eigenvalue": {
+        "value": -0.3294374537107361,
+        "uncertainty": 0.0
+      },
+      "random_variance_correction_exponent": {
+        "value": 0.6588749074214721,
+        "uncertainty": 0.0
+      },
+      "random_correction": "tau^(-0.6589)",
+      "boundary_frg": {
+        "central_projection": {
+          "projection": "minimum",
+          "lambda2": 6.457395917260847,
+          "quartic_vertex": 19.37218775178254,
+          "eta_1": -0.38539742990005776,
+          "eta_parallel": 1.6588749074214724,
+          "boundary_operator_dimension": 1.329437453710736,
+          "surface_field_eigenvalue": 0.6705625462892639,
+          "theta_ordinary": 0.8073012850499711,
+          "theta_random_fixed": 0.14842637762849897,
+          "random_amplitude_eigenvalue": -0.3294374537107361,
+          "random_variance_correction_exponent": 0.6588749074214721
+        },
+        "alternative_projection": {
+          "projection": "origin",
+          "lambda2": 4.492876803954478,
+          "quartic_vertex": 13.478630411863435,
+          "eta_1": -0.2681488320196019,
+          "eta_parallel": 1.7761235053019282,
+          "boundary_operator_dimension": 1.3880617526509642,
+          "surface_field_eigenvalue": 0.6119382473490358,
+          "theta_ordinary": 0.8659255839901993,
+          "theta_random_fixed": 0.08980207868827084,
+          "random_amplitude_eigenvalue": -0.3880617526509642,
+          "random_variance_correction_exponent": 0.7761235053019284
+        },
+        "projection_intervals": {
+          "theta_ordinary": [
+            0.8073012850499711,
+            0.8659255839901993
+          ],
+          "theta_random_fixed": [
+            0.08980207868827084,
+            0.14842637762849897
+          ],
+          "random_variance_correction_exponent": [
+            0.6588749074214721,
+            0.7761235053019284
+          ]
+        }
+      }
+    }
+  },
+  "rows": [
+    {
+      "result_type": "this_repository_frg",
+      "quantum_dimension": 1,
+      "classical_dimension": 2,
+      "boundary": "fixed_plus",
+      "boundary_label": "严格 (+) fixed",
+      "theta": -0.11679693756304091,
+      "theta_uncertainty": 0.0,
+      "leading_correction": "power law"
+    },
+    {
+      "result_type": "this_repository_frg",
+      "quantum_dimension": 1,
+      "classical_dimension": 2,
+      "boundary": "ordinary",
+      "boundary_label": "ordinary",
+      "theta": 0.5177672618867495,
+      "theta_uncertainty": 0.0,
+      "leading_correction": "power law"
+    },
+    {
+      "result_type": "this_repository_frg",
+      "quantum_dimension": 1,
+      "classical_dimension": 2,
+      "boundary": "random_fixed",
+      "boundary_label": "随机 +/- fixed",
+      "theta": 0.24863886298716872,
+      "theta_uncertainty": 0.0,
+      "leading_correction": "tau^(-0.2691)"
+    },
+    {
+      "result_type": "this_repository_frg",
+      "quantum_dimension": 2,
+      "classical_dimension": 3,
+      "boundary": "fixed_plus",
+      "boundary_label": "严格 (+) fixed",
+      "theta": -0.522136168660765,
+      "theta_uncertainty": 0.0,
+      "leading_correction": "power law"
+    },
+    {
+      "result_type": "this_repository_frg",
+      "quantum_dimension": 2,
+      "classical_dimension": 3,
+      "boundary": "ordinary",
+      "boundary_label": "ordinary",
+      "theta": 0.8073012850499711,
+      "theta_uncertainty": 0.0,
+      "leading_correction": "power law"
+    },
+    {
+      "result_type": "this_repository_frg",
+      "quantum_dimension": 2,
+      "classical_dimension": 3,
+      "boundary": "random_fixed",
+      "boundary_label": "随机 +/- fixed",
+      "theta": 0.14842637762849897,
+      "theta_uncertainty": 0.0,
+      "leading_correction": "tau^(-0.6589)"
+    }
+  ],
+  "benchmark_dimensions": {
     "1": {
       "classical_dimension": 2,
       "eta": {
@@ -155,6 +414,10 @@
       },
       "delta_phi": {
         "value": 0.125,
+        "uncertainty": 0.0
+      },
+      "boundary_operator_dimension": {
+        "value": 0.5,
         "uncertainty": 0.0
       },
       "y_h1": {
@@ -181,25 +444,9 @@
         "value": 0.0,
         "uncertainty": 0.0
       },
-      "random_correction": "[ln(tau/tau0)]^(-1/2)",
-      "raw_lpa_prime": {
-        "delta_phi": {
-          "value": 0.1168,
-          "uncertainty": 0.0
-        },
-        "theta_fixed_plus": {
-          "value": -0.1168,
-          "uncertainty": 0.0
-        },
-        "theta_ordinary": {
-          "value": 0.3832,
-          "uncertainty": 0.0
-        },
-        "theta_random_fixed": {
-          "value": 0.3832,
-          "uncertainty": 0.0
-        }
-      }
+      "random_correction": "[1+g0 ln(tau/tau0)]^(+1/2)",
+      "bulk_source": "exact 2D Ising benchmark",
+      "surface_source": "exact 2D Ising ordinary-boundary benchmark"
     },
     "2": {
       "classical_dimension": 3,
@@ -211,6 +458,10 @@
         "value": 0.51805,
         "uncertainty": 0.00055
       },
+      "boundary_operator_dimension": {
+        "value": 1.2751,
+        "uncertainty": 0.0006
+      },
       "y_h1": {
         "value": 0.7249,
         "uncertainty": 0.0006
@@ -220,7 +471,7 @@
         "uncertainty": 0.00055
       },
       "theta_ordinary": {
-        "value": 0.20684999999999998,
+        "value": 0.7570499999999999,
         "uncertainty": 0.0008139410298049853
       },
       "theta_random_fixed": {
@@ -236,28 +487,13 @@
         "uncertainty": 0.0012
       },
       "random_correction": "tau^(-0.5502)",
-      "raw_lpa_prime": {
-        "delta_phi": {
-          "value": 0.5221284685441054,
-          "uncertainty": 0.0
-        },
-        "theta_fixed_plus": {
-          "value": -0.5221284685441054,
-          "uncertainty": 0.0
-        },
-        "theta_ordinary": {
-          "value": 0.20277153145589455,
-          "uncertainty": 0.0006
-        },
-        "theta_random_fixed": {
-          "value": 0.20277153145589455,
-          "uncertainty": 0.0006
-        }
-      }
+      "bulk_source": "published NPRG derivative expansion O(partial^6)",
+      "surface_source": "Monte Carlo ordinary-boundary benchmark"
     }
   },
-  "rows": [
+  "benchmark_rows": [
     {
+      "result_type": "external_benchmark",
       "quantum_dimension": 1,
       "classical_dimension": 2,
       "boundary": "fixed_plus",
@@ -267,6 +503,7 @@
       "leading_correction": "power law"
     },
     {
+      "result_type": "external_benchmark",
       "quantum_dimension": 1,
       "classical_dimension": 2,
       "boundary": "ordinary",
@@ -276,15 +513,17 @@
       "leading_correction": "power law"
     },
     {
+      "result_type": "external_benchmark",
       "quantum_dimension": 1,
       "classical_dimension": 2,
       "boundary": "random_fixed",
       "boundary_label": "随机 +/- fixed",
       "theta": 0.375,
       "theta_uncertainty": 0.0,
-      "leading_correction": "[ln(tau/tau0)]^(-1/2)"
+      "leading_correction": "[1+g0 ln(tau/tau0)]^(+1/2)"
     },
     {
+      "result_type": "external_benchmark",
       "quantum_dimension": 2,
       "classical_dimension": 3,
       "boundary": "fixed_plus",
@@ -294,15 +533,17 @@
       "leading_correction": "power law"
     },
     {
+      "result_type": "external_benchmark",
       "quantum_dimension": 2,
       "classical_dimension": 3,
       "boundary": "ordinary",
       "boundary_label": "ordinary",
-      "theta": 0.20684999999999998,
+      "theta": 0.7570499999999999,
       "theta_uncertainty": 0.0008139410298049853,
       "leading_correction": "power law"
     },
     {
+      "result_type": "external_benchmark",
       "quantum_dimension": 2,
       "classical_dimension": 3,
       "boundary": "random_fixed",
@@ -311,5 +552,18 @@
       "theta_uncertainty": 0.0008139410298049853,
       "leading_correction": "tau^(-0.5502)"
     }
-  ]
+  ],
+  "arxiv_2607_01076_v1_consistency_check": {
+    "reported_beta_1": 0.8003,
+    "reported_nu": 0.6299709,
+    "reported_beta_1_over_nu": 1.2704,
+    "ordinary_theta_using_published_high_order_bulk": {
+      "value": 0.75235,
+      "uncertainty": 0.0008139410298049853
+    },
+    "cited_primary_y_h1": 0.7249,
+    "cited_primary_x_1": 1.2751,
+    "difference_in_x_1": 0.0046999999999999265,
+    "note": "arXiv:2607.01076v1 cites Hasenbusch 2011, but its beta_1 and beta_1/nu do not equal the values implied by Hasenbusch's directly reported y_h1"
+  }
 }

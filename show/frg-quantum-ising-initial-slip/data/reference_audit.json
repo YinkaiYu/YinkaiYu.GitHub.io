@@ -1,0 +1,252 @@
+{
+  "audit_date": "2026-07-26",
+  "policy": "Metadata was checked against the primary arXiv record and/or DOI registry. Numerical claims were checked in the paper text. External numbers are benchmarks and are not inserted into this repository's FRG flow.",
+  "references": [
+    {
+      "id": 1,
+      "authors": [
+        "Shuai Yin",
+        "Peizhi Mai",
+        "Fan Zhong"
+      ],
+      "title": "Universal short-time quantum critical dynamics in imaginary time",
+      "venue": "Physical Review B",
+      "volume": "89",
+      "article": "144115",
+      "year": 2014,
+      "doi": "10.1103/PhysRevB.89.144115",
+      "arxiv": "1311.0108",
+      "verified_urls": [
+        "https://doi.org/10.1103/PhysRevB.89.144115",
+        "https://arxiv.org/abs/1311.0108"
+      ]
+    },
+    {
+      "id": 2,
+      "authors": [
+        "Yu-Rong Shu",
+        "Shuai Yin",
+        "Dao-Xin Yao"
+      ],
+      "title": "Universal short-time quantum critical dynamics of finite-size systems",
+      "venue": "Physical Review B",
+      "volume": "96",
+      "article": "094304",
+      "year": 2017,
+      "doi": "10.1103/PhysRevB.96.094304",
+      "arxiv": "1705.05931",
+      "verified_urls": [
+        "https://doi.org/10.1103/PhysRevB.96.094304",
+        "https://arxiv.org/abs/1705.05931"
+      ],
+      "correction_note": "Version 1.0 of this report had incorrect authors and title. The paper prepares a zero-magnetization, zero-correlation-length disordered product state and measures the small-M0 response through an imaginary-time correlation. It does not directly simulate quenched random +/- fixed temporal boundary conditions, so its theta values are only an indirect benchmark for the conjugate-field response and are not ordinary-profile exponents."
+    },
+    {
+      "id": 3,
+      "authors": [
+        "Yu-Rong Shu",
+        "Yuan-Biao Li",
+        "Shuai Yin"
+      ],
+      "title": "Universal Short-Imaginary-Time Quantum Critical Dynamics Near Boundaries",
+      "venue": "arXiv",
+      "version": "v1",
+      "year": 2026,
+      "arxiv": "2607.01076",
+      "verified_urls": [
+        "https://arxiv.org/abs/2607.01076",
+        "https://arxiv.org/pdf/2607.01076"
+      ],
+      "numerical_consistency_note": "Version 1 reports beta_1=0.8003(4) and beta_1/nu=1.2704 while citing Hasenbusch 2011. That cited primary source directly reports y_h1=0.7249(6), which implies beta_1/nu=2-y_h1=1.2751(6). Both alternatives are disclosed in the report."
+    },
+    {
+      "id": 4,
+      "authors": [
+        "Ivan Balog",
+        "Hugues Chaté",
+        "Bertrand Delamotte",
+        "Maroje Marohnić",
+        "Nicolás Wschebor"
+      ],
+      "title": "Convergence of Nonperturbative Approximations to the Renormalization Group",
+      "venue": "Physical Review Letters",
+      "volume": "123",
+      "article": "240604",
+      "year": 2019,
+      "doi": "10.1103/PhysRevLett.123.240604",
+      "verified_urls": [
+        "https://doi.org/10.1103/PhysRevLett.123.240604"
+      ]
+    },
+    {
+      "id": 5,
+      "authors": [
+        "Gonzalo De Polsi",
+        "Ivan Balog",
+        "Matthieu Tissier",
+        "Nicolás Wschebor"
+      ],
+      "title": "Precision calculation of critical exponents in the O(N) universality classes with the nonperturbative renormalization group",
+      "venue": "Physical Review E",
+      "volume": "101",
+      "article": "042113",
+      "year": 2020,
+      "doi": "10.1103/PhysRevE.101.042113",
+      "arxiv": "2001.07525",
+      "verified_urls": [
+        "https://doi.org/10.1103/PhysRevE.101.042113",
+        "https://arxiv.org/abs/2001.07525"
+      ]
+    },
+    {
+      "id": 6,
+      "authors": [
+        "Yang-yang Tan",
+        "Chuang Huang",
+        "Yong-rui Chen",
+        "Wei-jie Fu"
+      ],
+      "title": "Criticality of the O(N) universality via global solutions to nonperturbative fixed-point equations",
+      "venue": "The European Physical Journal C",
+      "volume": "84",
+      "article": "897",
+      "year": 2024,
+      "doi": "10.1140/epjc/s10052-024-13291-7",
+      "arxiv": "2211.10249",
+      "verified_urls": [
+        "https://doi.org/10.1140/epjc/s10052-024-13291-7",
+        "https://arxiv.org/abs/2211.10249"
+      ],
+      "correction_note": "Version 1.0 of this report had incorrect authors and article metadata."
+    },
+    {
+      "id": 7,
+      "authors": [
+        "H. W. Diehl"
+      ],
+      "title": "The Theory of Boundary Critical Phenomena",
+      "venue": "International Journal of Modern Physics B",
+      "volume": "11",
+      "pages": "3503-3523",
+      "year": 1997,
+      "doi": "10.1142/S0217979297001751",
+      "arxiv": "cond-mat/9610143",
+      "verified_urls": [
+        "https://doi.org/10.1142/S0217979297001751",
+        "https://arxiv.org/abs/cond-mat/9610143"
+      ]
+    },
+    {
+      "id": 8,
+      "authors": [
+        "Martin Hasenbusch"
+      ],
+      "title": "The thermodynamic Casimir force: A Monte Carlo study of the crossover between the ordinary and the normal surface universality class",
+      "venue": "Physical Review B",
+      "volume": "83",
+      "article": "134425",
+      "year": 2011,
+      "doi": "10.1103/PhysRevB.83.134425",
+      "arxiv": "1012.4986",
+      "verified_urls": [
+        "https://doi.org/10.1103/PhysRevB.83.134425",
+        "https://arxiv.org/abs/1012.4986"
+      ],
+      "checked_numerical_claims": {
+        "y_h1": "0.7249(6)",
+        "x_1_derived_as_2_minus_y_h1": "1.2751(6)",
+        "(beta_1-beta)/nu": "0.7570(7)"
+      }
+    },
+    {
+      "id": 9,
+      "authors": [
+        "M. Pleimling",
+        "F. A. Bagaméry",
+        "L. Turban",
+        "F. Iglói"
+      ],
+      "title": "Logarithmic corrections in the two-dimensional Ising model in a random surface field",
+      "venue": "Journal of Physics A: Mathematical and General",
+      "volume": "37",
+      "pages": "8801-8809",
+      "year": 2004,
+      "doi": "10.1088/0305-4470/37/37/003",
+      "arxiv": "cond-mat/0402188",
+      "verified_urls": [
+        "https://doi.org/10.1088/0305-4470/37/37/003",
+        "https://arxiv.org/abs/cond-mat/0402188"
+      ]
+    },
+    {
+      "id": 10,
+      "authors": [
+        "A. Maciołek",
+        "O. Vasilyev",
+        "V. Dotsenko",
+        "S. Dietrich"
+      ],
+      "title": "Critical Casimir forces in the presence of random surface fields",
+      "venue": "Physical Review E",
+      "volume": "91",
+      "article": "032408",
+      "year": 2015,
+      "doi": "10.1103/PhysRevE.91.032408",
+      "arxiv": "1502.02575",
+      "verified_urls": [
+        "https://doi.org/10.1103/PhysRevE.91.032408",
+        "https://arxiv.org/abs/1502.02575"
+      ]
+    },
+    {
+      "id": 11,
+      "authors": [
+        "Zheng Zhou",
+        "Yijian Zou"
+      ],
+      "title": "Studying the 3d Ising surface CFTs on the fuzzy sphere",
+      "venue": "SciPost Physics",
+      "volume": "18",
+      "article": "031",
+      "year": 2025,
+      "doi": "10.21468/SciPostPhys.18.1.031",
+      "arxiv": "2407.15914",
+      "verified_urls": [
+        "https://doi.org/10.21468/SciPostPhys.18.1.031",
+        "https://arxiv.org/abs/2407.15914"
+      ]
+    },
+    {
+      "id": 12,
+      "authors": [
+        "Christof Wetterich"
+      ],
+      "title": "Exact evolution equation for the effective potential",
+      "venue": "Physics Letters B",
+      "volume": "301",
+      "pages": "90-94",
+      "year": 1993,
+      "doi": "10.1016/0370-2693(93)90726-X",
+      "verified_urls": [
+        "https://doi.org/10.1016/0370-2693(93)90726-X"
+      ]
+    },
+    {
+      "id": 13,
+      "authors": [
+        "Daniel F. Litim"
+      ],
+      "title": "Optimized renormalization group flows",
+      "venue": "Physical Review D",
+      "volume": "64",
+      "article": "105007",
+      "year": 2001,
+      "doi": "10.1103/PhysRevD.64.105007",
+      "arxiv": "hep-th/0103195",
+      "verified_urls": [
+        "https://doi.org/10.1103/PhysRevD.64.105007",
+        "https://arxiv.org/abs/hep-th/0103195"
+      ]
+    }
+  ]
+}

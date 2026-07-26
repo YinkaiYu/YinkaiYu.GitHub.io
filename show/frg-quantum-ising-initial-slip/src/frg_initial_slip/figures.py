@@ -8,7 +8,7 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 
-from .boundary_rg import marginal_effective_exponent, marginal_random_coupling
+from .boundary_rg import marginal_random_coupling
 
 COLORS = {
     "ink": "#17212B",
@@ -247,7 +247,7 @@ def convergence_figure(results: dict, output_directory: Path) -> None:
 
 def exponent_comparison_figure(results: dict, output_directory: Path) -> None:
     set_paper_style()
-    figure, axes = plt.subplots(1, 2, figsize=(8.0, 3.35), sharey=True)
+    figure, axes = plt.subplots(1, 2, figsize=(8.25, 3.65), sharey=True)
     figure.subplots_adjust(wspace=0.18)
     labels = ["严格 (+)\nfixed", "ordinary", "随机 +/−\nfixed"]
     markers = ["o", "s", "D"]
@@ -256,61 +256,107 @@ def exponent_comparison_figure(results: dict, output_directory: Path) -> None:
     for panel, quantum_dimension in enumerate((1, 2)):
         axis = axes[panel]
         dimension = results["dimensions"][str(quantum_dimension)]
+        benchmark = results["benchmark_dimensions"][str(quantum_dimension)]
         estimates = [
             dimension["theta_fixed_plus"],
             dimension["theta_ordinary"],
             dimension["theta_random_fixed"],
         ]
-        for x, (estimate, marker, color) in enumerate(
-            zip(estimates, markers, colors, strict=True)
+        benchmark_estimates = [
+            benchmark["theta_fixed_plus"],
+            benchmark["theta_ordinary"],
+            benchmark["theta_random_fixed"],
+        ]
+        for x, (estimate, benchmark_estimate, marker, color) in enumerate(
+            zip(
+                estimates,
+                benchmark_estimates,
+                markers,
+                colors,
+                strict=True,
+            )
         ):
+            if x > 0:
+                interval = dimension["boundary_frg"]["projection_intervals"][
+                    "theta_ordinary" if x == 1 else "theta_random_fixed"
+                ]
+                axis.plot(
+                    [x - 0.08, x - 0.08],
+                    interval,
+                    color=color,
+                    alpha=0.32,
+                    linewidth=5.5,
+                    solid_capstyle="round",
+                    zorder=1,
+                )
             axis.errorbar(
-                x,
+                x - 0.08,
                 estimate["value"],
                 yerr=estimate["uncertainty"],
                 marker=marker,
                 markersize=7,
                 color=color,
-                markerfacecolor="white" if x == 2 else color,
+                markerfacecolor=color,
                 markeredgewidth=1.3,
                 capsize=3,
                 linewidth=1.1,
+                zorder=3,
             )
-            axis.text(
-                x,
-                estimate["value"] + (0.045 if estimate["value"] >= 0 else -0.055),
-                f'{estimate["value"]:+.4f}',
-                ha="center",
-                va="center",
+            axis.errorbar(
+                x + 0.08,
+                benchmark_estimate["value"],
+                yerr=benchmark_estimate["uncertainty"],
+                marker=marker,
+                markersize=6.2,
                 color=color,
-                fontsize=8.5,
+                markerfacecolor="white",
+                markeredgewidth=1.2,
+                capsize=2.5,
+                linewidth=1.0,
+                zorder=4,
             )
+            if x == 1:
+                axis.text(
+                    x - 0.08,
+                    estimate["value"] + 0.06,
+                    f"FRG {estimate['value']:.4f}",
+                    ha="center",
+                    color=color,
+                    fontsize=7.7,
+                )
+                axis.text(
+                    x + 0.08,
+                    benchmark_estimate["value"] - 0.075,
+                    f"对照 {benchmark_estimate['value']:.4f}",
+                    ha="center",
+                    color=color,
+                    fontsize=7.7,
+                )
         axis.axhline(0, color=COLORS["muted"], linewidth=0.8)
         axis.set_xticks(range(3), labels)
         axis.set_xlim(-0.55, 2.55)
         axis.set_title(f"{quantum_dimension}D 量子 Ising", pad=7)
         _panel_label(axis, chr(ord("a") + panel))
-        if quantum_dimension == 1:
-            axis.text(
-                2,
-                0.19,
-                r"同幂律，另有  $[\ln\tau]^{-1/2}$",
-                ha="center",
-                color=COLORS["random"],
-                fontsize=7.7,
-            )
-        else:
-            omega = dimension["random_variance_correction_exponent"]["value"]
-            axis.text(
-                2,
-                0.02,
-                rf"修正  $\tau^{{-{omega:.4f}}}$",
-                ha="center",
-                color=COLORS["random"],
-                fontsize=7.7,
-            )
     axes[0].set_ylabel(r"临界短时对数斜率  $\theta$")
-    axes[0].set_ylim(-0.65, 0.55)
+    axes[0].set_ylim(-0.65, 1.05)
+    axes[0].plot(
+        [],
+        [],
+        marker="o",
+        color=COLORS["ink"],
+        linestyle="none",
+        label="本仓库截断（实心）",
+    )
+    axes[0].plot(
+        [],
+        [],
+        marker="o",
+        markerfacecolor="white",
+        color=COLORS["ink"],
+        linestyle="none",
+        label="外部对照（空心）",
+    )
+    axes[0].legend(loc="upper left")
     _save(figure, output_directory, "exponent_comparison")
 
 
@@ -321,35 +367,36 @@ def disorder_flow_figure(results: dict, output_directory: Path) -> None:
     ell = np.linspace(0, 12, 400)
 
     axis = axes[0]
-    for coupling, color in zip((0.25, 1.0, 4.0), ("#9C8AC5", COLORS["random"], "#4D347C")):
-        axis.plot(
-            ell,
-            marginal_random_coupling(ell, coupling),
-            color=color,
-            linewidth=1.3,
-            label=rf"$g_0={coupling:g}$",
-        )
-    axis.set_xlabel(r"RG “时间”  $\ell=\ln b$")
-    axis.set_ylabel(r"replica 方差耦合  $g(\ell)$", labelpad=7)
-    axis.set_title("1D 量子：边缘无关", pad=7)
-    axis.legend(loc="upper right")
-    _panel_label(axis, "a")
-    inset = axis.inset_axes([0.47, 0.42, 0.48, 0.42])
-    tau = np.exp(np.linspace(0.15, 12, 300))
-    inset.plot(
-        np.log(tau),
-        marginal_effective_exponent(tau),
-        color=COLORS["fixed"],
-        linewidth=1.1,
+    one_dimensional = results["dimensions"]["1"]
+    y_w_1d = one_dimensional["random_amplitude_eigenvalue"]["value"]
+    axis.semilogy(
+        ell,
+        np.exp(y_w_1d * ell),
+        color=COLORS["random"],
+        linewidth=1.5,
+        label=rf"领先边界投影：$y_w={y_w_1d:.4f}$",
     )
-    inset.axhline(0.375, color=COLORS["ink"], linewidth=0.7, linestyle=(0, (3, 2)))
-    inset.set_xlabel(r"$\ln\tau$", fontsize=7)
-    inset.set_ylabel(r"$\theta_{\rm eff}$", fontsize=7)
-    inset.tick_params(labelsize=6.5)
+    axis.semilogy(
+        ell,
+        np.sqrt(marginal_random_coupling(ell, 1.0)),
+        color=COLORS["ink"],
+        linewidth=1.2,
+        linestyle=(0, (4, 2)),
+        label=r"精确边界对照：$w\sim\ell^{-1/2}$",
+    )
+    axis.set_xlabel(r"RG “时间”  $\ell=\ln b$")
+    axis.set_ylabel(r"归一化随机场均方根  $w(\ell)/w_0$", labelpad=7)
+    axis.set_title("1D 量子：领先投影的局限", pad=7)
+    axis.legend(loc="lower left")
+    _panel_label(axis, "a")
 
     axis = axes[1]
     y_w = results["dimensions"]["2"]["random_amplitude_eigenvalue"]["value"]
-    for amplitude, color in zip((0.5, 1.0, 2.0), ("#9C8AC5", COLORS["random"], "#4D347C")):
+    for amplitude, color in zip(
+        (0.5, 1.0, 2.0),
+        ("#9C8AC5", COLORS["random"], "#4D347C"),
+        strict=True,
+    ):
         axis.semilogy(
             ell,
             amplitude * np.exp(y_w * ell),
@@ -359,7 +406,7 @@ def disorder_flow_figure(results: dict, output_directory: Path) -> None:
         )
     axis.set_xlabel(r"RG “时间”  $\ell=\ln b$")
     axis.set_ylabel(r"随机场均方根  $w(\ell)$", labelpad=7)
-    axis.set_title("2D 量子：无关", pad=7)
+    axis.set_title("2D 量子：领先投影判定为无关", pad=7)
     axis.legend(loc="upper right")
     axis.text(
         0.96,
@@ -377,23 +424,19 @@ def scaling_curves_figure(results: dict, output_directory: Path) -> None:
     set_paper_style()
     figure, axes = plt.subplots(1, 2, figsize=(8.0, 3.25), sharey=True)
     figure.subplots_adjust(wspace=0.18)
-    tau = np.geomspace(1.0, 1e4, 400)
+    tau = np.geomspace(1.0, 1e3, 400)
     for panel, quantum_dimension in enumerate((1, 2)):
         axis = axes[panel]
         dimension = results["dimensions"][str(quantum_dimension)]
         fixed = dimension["theta_fixed_plus"]["value"]
         ordinary = dimension["theta_ordinary"]["value"]
+        random = dimension["theta_random_fixed"]["value"]
         fixed_curve = tau**fixed
         ordinary_curve = tau**ordinary
-        if quantum_dimension == 1:
-            random_curve = tau**ordinary / np.sqrt(1.0 + 0.6 * np.log(tau))
-        else:
-            omega = dimension["random_variance_correction_exponent"]["value"]
-            random_curve = tau**ordinary * (1.0 + 0.6 * tau ** (-omega)) / 1.6
+        omega = dimension["random_variance_correction_exponent"]["value"]
+        random_curve = tau**random * (1.0 + 0.15 * tau ** (-omega)) / 1.15
         axis.loglog(tau, fixed_curve, color=COLORS["fixed"], lw=1.5, label="严格 (+) fixed")
-        axis.loglog(
-            tau, ordinary_curve, color=COLORS["ordinary"], lw=1.5, label="ordinary 响应"
-        )
+        axis.loglog(tau, ordinary_curve, color=COLORS["ordinary"], lw=1.5, label="ordinary 响应")
         axis.loglog(
             tau,
             random_curve,
@@ -404,8 +447,8 @@ def scaling_curves_figure(results: dict, output_directory: Path) -> None:
         )
         axis.set_xlabel(r"虚时间  $\tau/\tau_{\rm mic}$")
         axis.set_title(f"{quantum_dimension}D 量子 Ising", pad=7)
-        axis.set_xlim(1, 1e4)
-        axis.set_ylim(0.006, 50)
+        axis.set_xlim(1, 1e3)
+        axis.set_ylim(0.02, 500)
         _panel_label(axis, chr(ord("a") + panel))
     axes[0].set_ylabel("归一化磁化／线性响应（示意）")
     axes[0].legend(loc="lower left")

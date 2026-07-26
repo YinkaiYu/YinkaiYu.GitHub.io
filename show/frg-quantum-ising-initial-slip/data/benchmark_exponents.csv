@@ -1,0 +1,7 @@
+result_type,quantum_dimension,classical_dimension,boundary,boundary_label,theta,theta_uncertainty,leading_correction
+external_benchmark,1,2,fixed_plus,严格 (+) fixed,-0.125,0.0,power law
+external_benchmark,1,2,ordinary,ordinary,0.375,0.0,power law
+external_benchmark,1,2,random_fixed,随机 +/- fixed,0.375,0.0,[1+g0 ln(tau/tau0)]^(+1/2)
+external_benchmark,2,3,fixed_plus,严格 (+) fixed,-0.51805,0.00055,power law
+external_benchmark,2,3,ordinary,ordinary,0.7570499999999999,0.0008139410298049853,power law
+external_benchmark,2,3,random_fixed,随机 +/- fixed,0.20684999999999998,0.0008139410298049853,tau^(-0.5502)
