@@ -196,7 +196,9 @@ def convergence_figure(results: dict, output_directory: Path) -> None:
     eta = np.array([row["eta"] for row in data])
     theta_fixed = -(1.0 + eta) / 2.0
 
-    figure, axes = plt.subplots(1, 2, figsize=(7.2, 3.1))
+    figure, axes = plt.subplots(1, 2, figsize=(7.9, 3.2))
+    # Keep the right-panel y label fully inside the inter-panel gutter.
+    figure.subplots_adjust(wspace=0.42)
     panels = [
         (axes[0], eta, r"异常维数  $\eta$", 0.0361, 0.0011, 0.0362978),
         (
@@ -235,7 +237,7 @@ def convergence_figure(results: dict, output_directory: Path) -> None:
             label="本仓库 LPA′",
         )
         axis.set_xlabel("势能多项式最高阶  $N$")
-        axis.set_ylabel(ylabel)
+        axis.set_ylabel(ylabel, labelpad=7)
         axis.set_xticks(orders)
         axis.set_xlim(1.8, 7.2)
         _panel_label(axis, chr(ord("a") + index))
@@ -245,7 +247,8 @@ def convergence_figure(results: dict, output_directory: Path) -> None:
 
 def exponent_comparison_figure(results: dict, output_directory: Path) -> None:
     set_paper_style()
-    figure, axes = plt.subplots(1, 2, figsize=(7.8, 3.35), sharey=True)
+    figure, axes = plt.subplots(1, 2, figsize=(8.0, 3.35), sharey=True)
+    figure.subplots_adjust(wspace=0.18)
     labels = ["严格 (+)\nfixed", "ordinary", "随机 +/−\nfixed"]
     markers = ["o", "s", "D"]
     colors = [COLORS["fixed"], COLORS["ordinary"], COLORS["random"]]
@@ -313,7 +316,8 @@ def exponent_comparison_figure(results: dict, output_directory: Path) -> None:
 
 def disorder_flow_figure(results: dict, output_directory: Path) -> None:
     set_paper_style()
-    figure, axes = plt.subplots(1, 2, figsize=(7.7, 3.2))
+    figure, axes = plt.subplots(1, 2, figsize=(8.0, 3.25))
+    figure.subplots_adjust(wspace=0.34)
     ell = np.linspace(0, 12, 400)
 
     axis = axes[0]
@@ -326,7 +330,7 @@ def disorder_flow_figure(results: dict, output_directory: Path) -> None:
             label=rf"$g_0={coupling:g}$",
         )
     axis.set_xlabel(r"RG “时间”  $\ell=\ln b$")
-    axis.set_ylabel(r"复制子方差耦合  $g(\ell)$")
+    axis.set_ylabel(r"replica 方差耦合  $g(\ell)$", labelpad=7)
     axis.set_title("1D 量子：边缘无关", pad=7)
     axis.legend(loc="upper right")
     _panel_label(axis, "a")
@@ -354,7 +358,7 @@ def disorder_flow_figure(results: dict, output_directory: Path) -> None:
             label=rf"$w_0={amplitude:g}$",
         )
     axis.set_xlabel(r"RG “时间”  $\ell=\ln b$")
-    axis.set_ylabel(r"随机场均方根  $w(\ell)$")
+    axis.set_ylabel(r"随机场均方根  $w(\ell)$", labelpad=7)
     axis.set_title("2D 量子：无关", pad=7)
     axis.legend(loc="upper right")
     axis.text(
@@ -371,7 +375,8 @@ def disorder_flow_figure(results: dict, output_directory: Path) -> None:
 
 def scaling_curves_figure(results: dict, output_directory: Path) -> None:
     set_paper_style()
-    figure, axes = plt.subplots(1, 2, figsize=(7.8, 3.25), sharey=True)
+    figure, axes = plt.subplots(1, 2, figsize=(8.0, 3.25), sharey=True)
+    figure.subplots_adjust(wspace=0.18)
     tau = np.geomspace(1.0, 1e4, 400)
     for panel, quantum_dimension in enumerate((1, 2)):
         axis = axes[panel]

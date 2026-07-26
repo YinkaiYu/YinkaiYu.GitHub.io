@@ -297,7 +297,7 @@
       <div class="meta">
         <span class="status">可复现计算</span>
         <span>发布日期：2026-07-26</span>
-        <span>方法：Wetterich FRG + 边界／复制子 RG</span>
+        <span>方法：Wetterich FRG + 边界／replica RG</span>
         <span>代码与数据：本报告同仓库</span>
       </div>
     </div>
@@ -310,7 +310,7 @@
         在量子临界点，虚时间演化会把初态变成欧几里得路径积分的一条“时间边界”。
         因而短时磁化率不是只由体相临界点决定；初态属于哪一种边界固定点同样关键。
         本报告从精确的 Wetterich 泛函流方程出发，在体相使用 LPA′ 与高阶导数展开，
-        在边界使用普通边界算符与复制子随机场流，计算一维和二维量子 Ising 模型的
+        在边界使用普通边界算符与 replica 随机场流，计算一维和二维量子 Ising 模型的
         有符号短时对数斜率 \(\theta\)。
       </p>
       <div class="result-band">
@@ -602,14 +602,15 @@
         \(y_{h_1}=(D-1)-\Delta_1=0.7249(6)\)。
       </p>
 
-      <h3 class="random">4.3 随机 \(+\!/\!-\) fixed：复制子方差是否相关？</h3>
+      <h3 class="random">4.3 随机 \(+\!/\!-\) fixed：replica 方差是否相关？</h3>
       <p>
         令边界符号 \(s(\mathbf x)=\pm1\) 的概率为
         \(P(s=\pm1)=(1\pm m_0)/2\)。\(m_0=0\) 时平均磁化严格为零；
         \(\theta_{\rm rand}\) 指
         \(R_{\rm rand}=\left.\partial\overline M/\partial m_0\right|_0\)
-        的增长。引入 \(n\) 个复制子后，零均值、方差 \(\Delta\) 的 quenched
-        边界场产生
+        的增长。为计算冻结随机场的平均，引入 \(n\) 套相同的场
+        \(\phi_a\)（英文称 replicas），完成计算后取 \(n\to0\)。零均值、方差
+        \(\Delta\) 的 quenched 边界场产生
       </p>
       \[
         S_{\partial,\rm rep}
@@ -629,7 +630,7 @@
       \]
       <p>
         \(D=2\) 时 \(y_w=0\)，随机方差是边缘无关变量。把非普适正系数吸收到
-        \(g\) 中，二阶复制子流可写成
+        \(g\) 中，二阶 replica RG 流可写成
       </p>
       \[
         \frac{dg}{d\ell}=-g^2,\qquad
@@ -827,7 +828,7 @@
         <li>
           <div>
             <strong>ordinary 的三维边界输入是外部精密校准。</strong>
-            本仓库直接求解体相 FRG 与复制子边界流；\(y_{h_1}=0.7249(6)\)
+            本仓库直接求解体相 FRG 与 replica 边界流；\(y_{h_1}=0.7249(6)\)
             来自改进格点的高精度 ordinary 边界算符测定。它不是本仓库 LPA′
             自行产生的数字。这样做牺牲了“纯单一截断”的标签，换来可辩护的最终精度。
           </div>
@@ -871,7 +872,7 @@ python -m http.server 8000</code></pre>
         <li><a href="./data/exponents.csv">最终六行指数表</a></li>
         <li><a href="./data/lpa_convergence_D3.json">\(D=3\) LPA′ 阶数收敛序列</a></li>
         <li><a href="./src/frg_initial_slip/bulk_lpa.py">固定点与稳定性矩阵实现</a></li>
-        <li><a href="./src/frg_initial_slip/boundary_rg.py">边界／随机复制子指数实现</a></li>
+        <li><a href="./src/frg_initial_slip/boundary_rg.py">边界／随机 replica 指数实现</a></li>
         <li><a href="./src/frg_initial_slip/figures.py">全部图形的可重复绘图代码</a></li>
       </ul>
       <p class="fineprint">
