@@ -3,23 +3,23 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="一维与二维量子 Ising 模型临界虚时间短时初始滑移指数的泛函重整化群计算。">
+  <meta name="description" content="一维和二维量子 Ising 模型在三种固定时间边界下的虚时间临界短时指数：DE2 泛函重整化群计算、边界两圈重求和与系统误差审计。">
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
-  <link rel="icon" href="data:,">
-  <title>量子 Ising 临界虚时间短时指数：三种时间边界的 FRG 计算</title>
+  <title>量子 Ising 临界虚时间短时指数：三种时间边界的泛函重整化群计算</title>
   <style>
     :root {
       --ink: #17212b;
-      --muted: #5e6b76;
+      --muted: #5d6a74;
       --paper: #fffdf8;
-      --ground: #eee9df;
-      --rule: #d8d2c7;
+      --ground: #ece7dd;
+      --rule: #d8d1c5;
       --fixed: #d95f4b;
       --ordinary: #167d8d;
       --random: #7056a8;
       --accent: #e5a43b;
-      --soft-blue: #e8f0f1;
-      --soft-gold: #f6edda;
+      --bluewash: #e8f0f1;
+      --goldwash: #f6edda;
+      --redwash: #fbefec;
     }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -28,130 +28,125 @@
       color: var(--ink);
       background: var(--ground);
       font-family: "Noto Sans CJK SC", "Microsoft YaHei", system-ui, sans-serif;
-      line-height: 1.78;
       font-size: 17px;
+      line-height: 1.78;
     }
-    a { color: #0e6b79; text-decoration-thickness: 1px; text-underline-offset: 0.16em; }
-    a:hover { color: #0a505a; }
+    a { color: #0d6977; text-underline-offset: 0.15em; }
+    a:hover { color: #084e59; }
     .masthead {
-      background: var(--ink);
+      padding: 4.5rem 1.5rem 4rem;
       color: white;
-      padding: 4.8rem 1.5rem 4.2rem;
+      background:
+        linear-gradient(118deg, rgba(22,125,141,0.2), transparent 42%),
+        var(--ink);
       border-bottom: 5px solid var(--accent);
     }
     .masthead-inner, .page { max-width: 1120px; margin: 0 auto; }
     .kicker {
       margin: 0 0 1rem;
-      color: #a8d5da;
+      color: #a7d5db;
       font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.16em;
+      font-weight: 750;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
     }
     h1 {
-      max-width: 930px;
+      max-width: 970px;
       margin: 0;
       font-family: "Noto Serif CJK SC", "Songti SC", serif;
-      font-size: clamp(2.25rem, 5vw, 4.25rem);
+      font-size: clamp(2.15rem, 5vw, 4.15rem);
       line-height: 1.16;
       letter-spacing: -0.035em;
-      font-weight: 700;
     }
     .deck {
-      max-width: 850px;
+      max-width: 880px;
       margin: 1.4rem 0 0;
       color: #dbe4e8;
-      font-size: 1.12rem;
-      line-height: 1.7;
+      font-size: 1.08rem;
     }
     .meta {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.55rem 1.5rem;
-      margin-top: 2.2rem;
-      color: #aebbc2;
+      gap: 0.6rem 1.5rem;
+      margin-top: 2rem;
+      color: #adbcc3;
       font-size: 0.84rem;
     }
     .status {
-      padding: 0.08rem 0.55rem;
+      padding: 0.08rem 0.58rem;
       color: var(--ink);
       background: var(--accent);
       border-radius: 999px;
-      font-weight: 700;
+      font-weight: 750;
     }
     .page {
+      padding: 0 4.5rem 5rem;
       background: var(--paper);
-      padding: 0 4.7rem 5rem;
-      box-shadow: 0 12px 42px rgba(23, 33, 43, 0.09);
+      box-shadow: 0 12px 42px rgba(23,33,43,0.09);
       overflow-x: clip;
     }
     .contents {
       display: grid;
-      grid-template-columns: 1fr 2.1fr;
-      gap: 3.8rem;
-      padding: 3.2rem 0;
+      grid-template-columns: 0.8fr 2.2fr;
+      gap: 3.5rem;
+      padding: 3rem 0;
       border-bottom: 1px solid var(--rule);
     }
     .contents h2 { margin: 0; }
     .contents ol {
       columns: 2;
-      column-gap: 2.5rem;
+      column-gap: 2.4rem;
       margin: 0;
-      padding-left: 1.2rem;
+      padding-left: 1.25rem;
       font-size: 0.91rem;
     }
-    .contents li { break-inside: avoid; margin-bottom: 0.45rem; }
-    section { padding: 3.8rem 0 0; }
+    .contents li { break-inside: avoid; margin-bottom: 0.4rem; }
+    section { padding: 3.7rem 0 0; scroll-margin-top: 1rem; }
     h2 {
-      margin: 0 0 1.25rem;
+      margin: 0 0 1.15rem;
       font-family: "Noto Serif CJK SC", "Songti SC", serif;
-      font-size: clamp(1.65rem, 3vw, 2.25rem);
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
       line-height: 1.3;
       letter-spacing: -0.02em;
     }
     h3 {
-      margin: 2.2rem 0 0.75rem;
+      margin: 2.25rem 0 0.7rem;
       font-size: 1.13rem;
       line-height: 1.45;
     }
-    p { margin: 0.7rem 0 1.1rem; }
-    .lede { font-size: 1.08rem; color: #293741; }
-    .abstract {
-      padding: 2rem 0 0;
-      font-size: 1.05rem;
-    }
-    .result-band {
-      margin: 2.1rem 0 0;
-      padding: 1.25rem 1.5rem;
-      border-left: 5px solid var(--ordinary);
-      background: var(--soft-blue);
-      font-size: 1rem;
-    }
-    .result-band strong { color: #0d6571; }
-    .erratum {
-      margin: 2rem 0 0;
-      padding: 1.2rem 1.45rem;
-      border: 1px solid #d8b1a8;
-      border-left: 5px solid var(--fixed);
-      background: #fbefec;
+    p { margin: 0.72rem 0 1.08rem; }
+    .lede { font-size: 1.07rem; color: #293741; }
+    .small { color: var(--muted); font-size: 0.88rem; }
+    .cite { white-space: nowrap; font-size: 0.82em; font-weight: 700; }
+    .result-band, .callout, .warning, .integrity {
+      margin: 1.7rem 0;
+      padding: 1.12rem 1.35rem;
       font-size: 0.94rem;
     }
-    .erratum strong { color: #9c3f31; }
-    .equation-note {
-      max-width: 780px;
-      margin: 1.2rem auto;
-      color: var(--muted);
-      font-size: 0.88rem;
-      text-align: center;
+    .result-band { border-left: 5px solid var(--ordinary); background: var(--bluewash); }
+    .callout { border: 1px solid #decda9; background: var(--goldwash); }
+    .warning { border-left: 5px solid var(--fixed); background: var(--redwash); }
+    .integrity { border: 1px solid #a9c8cd; background: #f1f7f7; }
+    .definition-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.1rem;
+      margin: 1.6rem 0 2rem;
     }
-    mjx-container[display="true"] {
-      display: block;
-      max-width: 100%;
-      overflow-x: auto;
-      overflow-y: hidden;
-      padding: 0.25rem 0;
+    .definition-grid article {
+      padding: 1.05rem 1.1rem 1.15rem;
+      background: #faf8f3;
+      border-top: 4px solid var(--rule);
     }
-    figure { margin: 2.2rem 0 2.7rem; }
+    .definition-grid article:nth-child(1) { border-color: var(--fixed); }
+    .definition-grid article:nth-child(2) { border-color: var(--ordinary); }
+    .definition-grid article:nth-child(3) { border-color: var(--random); }
+    .definition-grid h3 { margin-top: 0; font-size: 1rem; }
+    .definition-grid p { margin-bottom: 0; font-size: 0.88rem; }
+    .fixed { color: var(--fixed); }
+    .ordinary { color: var(--ordinary); }
+    .random { color: var(--random); }
+    figure { margin: 2.25rem 0 2.7rem; }
     figure img {
       display: block;
       width: 100%;
@@ -159,14 +154,14 @@
       background: white;
     }
     figcaption {
-      max-width: 900px;
+      max-width: 940px;
       margin: 0.85rem auto 0;
       color: #46545e;
       font-size: 0.88rem;
       line-height: 1.65;
     }
     figcaption strong { color: var(--ink); }
-    .table-wrap { overflow-x: auto; margin: 1.5rem 0 2rem; }
+    .table-wrap { margin: 1.5rem 0 2rem; overflow-x: auto; }
     table {
       width: 100%;
       border-collapse: collapse;
@@ -174,114 +169,64 @@
       font-variant-numeric: tabular-nums;
     }
     th, td {
-      padding: 0.78rem 0.7rem;
+      padding: 0.76rem 0.68rem;
       border-bottom: 1px solid var(--rule);
       text-align: left;
       vertical-align: top;
     }
-    th {
-      background: #f3f0e9;
-      font-weight: 700;
-      white-space: nowrap;
-    }
+    th { background: #f3f0e9; white-space: nowrap; }
     tbody tr:hover { background: #faf7f0; }
     .num { text-align: right; white-space: nowrap; }
-    .fixed { color: var(--fixed); }
-    .ordinary { color: var(--ordinary); }
-    .random { color: var(--random); }
-    .definition-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.2rem;
-      margin: 1.6rem 0 2rem;
-    }
-    .definition-grid article {
-      padding: 1.1rem 1.15rem 1.2rem;
-      border-top: 4px solid var(--rule);
-      background: #faf8f3;
-    }
-    .definition-grid article:nth-child(1) { border-color: var(--fixed); }
-    .definition-grid article:nth-child(2) { border-color: var(--ordinary); }
-    .definition-grid article:nth-child(3) { border-color: var(--random); }
-    .definition-grid h3 { margin-top: 0; font-size: 1rem; }
-    .definition-grid p { margin-bottom: 0; font-size: 0.88rem; }
-    .callout {
-      margin: 1.7rem 0;
-      padding: 1.05rem 1.3rem;
-      border: 1px solid #decda9;
-      background: var(--soft-gold);
-      font-size: 0.93rem;
-    }
-    .steps {
-      counter-reset: method;
-      list-style: none;
-      padding: 0;
-    }
-    .steps li {
-      counter-increment: method;
-      display: grid;
-      grid-template-columns: 2.2rem 1fr;
-      gap: 0.8rem;
-      margin: 1.1rem 0;
-    }
-    .steps li::before {
-      content: counter(method);
-      display: grid;
-      place-items: center;
-      width: 1.8rem;
-      height: 1.8rem;
-      border-radius: 50%;
-      color: white;
-      background: var(--ink);
-      font-size: 0.8rem;
-      font-weight: 700;
-    }
     code {
       padding: 0.08em 0.3em;
+      background: #f0ede6;
       border-radius: 3px;
-      background: #efede7;
-      font-family: "JetBrains Mono", "SFMono-Regular", monospace;
+      font-family: "SFMono-Regular", Consolas, monospace;
       font-size: 0.88em;
     }
     pre {
+      padding: 1rem 1.15rem;
       overflow-x: auto;
-      padding: 1rem 1.2rem;
-      color: #e9f1f4;
-      background: #1c2933;
+      color: #e6eef1;
+      background: var(--ink);
       border-radius: 4px;
-      line-height: 1.55;
-      font-size: 0.82rem;
+      line-height: 1.5;
     }
-    pre code { padding: 0; color: inherit; background: transparent; }
+    pre code { padding: 0; color: inherit; background: none; }
+    mjx-container[display="true"] {
+      display: block;
+      max-width: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 0.25rem 0;
+    }
     .references {
-      padding-left: 1.3rem;
-      font-size: 0.86rem;
+      padding-left: 1.6rem;
+      font-size: 0.88rem;
     }
     .references li { margin-bottom: 0.8rem; }
-    .fineprint { color: var(--muted); font-size: 0.82rem; }
-    .footer {
+    footer {
       margin-top: 4rem;
-      padding-top: 1.6rem;
-      border-top: 1px solid var(--rule);
+      padding-top: 1.5rem;
       color: var(--muted);
-      font-size: 0.8rem;
+      border-top: 1px solid var(--rule);
+      font-size: 0.83rem;
     }
-    @media (max-width: 820px) {
-      body { font-size: 16px; }
-      .page { padding: 0 1.2rem 3rem; box-shadow: none; }
-      .masthead { padding: 3.3rem 1.2rem 3rem; }
+    @media (max-width: 800px) {
+      .page { padding: 0 1.25rem 3rem; }
+      .masthead { padding-top: 3rem; }
       .contents { grid-template-columns: 1fr; gap: 1rem; }
       .contents ol { columns: 1; }
       .definition-grid { grid-template-columns: 1fr; }
-      section { padding-top: 3rem; }
-      th, td { padding: 0.62rem 0.55rem; }
+      body { font-size: 16px; }
     }
     @media print {
-      body { background: white; font-size: 10.5pt; }
-      .masthead { padding: 2rem; print-color-adjust: exact; }
-      .page { max-width: none; padding: 0 1cm; box-shadow: none; }
+      body { background: white; font-size: 11pt; }
+      .masthead { color: var(--ink); background: white; border-bottom: 2px solid var(--ink); }
+      .deck, .meta, .kicker { color: var(--ink); }
+      .page { max-width: none; padding: 0; box-shadow: none; }
       a { color: inherit; }
-      figure, table { break-inside: avoid; }
+      section, figure { break-inside: avoid; }
     }
   </style>
   <script>
@@ -289,959 +234,984 @@
       tex: {
         inlineMath: [['\\(', '\\)']],
         displayMath: [['\\[', '\\]']],
-        processEscapes: true
+        tags: 'ams'
       },
-      svg: { fontCache: 'global' }
+      options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }
     };
   </script>
-  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
+
+
+
+
+
+
+
+
+
+
   <header class="masthead">
     <div class="masthead-inner">
-      <p class="kicker">Functional renormalization group · Research report</p>
-      <h1>边界先于时间：量子 Ising 临界虚时间短时指数</h1>
+      <p class="kicker">FUNCTIONAL RENORMALIZATION GROUP · REPRODUCIBLE REPORT</p>
+      <h1>量子 Ising 临界虚时间短时指数：三种时间边界的泛函重整化群计算</h1>
       <p class="deck">
-        一维与二维横场 Ising 模型的泛函重整化群计算；严格 \(+\) fixed、ordinary，
-        以及随机 \(+\!/\!-\) fixed 三种虚时间初始边界的统一比较。
+        一维与二维横场 Ising 模型；严格 \(+\) fixed、ordinary profile，以及
+        quenched 随机 \(+/-\) fixed 初态的小平均偏置响应。本文从问题定义、边界算符、
+        DE2 数值流、两圈边界重求和到误差预算逐层说明。
       </p>
       <div class="meta">
-        <span class="status">版本 1.2 · 已勘误并修订术语</span>
-        <span>发布日期：2026-07-26</span>
-        <span>方法：全局 LPA′ FRG + Dirichlet 边界 one-loop 投影</span>
-        <span>代码与数据：本报告同仓库</span>
+        <span class="status">版本 2.0</span>
+        <span>更新：2026-07-26</span>
+        <span>体相：场依赖 \(O(\partial^2)\) 导数展开（DE2）</span>
+        <span>边界：通用两圈顶角流 + conformal–Borel–Leroy 重求和</span>
       </div>
     </div>
   </header>
 
   <main class="page">
-    <aside class="erratum" id="correction">
-      <strong>重要勘误与致歉。</strong>
-      版本 1.0 错把 ordinary 的边界算符振幅指数
-      \(x_1-\Delta_\phi\) 写成了共轭边界场响应指数
-      \(y_{h_1}-\Delta_\phi\)，从而令 ordinary 与随机 fixed 在二维量子
-      Ising 中错误地重合。版本 1.0 的参考文献第 2、5 条还包含错误的作者与题名。
-      二维随机边界响应的对数修正也经原文重核：旧稿误写成指数为
-      \(-1/2\) 的因子，正确结果的指数是 \(+1/2\)。
-      这些错误不符合学术写作应有的可核查标准。本版重新推导并重算全部结果，
-      将本仓库 FRG 数值与外部对照严格分栏，并逐条按论文原文、arXiv 与 DOI
-      核验书目信息；可机器检查的核验表见
-      <a href="./data/reference_audit.json">reference_audit.json</a>。
-    </aside>
-
-    <section class="abstract" id="abstract">
-      <h2>摘要</h2>
-      <p class="lede">
-        在量子临界点，虚时间演化会把初态变成欧几里得路径积分的一条“时间边界”。
-        因而短时磁化率不是只由体相临界点决定；初态属于哪一种边界固定点同样关键。
-        本报告从精确 Wetterich 泛函流方程出发，自行数值积分 \(D=2,3\) Ising
-        的全局 LPA′ 固定点；在半空间上把所得非微扰体相 four-point vertex
-        （有效四点相互作用）代入 ordinary
-        Dirichlet 边界最低维的 \(\mathbb Z_2\)-odd operator
-        （在自旋翻转下变号的算符）
-        \(\mathcal O_1=\partial_n\phi\) 的 one-loop 波函数重整化投影，并另外处理
-        quenched（随虚时间固定不变的）随机边界场。结果是三个定义不同、不能互换的
-        短时指数；按下文的对数斜率定义，这些指数可以为正，也可以为负。
-      </p>
-      <div class="result-band">
-        <strong>本仓库 FRG 主结果。</strong>
-        在“全局体相 LPA′ + FRG-improved one-loop 边界 vertex”截断和势极小值
-        投影下，
-        一维量子模型得到
-        \(\theta_+=-0.116797\)、
-        \(\theta_{\rm ord}^{\rm FRG}=0.517767\)、
-        \(\theta_{\rm rand}^{\rm FRG}=0.248639\)；
-        二维量子模型得到
-        \(\theta_+=-0.522136\)、
-        \(\theta_{\rm ord}^{\rm FRG}=0.807301\)、
-        \(\theta_{\rm rand}^{\rm FRG}=0.148426\)。
-        这里 ordinary 与 random 在二维量子模型中清楚不同。
-      </div>
-      <p>
-        上述小数是数值求解值，不等于同等精度的物理预测：边界投影仍是低阶截断。
-        将边界 vertex 的求值点从势极小值改到原点时，一维量子 ordinary/random
-        分别变为
-        \(0.944976/-0.178570\)，二维量子分别变为
-        \(0.865926/0.089802\)。这组投影漂移是必须公开的系统误差诊断。
-        作为独立、且不用于校准或替换 FRG 计算的外部对照，二维 Ising 精确值给出
-        一维量子
-        \((-1/8,\,3/8,\,3/8)\)；已发表高阶体相 NPRG 与经核验的三维
-        ordinary 边界数据组合给出二维量子
-        \((-0.5181(6),\,0.7571(8),\,0.2069(8))\)。
-      </p>
-    </section>
-
     <nav class="contents" aria-label="目录">
-      <h2>阅读路径</h2>
+      <h2>目录</h2>
       <ol>
-        <li><a href="#problem">问题与可测量量</a></li>
-        <li><a href="#boundary">为什么初态是一条边界</a></li>
-        <li><a href="#frg">FRG 流方程与数值截断</a></li>
-        <li><a href="#boundary-rg">三类边界的指数公式</a></li>
-        <li><a href="#results">数值结果与比较</a></li>
-        <li><a href="#precision">精度、验证与限制</a></li>
-        <li><a href="#reproduce">复现实验</a></li>
+        <li><a href="#summary">结论先行</a></li>
+        <li><a href="#problem">模型与问题</a></li>
+        <li><a href="#protocols">三种边界协议</a></li>
+        <li><a href="#scaling">标度关系</a></li>
+        <li><a href="#bulk-frg">体相 DE2 FRG</a></li>
+        <li><a href="#boundary-frg">ordinary 边界计算</a></li>
+        <li><a href="#results">数值结果</a></li>
+        <li><a href="#random">随机 fixed 与对数修正</a></li>
+        <li><a href="#literature">与两篇指定工作的差异</a></li>
+        <li><a href="#uncertainty">系统误差与局限</a></li>
+        <li><a href="#reproduce">复现方法</a></li>
         <li><a href="#references">参考文献</a></li>
       </ol>
     </nav>
 
+    <section id="summary">
+      <h2>结论先行</h2>
+      <p class="lede">
+        本仓库不再把 LPA′ 当作最终方法。体相直接求解场依赖的 DE2 Wetterich 固定点；
+        ordinary 边界使用通用两圈边界算符级数，再由本仓库完成重求和和参数稳定性扫描。
+        下表是这条流水线给出的有符号对数斜率 \(\theta\)，误差为保守的系统误差估计。
+      </p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>量子空间维数</th>
+              <th>时间边界／观测量</th>
+              <th class="num">本仓库 FRG 的 \(\theta\)</th>
+              <th class="num">外部高精度对照</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td rowspan="3">\(d=1\)</td>
+              <td class="fixed">严格 \(+\) fixed 的磁化</td>
+              <td class="num">\(-0.1454\pm0.0375\)</td>
+              <td class="num">\(-0.125\)（精确）</td>
+            </tr>
+            <tr>
+              <td class="ordinary">ordinary profile 振幅</td>
+              <td class="num">\(0.4455\pm0.1986\)</td>
+              <td class="num">\(0.375\)（精确）</td>
+            </tr>
+            <tr>
+              <td class="random">随机 fixed 的平均偏置响应</td>
+              <td class="num">\(0.2636\pm0.2123\)</td>
+              <td class="num">\(0.375\) 加 \(-\frac12\) 次幂的对数因子</td>
+            </tr>
+            <tr>
+              <td rowspan="3">\(d=2\)</td>
+              <td class="fixed">严格 \(+\) fixed 的磁化</td>
+              <td class="num">\(-0.5223\pm0.0057\)</td>
+              <td class="num">\(-0.51805\pm0.00055\)</td>
+            </tr>
+            <tr>
+              <td class="ordinary">ordinary profile 振幅</td>
+              <td class="num">\(0.7593\pm0.0309\)</td>
+              <td class="num">\(0.75705\pm0.00081\)</td>
+            </tr>
+            <tr>
+              <td class="random">随机 fixed 的平均偏置响应</td>
+              <td class="num">\(0.1962\pm0.0330\)</td>
+              <td class="num">\(0.20685\pm0.00081\)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="result-band">
+        <strong>最重要的物理区分：</strong>
+        ordinary profile 由 \(x_1-\Delta_\phi\) 控制；随机 fixed 的小平均偏置响应由
+        \(y_{h_1}-\Delta_\phi\) 控制。因为 \(x_1+y_{h_1}=D-1\)，二者在
+        \(D=3\) 一般不同。它们只在精确二维经典 Ising 边界
+        \(x_1=y_{h_1}=\frac12\) 时偶然相等。
+      </div>
+
+      <div class="integrity">
+        <strong>计算与文献的边界。</strong>
+        \(U_k(\rho)\) 与 \(Z_k(\rho)\) 的 DE2 固定点、调节器扫描、PMS、配点收敛和重求和
+        都由本仓库实际计算。ordinary 的两圈级数系数是通用解析输入，来源和核验见
+        <a class="cite" href="#ref-14">[14]</a>；外部精确值、Monte Carlo 和高阶 NPRG
+        只作为对照，没有拿来校准中心值。早期版本曾有错误书目信息；本版的每条外部
+        数值都带引用，并在 <a href="./data/reference_audit.json">reference_audit.json</a>
+        中记录核验来源。
+      </div>
+    </section>
+
     <section id="problem">
-      <h2>1. 问题：临界虚时间演化测量什么？</h2>
+      <h2>1. 模型与要计算的问题</h2>
       <p>
-        横场量子 Ising 模型在 \(d\) 维空间格点上的哈密顿量写成
+        横场量子 Ising 模型的 Hamiltonian（能量算符）写成
       </p>
       \[
-        H=-J\sum_{\langle i j\rangle}\sigma_i^z\sigma_j^z
+        H=-J\sum_{\langle ij\rangle}\sigma_i^z\sigma_j^z
           -h\sum_i\sigma_i^x .
       \]
       <p>
-        \(J>0\) 是相邻自旋趋向同向的铁磁耦合；\(h\) 是横向磁场；
-        \(\sigma_i^x\) 与 \(\sigma_i^z\) 是格点 \(i\) 上的 Pauli 矩阵；
-        \(\langle i j\rangle\) 表示最近邻。把 \(h/J\) 调到量子临界值后，从初态
-        \(|\psi_0\rangle\) 出发的归一化虚时间态为
+        这里 \(J>0\) 是相邻自旋沿 \(z\) 方向的铁磁耦合，\(h\) 是沿 \(x\) 方向的横场，
+        \(\sigma_i^x\) 与 \(\sigma_i^z\) 是格点 \(i\) 上的 Pauli 矩阵，
+        \(\langle ij\rangle\) 表示相邻格点。调到量子临界点 \(h=h_c\) 后，长距离理论具有
+        动力学指数 \(z=1\)，所以 \(d\) 维量子模型等价于
+        \(D=d+1\) 维各向同性经典 Ising 场论。虚时间 \(\tau\) 因而是这个
+        \(D\) 维 Euclidean 半空间的一条坐标。虚时间短时标度的早期量子动力学背景见
+        <a class="cite" href="#ref-1">[1]</a>。
+      </p>
+      <p>
+        对每个协议，我们先明确定义一个观测量 \(\mathcal O(\tau)\)，再把有符号指数
+        \(\theta\) 定义为标度区间内的对数斜率：
       </p>
       \[
-        |\psi(\tau)\rangle =
-        \frac{e^{-\tau H}|\psi_0\rangle}
-        {\sqrt{\langle\psi_0|e^{-2\tau H}|\psi_0\rangle}} ,
+        \mathcal O(\tau)\sim \tau^\theta,\qquad
+        \theta=\frac{d\ln \mathcal O}{d\ln\tau}.
       \]
       <p>
-        其中 \(\tau\ge 0\) 是虚时间。纵向磁化密度定义为
+        因此 \(\theta>0\) 表示该观测量在短时标度区间内增长，\(\theta<0\) 表示衰减。
+        “initial slip” 在不同论文里可能指不同响应；只有先指定 \(\mathcal O\)，数值才可比较。
       </p>
-      \[
-        M(\tau)=\frac{1}{L^d}\sum_i
-        \langle\psi(\tau)|\sigma_i^z|\psi(\tau)\rangle ,
-      \]
-      <p>
-        \(L\) 是系统线性尺寸。在微观暂态已经结束、而有限尺寸尚未被感知的窗口
-      </p>
-      \[
-        \tau_{\rm mic}\ll\tau\ll L^z ,
-      \]
-      <p>
-        临界系统呈现幂律。对 Ising 量子临界点，洛伦兹不变性给出动力学指数
-        \(z=1\)。三种边界必须先定义三个不同的标度量：
-      </p>
-      \[
-        Q_+(\tau)=|M_+(\tau)|,
-        \qquad
-        Q_{\rm ord}(\tau)=
-        \left|\frac{\partial M}{\partial a_1}\right|_{a_1=0},
-        \qquad
-        Q_{\rm rand}(\tau)=
-        \left|\frac{\partial\overline M}{\partial m_0}\right|_{m_0=0}.
-      \]
-      <p>
-        \(a_1\) 是 ordinary 边界短距离展开中最低维
-        \(\mathbb Z_2\)-odd 边界算符
-        \(\mathcal O_1\) 的振幅；它不是共轭边界场。
-        \(m_0=P(+)-P(-)\) 是随机 fixed 符号的平均概率偏置；横线表示对
-        quenched disorder（在虚时间演化中不随时间改变的随机变量）进行样本平均。
-        完全对称的 ordinary 边界和零偏置随机集合本身都有 \(M=0\)，因此必须说明
-        对哪一个小量取系数。对任一已经定义的 \(Q_\alpha\)，本报告采用
-      </p>
-      \[
-        \theta_{\alpha,\rm eff}(\tau)
-        =\frac{d\ln Q_\alpha(\tau)}{d\ln\tau},
-        \qquad
-        \theta_\alpha=\lim_{\rm scaling\ window}\theta_{\alpha,\rm eff}.
-      \]
     </section>
 
-    <section id="boundary">
-      <h2>2. 初态为什么是一条边界？</h2>
-      <p>
-        Suzuki–Trotter 分解把 \(d\) 维量子模型映射成
-        \(D=d+1\) 维经典 Ising 场论；新增的一维正是虚时间。
-        \(|\psi_0\rangle\) 不在体内重复出现，而只规定 \(\tau=0\) 处的场，因此它是
-        codimension-one 边界（余维为 1，即边界比体相少一个维度）。长尺度下，
-        微观上不同的初态会流向少数几类边界 fixed point（固定点）。
-      </p>
-
+    <section id="protocols">
+      <h2>2. 三种时间边界不是同一个问题</h2>
       <div class="definition-grid">
         <article>
           <h3 class="fixed">严格 \(+\) fixed</h3>
           <p>
-            每个 \(\sigma^z\) 都固定为 \(+1\)。这是无穷强同号边界场的有序／normal
-            边界，不是 ordinary。它在 \(\tau=0\) 已有最大磁化。
+            在 \(\tau=0\) 把所有微观 \(z\)-自旋固定为 \(+1\)。观测量是随后体相磁化
+            \(M_+(\tau)\)。这是显式破缺 \(\mathbb Z_2\) 自旋翻转对称性的有序固定边界。
           </p>
         </article>
         <article>
-          <h3 class="ordinary">ordinary</h3>
+          <h3 class="ordinary">ordinary profile</h3>
           <p>
-            边界保持 \(\mathbb Z_2\) 自旋翻转对称；连续场论中是 ordinary
-            Dirichlet 固定点。本报告测量其边界算符振幅 \(a_1\) 向体内传播时的
-            磁化轮廓；若不插入 \(\mathbb Z_2\)-odd operator，平均磁化为零。
+            时间边界保持 \(\mathbb Z_2\) 对称；连续场论的红外固定点是 ordinary
+            Dirichlet 边界。观测量是 leading odd boundary operator（最低维奇边界算符）
+            的单位振幅在体相产生的 profile 系数，不是零场下恒等于零的磁化本身。
           </p>
         </article>
         <article>
-          <h3 class="random">随机 \(+\!/\!-\) fixed</h3>
+          <h3 class="random">随机 \(+/-\) fixed</h3>
           <p>
-            每个自旋在 \(\tau=0\) 的路径积分边界上被钉扎，其符号沿空间冻结为
-            随机变量；\(\tau>0\) 的体相自由积分。这是 quenched 随机场边界；
-            测量量是对符号概率均值 \(m_0\) 的响应。“fixed”描述每个样本的
-            时间边界，“随机”描述样本集合。
+            每个空间位置在 \(\tau=0\) 固定为独立的 \(+1\) 或 \(-1\)，且同一组符号在整个
+            虚时间演化中不重新抽样（quenched）。令 \(m_0\) 是 \(+\) 与 \(-\) 概率的微小
+            平均偏置，观测量是无序平均磁化对 \(m_0\) 的线性响应。
           </p>
         </article>
       </div>
 
       <figure>
-        <img src="./figures/boundary_classes.png" alt="三种虚时间边界的格点示意图">
+        <img src="./figures/boundary_classes.png" alt="三种时间边界协议：严格正 fixed、ordinary、随机正负 fixed">
         <figcaption>
-          <strong>图 1｜三种初态不是同一种边界。</strong>
-          横轴为空间，纵轴为虚时间。底行是 \(\tau=0\) 的边界条件，向上表示逐步
-          coarse-graining（逐步忽略短尺度细节）后的长尺度描述。
-          (a) 同号固定边界保留非零磁化；
-          (b) ordinary 边界不选取 \(+\) 或 \(-\)；
-          (c) 随机 fixed 在单个样本中钉扎，但零均值无序平均恢复
-          \(\mathbb Z_2\) 对称。圆点只作概念示意，不是蒙特卡洛构型。
+          <strong>图 1｜三种初始时间边界。</strong>
+          底边是 \(\tau=0\)，向上是虚时间。ordinary 是保持对称性的长尺度边界固定点；
+          随机 fixed 是微观上逐点固定、宏观上经无序平均后流向 ordinary 的协议。
+          “固定”描述微观约束，“ordinary”描述红外边界普适类，两词不能互换。
         </figcaption>
       </figure>
 
+      <p>
+        随机协议可写得更精确。令边界符号 \(s(\mathbf x)=\pm1\)，且
+      </p>
+      \[
+        \Pr[s=+1]=\frac{1+m_0}{2},\qquad
+        \Pr[s=-1]=\frac{1-m_0}{2}.
+      \]
+      <p>
+        以横线表示对固定符号构型的 quenched 平均，定义
+      </p>
+      \[
+        \chi_{\rm rand}(\tau)
+        =\left.\frac{\partial\,\overline{M(\tau;m_0)}}{\partial m_0}\right|_{m_0=0}
+        \sim \tau^{\theta_{\rm rand}} .
+      \]
+      <p>
+        这一定义消除了“零偏置时平均磁化为零”的歧义。
+      </p>
+    </section>
+
+    <section id="scaling">
+      <h2>3. 从边界标度维数到三个指数</h2>
+      <p>
+        体相序参量场记为 \(\phi\)。它的标度维数是
+      </p>
+      \[
+        \Delta_\phi=\frac{D-2+\eta}{2}=\frac{\beta}{\nu}.
+      \]
+      <p>
+        \(\eta\) 是体相两点关联函数的异常维数，\(\beta\) 是自发磁化临界指数，
+        \(\nu\) 是关联长度临界指数。ordinary Dirichlet 边界上最低维的
+        \(\mathbb Z_2\)-odd 算符为法向导数
+        \(\mathcal O_1=\partial_n\phi\)；其标度维数定义为
+        \(x_1=\beta_1/\nu\)，其中 \(\beta_1\) 是表面磁化指数。
+        与均匀边界场 \(h_1\) 共轭的 RG 本征值为
+      </p>
+      \[
+        y_{h_1}=D-1-x_1.
+      \]
+      <p>
+        这些 ordinary 边界关系及 boundary operator expansion（边界算符展开）见
+        <a class="cite" href="#ref-7">[7]</a> 与
+        <a class="cite" href="#ref-14">[14]</a>。
+      </p>
+
+      <h3>3.1 严格 \(+\) fixed</h3>
+      <p>
+        有序边界已经提供有限磁化振幅，离边界距离 \(\tau\) 处只剩体相场的缩放：
+      </p>
+      \[
+        M_+(\tau)\sim\tau^{-\Delta_\phi},
+        \qquad \boxed{\theta_+=-\Delta_\phi}.
+      \]
+
+      <h3>3.2 ordinary profile</h3>
+      <p>
+        ordinary 边界的边界算符展开给出
+        \(\phi(\mathbf x,\tau)\sim \tau^{x_1-\Delta_\phi}\mathcal O_1(\mathbf x)\)。
+        对单位 \(\mathcal O_1\) 振幅，因而
+      </p>
+      \[
+        \boxed{\theta_{\rm ord}=x_1-\Delta_\phi
+        =\frac{\beta_1-\beta}{\nu}}.
+      \]
+
+      <h3>3.3 随机 fixed 的平均偏置</h3>
+      <p>
+        小平均偏置是均匀边界场方向，线性响应多出 \(y_{h_1}\) 的缩放：
+      </p>
+      \[
+        \boxed{\theta_{\rm rand}=y_{h_1}-\Delta_\phi}.
+      \]
+      <p>
+        消去 \(x_1\)、\(y_{h_1}\) 与 \(\Delta_\phi\)，得到贯穿数值检查的恒等式
+      </p>
+      \[
+        \boxed{\theta_{\rm rand}=1-\eta-\theta_{\rm ord}}.
+      \]
       <div class="callout">
-        <strong>容易混淆之处：</strong>
-        “固定边界条件”是对微观路径积分变量的约束；“ordinary”是一个长尺度边界
-        普适类。均匀 \(+\) fixed 流向有序边界，而零均值随机 fixed 在这里流向
-        ordinary；在精确 \(D=2\) 情形，这一流动缓慢到会产生对数修正。但本报告
-        比较的两个响应分别对 \(a_1\) 与 \(m_0\) 求导；即使最终流向同一个
-        fixed point，两个指数也不应被机械地设成相等。
+        在 \(D=3\) 中，\(x_1\approx1.275\) 而 \(y_{h_1}\approx0.725\)，所以 ordinary
+        profile 与随机偏置响应相差很大；把两者写成同一个指数会直接违反
+        \(x_1+y_{h_1}=D-1\)。
       </div>
     </section>
 
-    <section id="frg">
-      <h2>3. 泛函重整化群：从无穷多个耦合到可计算的流</h2>
+    <section id="bulk-frg">
+      <h2>4. 体相：从 LPA′ 升级到场依赖 DE2</h2>
       <p>
-        泛函重整化群（functional renormalization group, FRG）用一个动量尺度
-        \(k\) 逐层积分涨落。尺度依赖的有效作用量 \(\Gamma_k[\phi]\) 满足精确的
-        <a href="https://doi.org/10.1016/0370-2693(93)90726-X">Wetterich 方程</a>
+        泛函重整化群使用尺度依赖的有效作用量 \(\Gamma_k\)。\(k\) 是逐步降低的动量尺度，
+        \(R_k\) 是压制动量 \(q\lesssim k\) 模的红外调节器。精确 Wetterich 方程为
+        <a class="cite" href="#ref-12">[12]</a>
       </p>
       \[
         \partial_t\Gamma_k[\phi]
-        =\frac12\,{\rm Tr}\!\left[
-        \bigl(\Gamma_k^{(2)}[\phi]+R_k\bigr)^{-1}
-        \partial_t R_k\right],
+        =\frac12\operatorname{Tr}\!\left[
+          \bigl(\Gamma_k^{(2)}[\phi]+R_k\bigr)^{-1}\partial_tR_k
+        \right],
         \qquad t=\ln(k/\Lambda).
       \]
       <p>
-        \(\phi\) 是连续 Ising 序参量场；\(\Gamma_k^{(2)}\) 是对 \(\phi\) 的二阶
-        泛函导数；\(R_k\) 抑制动量小于 \(k\) 的模式；\(\Lambda\) 是紫外截止。
-        方程精确但包含无穷多个函数。体相采用 LPA′ 截断
+        \(\Lambda\) 是紫外起始尺度，\(\Gamma_k^{(2)}\) 是对场取两次泛函导数，
+        \(\operatorname{Tr}\) 表示对内部动量积分。方程本身精确，但包含无穷多个动量与场依赖
+        顶角，必须系统截断；FRG 的标准结构和近似体系见
+        <a class="cite" href="#ref-16">[16]</a>。
+      </p>
+
+      <p>
+        LPA′ 只保留常数波函数因子 \(Z_k\)。本版采用 \(N=1\) Ising 标量场的完整
+        \(O(\partial^2)\) 导数展开：
       </p>
       \[
-        \Gamma_k^{\rm bulk}
-        =\int_{\tau>0}d^D x\left[
-        \frac{Z_k}{2}(\partial_\mu\phi)^2+U_k(\rho)\right],
-        \qquad \rho=\frac{\phi^2}{2},
+        \Gamma_k[\phi]=\int d^Dx\left[
+          U_k(\rho)+\frac12 Z_k(\rho)(\partial_\mu\phi)^2
+        \right],\qquad \rho=\frac{\phi^2}{2}.
       \]
       <p>
-        其中 \(U_k\) 是整个位形依赖的有效势，\(Z_k\) 是波函数重整化。
-        用<a href="https://doi.org/10.1103/PhysRevD.64.105007">优化的 Litim
-        截止</a>并改写为无量纲势 \(u(\rho)\)，\(N=1\) Ising 流为
+        \(U_k(\rho)\) 是场依赖有效势，\(Z_k(\rho)\) 是场依赖波函数重整化。代码直接对
+        Wetterich 两点流作外动量 \(p^2\) 投影，使用四个小而非零的 \(p\) 值外推到
+        \(p\to0\)，而不是把 \(Z_k\) 设成常数。
+      </p>
+
+      <h3>4.1 全局场表示与调节器扫描</h3>
+      <p>
+        \(U_k\) 与 \(Z_k\) 在有限 \(\rho\) 区间用 Chebyshev–Lobatto 配点表示。
+        本仓库扫描两个平滑调节器族：
       </p>
       \[
-        \partial_t u=-D u+(D-2+\eta)\rho u'
-        +\mathcal C_D(\eta)\,
-        \frac{1}{1+u'+2\rho u''},
-      \]
-      \[
-        \mathcal C_D(\eta)=
-        \frac{(4\pi)^{-D/2}}{\Gamma(D/2)}
-        \left(\frac{2-\eta}{D}+\frac{\eta}{D+2}\right).
+        r_{\rm W}(y)=\alpha\frac{y}{e^y-1},
+        \qquad
+        r_{\rm E}(y)=\alpha e^{-y},
+        \qquad y=\frac{q^2}{k^2}.
       \]
       <p>
-        撇号表示对 \(\rho\) 求导；异常维数
-        \(\eta=-\partial_t\ln Z_k\)。在势极小值 \(\rho=\kappa\) 处，
-        \(u'(\kappa)=0\)、\(\lambda_2=u''(\kappa)\)，LPA′ 投影给出
-      </p>
-      \[
-        \eta=
-        \frac{1}{2^{D-2}\pi^{D/2}\Gamma(1+D/2)}
-        \frac{\kappa\lambda_2^2}
-        {(1+2\kappa\lambda_2)^2}.
-      \]
-      <p>
-        为避免 \(D=2\) 时局部 Taylor 级数收敛半径过小，本版的主计算不从文献
-        抄入全局势，也不把局部多项式外推到原点。固定点大场渐近式为
-      </p>
-      \[
-        u(\rho)=\gamma\rho^{p}
-        +\frac{\mathcal C_D}
-        {\gamma p(2p-1)[\,2D-(D-2+\eta)\,]}\rho^{1-p}
-        +\cdots,
-        \qquad p=\frac{D}{D-2+\eta}.
-      \]
-      <p>
-        代码从 \(\rho_{\rm L}\) 向 \(\rho=\varepsilon_\rho\) 反向积分
-        \(u,u',u''\) 的三阶常微分方程，调节 \(\gamma\) 使原点正则，再用上式
-        自洽更新 \(\eta\)。本仓库得到
-      </p>
-      \[
-        \begin{array}{c|ccc}
-        D & \eta_{\rm global\ LPA'} & \kappa & u''(\kappa)\\ \hline
-        2 & 0.2335938751 & 0.1975138627 & 8.0798870793\\
-        3 & 0.0442723373 & 0.0305927762 & 6.4573959173
-        \end{array}
-      \]
-      <p>
-        \(D=3\) 另用极小值附近的多项式
-        \(u=\sum_{n=2}^{N}\lambda_n(\rho-\kappa)^n/n!\) 独立求到 \(N=7\)，
-        得到 \(\eta=0.0442569371\)，与全局积分相差 \(1.54\times10^{-5}\)。
-        这验证了数值实现，却不消除 LPA′ 本身缺失场依赖 \(Z_k(\rho)\) 和更高导数
-        算符的系统误差。
+        \(r(y)=R_k/(Z_k k^2)\) 是无量纲调节器形状，\(\alpha\) 是形状参数。有限截断下结果
+        依赖 \(\alpha\)；principle of minimal sensitivity（最小敏感性原理，PMS）选择
+        \(\partial\eta/\partial\alpha=0\) 的局部稳定点。两个调节器族的 PMS 差异保留为误差，
+        不平均掉后假装不存在。
       </p>
 
       <figure>
-        <img src="./figures/frg_convergence.png" alt="三维经典 Ising LPA-prime 多项式截断的逐阶收敛">
+        <img src="./figures/frg_convergence.png" alt="DE2 调节器 PMS 扫描和 Chebyshev 配点收敛">
         <figcaption>
-          <strong>图 2｜直接可复现的 LPA′ 收敛与系统截断误差。</strong>
-          红点是本仓库从 \(N=2\) 到 \(N=7\) 的计算；它稳定到
-          \(\eta=0.04425694\)，并与本仓库全局解 \(0.04427234\) 交叉一致；
-          但这不代表已经收敛到真实答案，因为恒定 \(Z_k\) 的 LPA′ 仍缺少场依赖
-          与高阶导数算符。蓝带是仅作外部对照的已发表
-          \(O(\partial^6)\) NPRG 结果 \(\eta=0.0361(11)\)，虚线为更高精度基准。
-          右图把同一误差传播到 \(\theta_+=-(1+\eta)/2\)。
-      </figcaption>
+          <strong>图 2｜体相 DE2 的调节器与数值收敛审计。</strong>
+          (a,b) 两个平滑调节器族的 \(\eta(\alpha)\)，空心大点是 PMS；
+          (c,d) 配点阶数 \(8,10,12\) 的序列。\(D=3\) 的指数型 12 阶解未通过共同残差门槛，
+          所以主结果采用 10 阶；\(D=2\) 采用 12 阶。外部横线只用于验证：二维经典 Ising
+          的精确 \(\eta=\frac14\)，以及高阶 NPRG 的三维结果
+          \(\eta=0.0361(11)\) <a class="cite" href="#ref-4">[4]</a><a class="cite" href="#ref-5">[5]</a>。
+          靠近低临界维数时场收敛会变得非均匀，这也是 \(D=2\) 误差必须放宽的原因
+          <a class="cite" href="#ref-17">[17]</a>。
+        </figcaption>
       </figure>
 
-      <h3>本项目直接计算的 FRG 结果与外部对照为什么必须分栏？</h3>
+      <h3>4.2 体相数值与误差预算</h3>
+      <p>
+        采用调节器族中心的平均作为 \(\eta\) 中心值。误差不按统计独立假设做平方和，
+        而是线性相加：
+      </p>
+      \[
+        \delta\eta=
+        \delta_{\rm DE}+\delta_{\rm reg}+\delta_{\rm coll}
+        +\delta_{\rho_{\max}}+\delta_{\rm mom}.
+      \]
+      <p>
+        五项依次是导数展开阶数、调节器族、配点阶数、场区间和动量积分／外推误差。
+        已发表的 Ising 导数展开显示相邻阶的有效小参数约在
+        \(\frac19\) 到 \(\frac14\) 之间
+        <a class="cite" href="#ref-4">[4]</a><a class="cite" href="#ref-5">[5]</a>；
+        本仓库取最保守的 \(\delta_{\rm DE}=|\eta|/4\)。
+      </p>
+
       <div class="table-wrap">
         <table>
           <thead>
             <tr>
               <th>经典维数</th>
-              <th>本项目 FRG 默认投影值</th>
-              <th>外部高精度对照</th>
-              <th>解释</th>
+              <th class="num">DE2 \(\eta\)</th>
+              <th class="num">接受配点阶数</th>
+              <th class="num">\(\delta_{\rm DE}\)</th>
+              <th class="num">\(\delta_{\rm reg}\)</th>
+              <th class="num">\(\delta_{\rm coll}\)</th>
+              <th class="num">\(\delta_{\rho_{\max}}\)</th>
+              <th class="num">\(\delta_{\rm mom}\)</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>\(D=2\)</td>
-              <td>\(\eta_{\rm LPA'}=0.2335938751\)</td>
-              <td>\(\eta=1/4\)（精确）</td>
-              <td>精确值只用于评估误差，不校准或替换 FRG 流</td>
+              <td class="num">\(0.290878\pm0.074911\)</td>
+              <td class="num">12</td>
+              <td class="num">7.27e-02</td>
+              <td class="num">1.92e-03</td>
+              <td class="num">2.69e-04</td>
+              <td class="num">9.66e-07</td>
+              <td class="num">6.77e-12</td>
             </tr>
             <tr>
               <td>\(D=3\)</td>
-              <td>\(\eta_{\rm LPA'}=0.0442723373\)</td>
-              <td>\(\eta_{\partial^6}=0.0361(11)\)</td>
-              <td>后者是已发表的 NPRG 结果，与本项目计算分开列出</td>
+              <td class="num">\(0.044522\pm0.011415\)</td>
+              <td class="num">10</td>
+              <td class="num">1.11e-02</td>
+              <td class="num">2.58e-04</td>
+              <td class="num">2.64e-05</td>
+              <td class="num">3.43e-09</td>
+              <td class="num">3.86e-07</td>
             </tr>
           </tbody>
         </table>
       </div>
-      <p class="fineprint">
-        数值积分残差和最后几位稳定性只说明“给定截断已达到所报数值精度”，
-        不说明该截断等于完整理论。以下主表首先报告本项目直接计算的 FRG 结果；
-        精确、Monte Carlo、bootstrap 或其他论文的 NPRG 数值统一放在
-        “外部对照”列。
+      <p class="small">
+        LPA′ 基线分别为 \(\eta=0.233594\) 和
+        \(\eta=0.044272\)。它们只作方法升级的
+        诊断，不进入主结果。
       </p>
     </section>
 
-    <section id="boundary-rg">
-      <h2>4. 边界 RG：三种 \(\theta\) 从哪里来？</h2>
+    <section id="boundary-frg">
+      <h2>5. ordinary 边界：两圈顶角流与重求和</h2>
       <p>
-        记时间边界自身的维数为 \(s=D-1\)，体相序参量的尺度维数为
+        ordinary 固定点满足 Dirichlet 边界条件，边界上的 \(\phi\) 本身为零；需要重整化的
+        leading odd operator 是 \(\mathcal O_1=\partial_n\phi\)。其额外异常维数记为
+        \(\eta_{1,\infty}\)，下标 \(\infty\) 表示 surface enhancement（表面增强参数）
+        \(c\to\infty\) 的 ordinary 极限。对 Ising 模型，令
+        \(\epsilon=4-D\)，通用两圈结果为
+        <a class="cite" href="#ref-14">[14]</a>
       </p>
       \[
-        \Delta_\phi=\frac{D-2+\eta}{2}.
+        \eta_{1,\infty}
+        =-\frac{\epsilon}{3}-\frac{17}{81}\epsilon^2+O(\epsilon^3).
       \]
       <p>
-        ordinary 边界上最低维的 \(\mathbb Z_2\)-odd operator 记为
-        \(\mathcal O_1\)，其尺度维数
-        \(x_1=\beta_1/\nu\)。与它共轭的均匀边界场 \(h_1\) 的 RG
-        本征值不是 \(x_1\)，而是
+        因为
+        \(\eta_\parallel^{\rm ord}=2+\eta+\eta_{1,\infty}\) 且
+        \(\theta_{\rm ord}=(\eta_\parallel^{\rm ord}-\eta)/2\)，体相 \(\eta\) 在这个组合中
+        精确消去：
       </p>
       \[
-        y_{h_1}=s-x_1.
+        \theta_{\rm ord}(\epsilon)
+        =1-\frac{\epsilon}{6}-\frac{17}{162}\epsilon^2+O(\epsilon^3).
       \]
-      <div class="callout">
-        <strong>本次错误的核心就在这里：</strong>
-        \(x_1\) 控制 ordinary 的边界算符振幅；\(y_{h_1}\) 控制小均匀边界场，
-        也控制随机 fixed 符号的平均偏置。把两者混成一个数，只有在
-        \(x_1=y_{h_1}=s/2\) 的特殊情形才不会产生明显矛盾。
+
+      <div class="warning">
+        <strong>方法边界必须说清楚：</strong>
+        这不是“完整的非微扰边界 DE2”。本仓库的体相是直接数值 DE2；边界部分采用已知且
+        可由顶角流逐圈复现的通用两圈系数，再进行本仓库自己的 conformal–Borel–Leroy
+        重求和。只有三项级数，尤其在 \(\epsilon=2\) 时不能声称高精度。
       </div>
 
-      <h3 class="fixed">4.1 严格 \(+\) fixed：没有独立的正滑移指数</h3>
+      <h3>5.1 conformal–Borel–Leroy 重求和</h3>
       <p>
-        一个已经有序的边界在距离 \(\tau\) 处诱导临界 magnetization profile
-        （磁化轮廓）
-        \(M(\tau)\sim\tau^{-\Delta_\phi}\)。由于 \(z=1\)，按定义可正可负的
-        对数斜率为
+        对截断级数 \(f(\epsilon)=\sum_{n=0}^2c_n\epsilon^n\)，先定义 Borel–Leroy 变换
       </p>
       \[
-        \boxed{\theta_+=-\Delta_\phi
-        =-\frac{D-2+\eta}{2}}.
+        \mathcal B_b(t)=
+        \sum_{n=0}^2\frac{c_n t^n}{\Gamma(n+b+1)} ,
       \]
       <p>
-        这就是为什么均匀 \(+\) 初态的曲线下降。把 ordinary 情形的正
-        \(\theta\) 套用到这里，会混淆两个边界 fixed point。
-      </p>
-
-      <h3 class="ordinary">4.2 ordinary：由 \(x_1=\beta_1/\nu\) 控制</h3>
-      <p>
-        ordinary 固定点保持 \(\mathbb Z_2\) 对称。在 Dirichlet 极限，
-        体场接近边界时的边界算符展开（boundary operator expansion）为
+        再以 \(\phi^4\) 大阶行为的首个 Borel 奇点参数 \(a=\frac13\) 作共形映射
       </p>
       \[
-        \phi(\mathbf x,\tau)
-        =C_{\phi 1}\,
-        \tau^{\,x_1-\Delta_\phi}\mathcal O_1(\mathbf x)+\cdots,
-        \qquad \mathcal O_1\propto\partial_n\phi.
+        w(t)=\frac{\sqrt{1+at}-1}{\sqrt{1+at}+1}.
       \]
       <p>
-        \(C_{\phi1}\) 是展开系数，\(\partial_n\) 表示朝向体内的法向导数。
-        若用 \(a_1\) 表示 \(\mathcal O_1\) 的小振幅，则体磁化的对应系数满足
-      </p>
-      \[
-        Q_{\rm ord}(\tau)\propto
-        \tau^{(x_1-\Delta_\phi)/z},
-        \qquad
-        \boxed{\theta_{\rm ord}
-        =\frac{x_1-\Delta_\phi}{z}
-        =\frac{\beta_1/\nu-\beta/\nu}{z}} .
-      \]
-      <div class="callout">
-        <strong>术语约定：</strong>
-        有些虚时间文献把对称 disordered product state 对小初始磁化
-        \(M_0\) 的响应也称为 “ordinary initial slip”；那个观测量由共轭场
-        \(y_{h_1}\) 控制。本报告按本次问题指定的
-        \(\beta_1/\nu-\beta/\nu\) 定义，把 “ordinary” 专指上述 BOE/profile
-        振幅指数，并把 \(y_{h_1}-\Delta_\phi\) 留给随机 fixed 的平均偏置响应。
-        这是一项观测协议的区分，不是把同一个指数改名。
-      </div>
-      <p>
-        arXiv:2607.01076v1 在研究“空间物理边界附近的虚时间动力学”时使用了同一个
-        短距离展开因子 \((\beta_1-\beta)/\nu\)。这里把空间法向换成初始时间边界的
-        虚时间法向；这支持上式的算符结构，但该论文并没有直接完成本报告的
-        时间边界 FRG 计算。
-      </p>
-
-      <h3>4.3 本仓库怎样用 FRG 自己求 \(x_1\)？</h3>
-      <p>
-        在半空间 Dirichlet 传播子上投影 \(\mathcal O_1=\partial_n\phi\) 的
-        two-point vertex（二点 vertex，即二阶有效关联函数）。本计算保留其
-        one-loop 表面动量壳贡献，并把其中的 four-point vertex 替换为前节
-        全局 Wetterich 固定点给出的 \(g_4\)。这个“FRG-improved one-loop
-        边界投影”
-        给出边界重整化异常维数
-      </p>
-      \[
-        \eta_1^{\rm FRG}
-        =-\frac{3}{24}K_s g_4,\qquad
-        K_s=\frac{2\pi^{s/2}}{\Gamma(s/2)(2\pi)^s},
-        \qquad
-        g_4=3u''(\kappa).
-      \]
-      <p>
-        系数 \(3=N+2\) 来自 Ising 的单分量收缩。表面壳层测度 \(K_s\)
-        来自与边界平行的 \(s\) 维动量积分。这个归一化在
-        \(D=4-\epsilon\) 自动恢复
-        \(\eta_1=-\epsilon/3+O(\epsilon^2)\)；这一系数未使用三维文献值校准。
-        但离开 \(D=4\) 后，它并不是完整的场依赖边界 FRG：边界高阶 vertex、
-        阈值函数的场依赖和更多法向导数算符都被舍弃。因此以下十位数字仅表示
-        这个明确截断被精确求解，不能当作十位物理精度。
-        由
-      </p>
-      \[
-        \eta_\parallel=2+\eta+\eta_1,\qquad
-        x_1=\frac{D-2+\eta_\parallel}{2}
-      \]
-      <p>
-        得到本项目的默认投影（在势极小值处求值）
-      </p>
-      \[
-        \begin{array}{c|ccc}
-        D & \eta_1^{\rm FRG} & x_1^{\rm FRG} & y_{h_1}^{\rm FRG}\\ \hline
-        2 & -0.9644654762 & 0.6345641994 & 0.3654358006\\
-        3 & -0.3853974299 & 1.3294374537 & 0.6705625463
-        \end{array}.
-      \]
-      <p>
-        把 \(g_4\) 从势极小值改到原点投影，\(D=2\) 的
-        \(x_1\) 变为 \(1.0617726341\)，\(D=3\) 变为
-        \(1.3880617527\)。尤其在 \(D=2\)，如此大的漂移明确说明 one-loop
-        边界截断
-        尚未定量收敛；它不能用数值求根的十位稳定性来掩盖。
-      </p>
-
-      <h3 class="random">4.4 随机 \(+\!/\!-\) fixed：由 \(y_{h_1}\) 控制</h3>
-      <p>
-        令边界符号 \(s(\mathbf x)=\pm1\) 的概率为
-        \(P(s=\pm1)=(1\pm m_0)/2\)。\(m_0=0\) 时平均磁化严格为零；
-        \(\theta_{\rm rand}\) 指
-        \(R_{\rm rand}=\left.\partial\overline M/\partial m_0\right|_0\)
-        的增长。平均偏置产生的是与 \(\mathcal O_1\) 共轭的均匀场，所以
-      </p>
-      \[
-        \boxed{\theta_{\rm rand}
-        =\frac{y_{h_1}-\Delta_\phi}{z}},
-      \]
-      <p>
-        而不是 \(x_1-\Delta_\phi\)。为计算冻结随机场的平均，引入 \(n\) 套
-        相同的场 \(\phi_a\)，这些场在英文文献中称为 replicas，最后取
-        \(n\to0\)。零均值、方差 \(\Delta\) 的 quenched 边界场产生
-      </p>
-      \[
-        S_{\partial,\rm rep}
-        =-\bar h_1\sum_a\int d^{D-1}x\,\mathcal O_{1,a}
-        -\frac{\Delta}{2}\sum_{a,b}
-        \int d^{D-1}x\,\mathcal O_{1,a}\mathcal O_{1,b},
-        \qquad n\to0 .
-      \]
-      <p>
-        边界面积维数记为 \(s=D-1\)。随机场均方根 \(w=\sqrt\Delta\) 与方差
-        的线性 RG 本征值分别是
-      </p>
-      \[
-        y_w=y_{h_1}-\frac{s}{2},
-        \qquad
-        y_\Delta=2y_{h_1}-s=2y_w .
-      \]
-      <p>
-        本项目的默认 FRG 投影给出
-        \(D=2\) 的 \(y_w=-0.1345642\)、
-        \(D=3\) 的 \(y_w=-0.3294375\)。因此在该低阶截断内，两者的随机场振幅
-        都随 RG 尺度衰减，方差修正指数分别为
-        \(\omega_{\rm dis}=0.2691284\) 与 \(0.6588749\)。
-      </p>
-      <p>
-        对精确的二维经典 Ising 边界，\(x_1=y_{h_1}=1/2\)，故 \(y_w=0\)；
-        随机方差是 marginally irrelevant：它在 RG 流中只缓慢趋于零，并产生
-        对数修正。把非普适正系数吸收到 \(g\) 中，
-        二阶 replica RG 流为
-      </p>
-      \[
-        \frac{dg}{d\ell}=-g^2,\qquad
-        g(\ell)=\frac{g_0}{1+g_0\ell},
-      \]
-      \[
-        \frac{d\ln\bar h_1}{d\ell}
-        =\frac12+\frac{g(\ell)}{2}.
-      \]
-      <p>
-        因而一维量子随机 fixed 的精确边界对照不是纯幂律，而是
-      </p>
-      \[
-        \boxed{
-        R_{\rm rand}(\tau)\sim
-        \tau^{3/8}
-        \left[1+g_0\ln(\tau/\tau_0)\right]^{1/2}},
-      \]
-      \[
-        \theta_{\rm eff}(\tau)
-        =\frac38+
-        \frac{g_0}{2[1+g_0\ln(\tau/\tau_0)]}
-        \longrightarrow \frac38 .
-      \]
-      <p>
-        因此有效斜率从 \(3/8\) 上方缓慢趋近。修正因子的指数 \(+1/2\) 可由
-        Pleimling 等人原文的
-        \(h_s(\ell)=h_s e^{\ell/2}[1+\kappa h^2\ell]^{1/2}\)
-        直接核对；这里把非普适 \(\kappa\) 吸收到 \(g_0\) 中。
-      </p>
-      <p>
-        对一般 \(y_w<0\)，无序平均量的首个偶于 \(w\) 的修正来自方差，
-      </p>
-      \[
-        R_{\rm rand}(\tau)=
-        A\tau^{\theta_{\rm rand}}
-        \left[1+B\tau^{-\omega_{\rm dis}}+\cdots\right],
-        \qquad
-        \boxed{\omega_{\rm dis}=-y_\Delta=-2y_w}.
-      \]
-      <p>
-        两个正指数的差为
-      </p>
-      \[
-        \theta_{\rm ord}-\theta_{\rm rand}
-        =x_1-y_{h_1}=2x_1-s.
-      \]
-      <p>
-        所以 \(D=2\) 精确边界的相等只是 \(x_1=s/2\) 的偶然；在 \(D=3\)
-        无论本仓库 FRG 还是外部高精度数据，都要求 ordinary 与随机 fixed 不同。
+        \(b\) 是 Borel–Leroy 参数；\(\lambda\) 控制映射后假定的强耦合行为。
+        本仓库扫描 \(0\le b\le5\)、\(0\le\lambda\le2\) 的 \(101\times81\) 网格，
+        以参数梯度和一圈／两圈差定义稳定性分数，保留最稳定的 \(10\%\) 点。
+        误差取“重求和中心与未重求和两圈值之差”和“稳定集合 90% 区间半宽”中的较大者。
       </p>
 
       <figure>
-        <img src="./figures/disorder_rg_flow.png" alt="随机边界耦合在一维和二维量子 Ising 模型中的 RG 流">
+        <img src="./figures/boundary_resummation.png" alt="ordinary 边界两圈 conformal Borel Leroy 重求和稳定性图">
         <figcaption>
-          <strong>图 3｜无序流也暴露边界截断误差。</strong>
-          (a) 一维量子模型的 FRG-improved one-loop 投影误给出
-          \(y_w=-0.1346\) 的幂律衰减；精确二维 Ising 边界应为
-          marginally irrelevant，
-          \(w\sim\ell^{-1/2}\)。两条线没有被强行重合。
-          (b) 二维量子模型中，本仓库同一投影给出
-          \(w(\ell)=w_0e^{-0.3294\ell}\)。不同曲线只改变非普适初始振幅。
+          <strong>图 3｜边界两圈重求和的辅助参数景观。</strong>
+          颜色是重求和后的 \(\theta_{\rm ord}\)，白色轮廓包围所选稳定区域。
+          \(D=3\) 的平台相对集中；\(D=2\) 的参数依赖显著更宽，直接显示两圈截断在
+          \(\epsilon=2\) 的局限。固定维数三维两圈结果提供独立交叉检查
+          <a class="cite" href="#ref-15">[15]</a>。
         </figcaption>
       </figure>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>\(D\)</th>
+              <th class="num">未重求和两圈</th>
+              <th class="num">重求和中心</th>
+              <th class="num">报告误差</th>
+              <th class="num">稳定集合 90% 区间</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>\(2\)</td>
+              <td class="num">0.246914</td>
+              <td class="num">0.445529</td>
+              <td class="num">0.198616</td>
+              <td class="num">\([0.3741,0.5037]\)</td>
+            </tr>
+            <tr>
+              <td>\(3\)</td>
+              <td class="num">0.728395</td>
+              <td class="num">0.759314</td>
+              <td class="num">0.030919</td>
+              <td class="num">\([0.7462,0.7728]\)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </section>
 
     <section id="results">
-      <h2>5. 数值结果：先看本项目 FRG，再看外部对照</h2>
-      <h3>5.1 本仓库 FRG 主结果</h3>
-      <div class="table-wrap">
-        <table aria-label="本仓库 FRG 临界初始滑移指数">
-          <thead>
-            <tr>
-              <th>量子空间维数</th>
-              <th>时间边界／协议</th>
-              <th class="num">默认投影 \(\theta\)</th>
-              <th>边界投影区间</th>
-              <th>默认投影下的主导标度</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td rowspan="3">\(d=1\)<br><span class="fineprint">\(D=2\) 经典</span></td>
-              <td class="fixed">严格 \(+\) fixed</td>
-              <td class="num">\(-0.11679694\)</td>
-              <td>不涉及边界 vertex 投影</td>
-              <td>\(M\sim\tau^{-0.11679694}\)</td>
-            </tr>
-            <tr>
-              <td class="ordinary">ordinary</td>
-              <td class="num">\(0.51776726\)</td>
-              <td>\([0.517767,\;0.944976]\)</td>
-              <td>\(Q_{\rm ord}\sim\tau^{0.51776726}\)</td>
-            </tr>
-            <tr>
-              <td class="random">随机 \(+\!/\!-\) fixed</td>
-              <td class="num">\(0.24863886\)</td>
-              <td>\([-0.178570,\;0.248639]\)</td>
-              <td>\(Q_{\rm rand}\sim\tau^{0.24863886}
-                [1+B\tau^{-0.26912840}+\cdots]\)</td>
-            </tr>
-            <tr>
-              <td rowspan="3">\(d=2\)<br><span class="fineprint">\(D=3\) 经典</span></td>
-              <td class="fixed">严格 \(+\) fixed</td>
-              <td class="num">\(-0.52213617\)</td>
-              <td>不涉及边界 vertex 投影</td>
-              <td>\(M\sim\tau^{-0.52213617}\)</td>
-            </tr>
-            <tr>
-              <td class="ordinary">ordinary</td>
-              <td class="num">\(0.80730129\)</td>
-              <td>\([0.807301,\;0.865926]\)</td>
-              <td>\(Q_{\rm ord}\sim\tau^{0.80730129}\)</td>
-            </tr>
-            <tr>
-              <td class="random">随机 \(+\!/\!-\) fixed</td>
-              <td class="num">\(0.14842638\)</td>
-              <td>\([0.089802,\;0.148426]\)</td>
-              <td>\(Q_{\rm rand}\sim\tau^{0.14842638}
-                [1+B\tau^{-0.65887491}+\cdots]\)</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="fineprint">
-        “边界投影区间”只是在同一 FRG-improved one-loop 边界截断中，将 \(u''\)
-        分别投影于势极小值和原点所得的跨度；它不是统计置信区间，也不保证覆盖
-        完整理论。默认值采用与体相 LPA′ 一致的势极小值投影。小数后很多位用于
-        复现，不代表物理精度。
+      <h2>6. 完整数值结果与外部验证</h2>
+      <p>
+        将 DE2 的 \(\eta\) 与边界重求和的 \(\theta_{\rm ord}\) 代入第 3 节恒等式，
+        得到图 4。误差传播中，\(\theta_+\) 使用
+        \(\delta\theta_+=\delta\eta/2\)；
+        \(\theta_{\rm rand}\) 对体相和边界误差作平方和。后者是为了避免把同一
+        \(\theta_{\rm ord}\) 误差重复线性计入，但仍不把它解释成统计置信区间。
       </p>
 
       <figure>
-        <img src="./figures/exponent_comparison.png" alt="一维与二维量子 Ising 模型三种边界的指数对比">
+        <img src="./figures/exponent_comparison.png" alt="一维和二维量子 Ising 三种边界指数的 FRG 与外部对照">
         <figcaption>
-          <strong>图 4｜本仓库截断与对照都要求二维 ordinary/random 分开。</strong>
-          实心点是本项目 FRG-improved one-loop 截断，空心点是外部高精度对照；
-          ordinary
-          和随机点后的
-          半透明竖线是两个边界投影之间的跨度。低阶 FRG 的绝对误差明显，但它已经
-          正确区分 \(x_1-\Delta_\phi\) 与 \(y_{h_1}-\Delta_\phi\)。
+          <strong>图 4｜本仓库 FRG 与外部高精度对照。</strong>
+          实心点是未用外部指数校准的本仓库结果，空心点是验证值。
+          \(D=2\) 的精确边界关系见 <a class="cite" href="#ref-7">[7]</a>；
+          \(D=3\) 体相 \(\eta\) 的高阶 NPRG 对照见
+          <a class="cite" href="#ref-4">[4]</a><a class="cite" href="#ref-5">[5]</a>，
+          ordinary 边界 \(y_{h_1}=0.7249(6)\) 来自 Monte Carlo
+          <a class="cite" href="#ref-8">[8]</a>。新的 surface-CFT 数值也与这一边界维数
+          相容 <a class="cite" href="#ref-11">[11]</a>。
         </figcaption>
       </figure>
 
-      <h3>5.2 外部高精度对照（不回填 FRG）</h3>
-      <div class="table-wrap">
-        <table aria-label="精确或外部高精度对照">
-          <thead>
-            <tr>
-              <th>量子空间维数</th>
-              <th class="num">\(\theta_+\)</th>
-              <th class="num">\(\theta_{\rm ord}\)</th>
-              <th class="num">\(\theta_{\rm rand}\)</th>
-              <th>来源与主导随机修正</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>\(d=1\)</td>
-              <td class="num">\(-0.125000\)</td>
-              <td class="num">\(0.375000\)</td>
-              <td class="num">\(0.375000\)</td>
-              <td>二维 Ising 精确边界；random 另乘
-                \([1+g_0\ln(\tau/\tau_0)]^{1/2}\)</td>
-            </tr>
-            <tr>
-              <td>\(d=2\)</td>
-              <td class="num">\(-0.5181(6)\)</td>
-              <td class="num">\(0.7571(8)\)</td>
-              <td class="num">\(0.2069(8)\)</td>
-              <td>已发表 \(O(\partial^6)\) 体相 NPRG
-                \(\eta=0.0361(11)\) 与直接核验的
-                \(x_1=1.2751(6)\)；random 的
-                \(\omega_{\rm dis}=0.5502(12)\)</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <p>
-        二维量子 ordinary 的对照值按
-      </p>
+      <h3>6.1 一维量子模型</h3>
       \[
-        \theta_{\rm ord}
-        =x_1-\Delta_\phi
-        =1.2751(6)-\frac{1+0.0361(11)}2
-        =0.7571(8)
+        \begin{aligned}
+        \eta_{\rm DE2}&=0.290878
+          \pm0.074911,\\
+        \theta_+&=-0.145439
+          \pm0.037455,\\
+        \theta_{\rm ord}&=0.445529
+          \pm0.198616,\\
+        \theta_{\rm rand}&=0.263593
+          \pm0.212273.
+        \end{aligned}
       \]
       <p>
-        传播独立不确定度。随机 fixed 则使用
-        \(y_{h_1}=2-x_1=0.7249(6)\)，所以
-        \(\theta_{\rm rand}=0.7249(6)-0.51805(55)=0.2069(8)\)。
-        这正是 ordinary 与随机 fixed 的定量差别。
+        精确 \(D=2\) Ising 数据是
+        \(\eta=\frac14\)、\(\Delta_\phi=\frac18\)、
+        \(x_1=y_{h_1}=\frac12\)，所以
+        \((\theta_+,\theta_{\rm ord},\theta_{\rm rand})
+        =(-\frac18,\frac38,\frac38)\)。
+        本仓库 DE2／两圈误差覆盖这些值，但 ordinary 的误差很宽；这不是高精度预测。
       </p>
 
-      <div class="callout">
-        <strong>关于 arXiv:2607.01076v1 的数值一致性。</strong>
-        该预印本写出 \(\beta_1=0.8003(4)\) 与
-        \(\beta_1/\nu=1.2704\)；配合高阶体相 NPRG 会得到
-        \(\theta_{\rm ord}=0.7524(8)\)。但它引用的 Hasenbusch 原始论文直接给出
-        \(y_{h_1}=0.7249(6)\)，其标度关系要求
-        \(\beta_1/\nu=2-y_{h_1}=1.2751(6)\)，并在原文中给出
-        \((\beta_1-\beta)/\nu=0.7570(7)\)。本报告不在未说明的情况下选择其中一组：
-        表中采用直接核验的原始量 \(y_{h_1}\)，同时把预印本 v1 的替代结果完整列出。
-      </div>
+      <h3>6.2 二维量子模型</h3>
+      \[
+        \begin{aligned}
+        \eta_{\rm DE2}&=0.044522
+          \pm0.011415,\\
+        \theta_+&=-0.522261
+          \pm0.005708,\\
+        \theta_{\rm ord}&=0.759314
+          \pm0.030919,\\
+        \theta_{\rm rand}&=0.196165
+          \pm0.032959.
+        \end{aligned}
+      \]
+      <p>
+        外部对照把高阶 NPRG 体相 \(\eta=0.0361(11)\)
+        <a class="cite" href="#ref-4">[4]</a><a class="cite" href="#ref-5">[5]</a>
+        与 \(y_{h_1}=0.7249(6)\)
+        <a class="cite" href="#ref-8">[8]</a> 组合，得到
+        \(\theta_+=-0.51805(55)\)、
+        \(\theta_{\rm ord}=0.75705(81)\) 和
+        \(\theta_{\rm rand}=0.20685(81)\)。
+        这三个对照值与本仓库误差相容，但没有参与中心值选择。
+      </p>
 
       <figure>
-        <img src="./figures/scaling_curves.png" alt="三种边界下磁化或响应随虚时间的预测曲线">
+        <img src="./figures/scaling_curves.png" alt="三种协议的主幂次虚时间标度曲线">
         <figcaption>
-          <strong>图 5｜本项目 FRG 默认投影所预测的趋势。</strong>
-          曲线按 \(\tau=\tau_{\rm mic}\) 归一化，振幅与修正系数仅作示意。
-          红线是均匀 \(+\) fixed 的衰减；青线是 ordinary 边界算符振幅；
-          紫色虚线是随机 fixed 平均偏置响应。它们使用本仓库 FRG 主表，而非
-          外部对照，因此可直接由代码重建。
+          <strong>图 5｜三个主幂次的视觉比较。</strong>
+          所有曲线在 \(\tau=\tau_{\rm mic}\) 归一化为 1，\(\tau_{\rm mic}\) 是进入
+          长尺度标度前的非普适微观时间。图中只画 FRG 中心值的主幂次，不表示实际振幅，
+          也没有把早期时间 crossover（交叉区）误当成渐近标度。
+        </figcaption>
+      </figure>
+    </section>
+
+    <section id="random">
+      <h2>7. 随机 fixed：相关变量、无关变量和对数因子</h2>
+      <p>
+        quenched 平均可用多个辅助场 \(\phi_a\) 表示；这些英文文献中的辅助副本直接称为
+        <em>replicas</em>。对高斯随机边界场，方差 \(g\) 产生
+      </p>
+      \[
+        -\frac{g}{2}\sum_{a,b}
+        \int_{\tau=0}d^{D-1}x\,
+        \mathcal O_{1,a}(\mathbf x)\mathcal O_{1,b}(\mathbf x).
+      \]
+      <p>
+        \(a,b\) 是 replica 标签，不是空间指标。随机场均方根振幅 \(w=\sqrt g\) 的线性
+        RG 本征值和方差本征值分别为
+      </p>
+      \[
+        y_w=y_{h_1}-\frac{D-1}{2},\qquad
+        y_g=2y_w=2y_{h_1}-(D-1).
+      \]
+      <p>
+        \(y_g<0\) 时随机方差无关，会在长尺度流向零；\(y_g=0\) 时需要计算非线性项。
+        三维经典 ordinary Ising 的随机表面场无关，这一判断也由数值与场论研究支持
+        <a class="cite" href="#ref-10">[10]</a>。
+      </p>
+
+      <h3>7.1 一维量子模型的边缘无关对数</h3>
+      <p>
+        精确 \(D=2\) ordinary 边界有 \(y_{h_1}=\frac12\)，所以 \(y_g=0\)。
+        一圈非线性流写成
+      </p>
+      \[
+        \frac{dg}{d\ell}=-\kappa g^2+O(g^3),\qquad \kappa>0,
+      \]
+      <p>
+        其解为 \(g(\ell)=g_0/(1+\kappa g_0\ell)\)。均匀平均偏置对应的边界场流为
+        <a class="cite" href="#ref-9">[9]</a>
+      </p>
+      \[
+        h_1(\ell)=
+        \frac{h_1(0)e^{\ell/2}}
+        {\sqrt{1+\kappa g_0\ell}}.
+      \]
+      <p>
+        取 \(\ell=\ln(\tau/\tau_0)\)，随机偏置响应因此是
+      </p>
+      \[
+        \boxed{
+        \chi_{\rm rand}(\tau)\sim
+        \tau^{3/8}
+        \left[1+\kappa g_0\ln(\tau/\tau_0)\right]^{-1/2}
+        }.
+      \]
+      <p>
+        对数括号是 \(-\frac12\) 次幂，而不是 \(+\frac12\) 次幂；有效斜率从
+        \(\frac38\) 的下方缓慢趋近：
+      </p>
+      \[
+        \theta_{\rm eff}(\tau)=
+        \frac38-
+        \frac{\kappa g_0}{2[1+\kappa g_0\ln(\tau/\tau_0)]}.
+      \]
+
+      <figure>
+        <img src="./figures/disorder_rg_flow.png" alt="一维边缘无关随机表面场和二维无关随机表面场的 RG 流">
+        <figcaption>
+          <strong>图 6｜随机 fixed 的 RG 流。</strong>
+          (a) \(D=2\) 精确标度维数使线性项消失，只剩边缘无关的对数衰减
+          <a class="cite" href="#ref-9">[9]</a>；
+          (b) \(D=3\) 的本仓库 FRG 给出 \(y_w<0\)，阴影传播了体相和边界截断误差。
+          图 (a) 是外部解析约束，不用于调节 \(D=2\) FRG 中心值。
+        </figcaption>
+      </figure>
+    </section>
+
+    <section id="literature">
+      <h2>8. 与指定文献的差异：比较前先对齐观测量和几何</h2>
+
+      <h3>8.1 Phys. Rev. B 96, 094304 (2017)</h3>
+      <p>
+        Shu、Yin 与 Yao 从平移不变的 coherent product state（相干直积态）出发；
+        在 \(M_0=0\) 时，该态的纵向磁化和纵向关联长度都为零。他们测量小 \(M_0\)
+        的零动量 boundary-to-bulk response，并报告一维量子
+        \(\theta=0.3734(2)\)、二维量子 \(\theta=0.209(4)\)
+        <a class="cite" href="#ref-2">[2]</a>。
+      </p>
+      <p>
+        该响应沿均匀边界共轭场方向缩放，因此指数结构是
+        \(y_{h_1}-\Delta_\phi\)。这与本报告随机 fixed 在无序流向 ordinary 后的
+        <em>mean-bias leading power</em>（平均偏置主幂次）相同，但两个微观协议并不相同：
+        2017 年工作没有逐点抽取并冻结随机 \(+/-\) 边界。更重要的是，它不是本报告定义的
+        ordinary profile \(x_1-\Delta_\phi\)。所以二维量子 \(0.209(4)\) 应与
+        本仓库 \(\theta_{\rm rand}=0.1962
+        \pm0.0330\) 以及外部对照
+        \(0.20685(81)\) 比较，而不是与
+        \(\theta_{\rm ord}\approx0.757\) 比较。
+      </p>
+
+      <h3>8.2 arXiv:2607.01076v1 (2026)</h3>
+      <p>
+        该预印本研究的不是只有 \(\tau=0\) 的时间半空间，而是在系统中再加入一个物理空间
+        边界；空间边界与初始时间边界相交，形成 codimension-two corner（余维数为 2 的角点）
+        <a class="cite" href="#ref-3">[3]</a>。
+      </p>
+
+      <figure>
+        <img src="./figures/geometry_comparison.png" alt="时间半空间和带空间边界的时空角点几何对比">
+        <figcaption>
+          <strong>图 7｜几何不同，指数公式也不同。</strong>
+          左图是本报告的纯时间边界问题；右图是
+          arXiv:2607.01076v1 的额外空间边界几何
+          <a class="cite" href="#ref-3">[3]</a>。角点指数不能直接当作时间半空间的
+          \(\theta_{\rm ord}\)。
         </figcaption>
       </figure>
 
-      <h3>5.3 重新解释 2017 年虚时间 QMC 的比较对象</h3>
       <p>
-        Shu、Yin 与 Yao 的 projector QMC 使用零磁化、零相关长度的对称
-        disordered product state，并通过
-        \(C(\tau)=\lim_{M_0\to0}M(\tau)/M_0\) 测量小初始磁化响应，给出一维量子
-        \(\theta=0.3734(2)\)、二维量子 \(\theta=0.209(4)\)。
-        该工作没有直接抽样 quenched 随机 \(+\!/\!-\) fixed 时间边界，因此不能
-        视为本报告随机协议的直接模拟。不过它测量的是同一个 ordinary 固定点的
-        共轭场本征方向 \(y_{h_1}-\Delta_\phi\)；当随机表面场的振幅在 RG 流中
-        趋于零、随机 fixed 渐近流向 ordinary 时，可作为 random/bias 主幂次的
-        间接核对。
-        它不检验随机边界特有的修正项。数值分别与精确 \(3/8\) 和外部对照
-        \(0.2069(8)\) 相容。版本 1.0 把这两个 QMC 数误标成 ordinary-profile
-        基准，本版已更正。
+        预印本定义体相 short-time exponent 为 \(\theta\)，并给出角点处两个组合
+      </p>
+      \[
+        \theta_1=\theta-2\frac{\beta_1-\beta}{\nu},
+        \qquad
+        \theta_1'=\theta-\frac{\beta_1-\beta}{\nu}.
+      \]
+      <p>
+        本报告的 ordinary profile 指数恰好是其中的“减数”
+      </p>
+      \[
+        \theta_{\rm ord}=\frac{\beta_1-\beta}{\nu},
+      \]
+      <p>
+        但它既不是 \(\theta_1\)，也不是 \(\theta_1'\)。用 v1 印出的
+        \(\beta=0.32653\)、
+        \(\nu=0.6299709\)、
+        \(\beta_1=0.8003\) 与
+        \(\theta=0.209\) 直接计算得到
+      </p>
+      \[
+        \frac{\beta_1-\beta}{\nu}
+        =0.752051,
+      \]
+      \[
+        \theta_1=-1.295101,
+        \qquad
+        \theta_1'=-0.543051.
+      \]
+      <p>
+        后一个数与 v1 正文写出的 \(-0.532\) 相差
+        \(-0.011051\)。
+        本报告只陈述“印刷输入不能复现印刷输出”这一算术事实，不据此修改自己的 FRG。
+        此外，v1 列出的 \(\beta_1/\nu=1.2704\) 与其所引 Hasenbusch 原始结果
+        \(y_{h_1}=0.7249(6)\) 所推出的
+        \(\beta_1/\nu=2-y_{h_1}=1.2751(6)\) 不完全一致
+        <a class="cite" href="#ref-8">[8]</a>；本报告的对照表使用后者。
+      </p>
+
+      <h3>8.3 与固定维数边界两圈和 NPRG 的差异</h3>
+      <p>
+        Diehl 与 Shpot 在固定 \(D=3\) 的 massive field theory（有质量场论）中对 ordinary
+        边界计算到两圈，并用 Padé–Borel 重求和；其 Ising 表给出
+        \(\eta_\parallel^{\rm ord}=1.528\)
+        <a class="cite" href="#ref-15">[15]</a>。若与高阶体相
+        \(\eta\approx0.036\) 组合，则
+        \((\eta_\parallel-\eta)/2\approx0.746\)，落在本仓库
+        \(0.7593\pm0.0309\) 内。两者差异主要来自重求和方案与
+        \(\epsilon\)-展开／固定维数展开的不同，而不是把目标值塞入流方程。
+      </p>
+      <p>
+        体相方面，本仓库只到 DE2，三维中心值约 \(0.0445\)；已发表工作把 Ising 导数展开
+        推到 \(O(\partial^6)\)，保守汇总为 \(\eta=0.0361(11)\)
+        <a class="cite" href="#ref-4">[4]</a><a class="cite" href="#ref-5">[5]</a>。
+        本仓库没有复制完整 \(O(\partial^4)\) 或 \(O(\partial^6)\) 的全部独立场函数，
+        因而不能声称同等精度；其价值是直接、可审计地展示 DE2 的原始结果与系统误差。
       </p>
     </section>
 
-    <section id="precision">
-      <h2>6. 精度声明、适用范围与没有被掩盖的限制</h2>
-      <ol class="steps">
-        <li>
-          <div>
-            <strong>数值求解误差很小。</strong>
-            全局大场积分的 \(\eta\) 自洽残差在 \(3\times10^{-10}\) 以内；
-            \(D=3\) 全局解与独立 \(N=7\) 多项式解的 \(\eta\) 相差
-            \(1.54\times10^{-5}\)。机器精度不是最终误差瓶颈。
-          </div>
-        </li>
-        <li>
-          <div>
-            <strong>体相截断误差仍大于求解误差。</strong>
-            LPA′ 忽略 \(Z_k(\rho)\) 的场依赖与四阶、六阶导数算符。本仓库
-            \(D=3\) 的 \(\eta=0.0442723\) 与已发表
-            \(O(\partial^6)\) 的 \(0.0361(11)\) 有约 \(0.0082\) 的差；
-            主 FRG 表如实保留前者。
-          </div>
-        </li>
-        <li>
-          <div>
-            <strong>边界截断误差是 ordinary/random 的主导误差。</strong>
-            本项目只保留 \(\partial_n\phi\) 的 FRG-improved one-loop 边界波函数
-            重整化。
-            势极小值与原点投影在 \(D=2\) 给出巨大的跨度，且精确值甚至不落在
-            random 的跨度内；因此没有依据为本项目的边界投影给出很小的误差条。
-          </div>
-        </li>
-        <li>
-          <div>
-            <strong>一维量子模型对该截断构成严格检验。</strong>
-            FRG-improved one-loop 边界投影得到 \(y_w=-0.1346\)，但精确二维 Ising
-            边界要求
-            \(y_w=0\) 与对数流。报告同时给出两者，不把精确答案称为 FRG，
-            也明确报告低阶 FRG 给出的错误判据。
-          </div>
-        </li>
-        <li>
-          <div>
-            <strong>指数定义依赖观测协议。</strong>
-            零偏置随机样本的 \(\overline M\) 恒为零。本报告的
-            \(\theta_{\rm rand}\) 是小均值偏置响应指数；若研究
-            \(\overline{M^2}\)、典型值或样本内自相关，需写出相应边界算符，
-            不能自动沿用同一个 \(\theta\)。
-          </div>
-        </li>
-        <li>
-          <div>
-            <strong>外部对照有完整来源边界。</strong>
-            \(x_1=1.2751(6)\)、\(y_{h_1}=0.7249(6)\) 和
-            \(\eta=0.0361(11)\) 只出现在外部对照列。预印本 v1 与其引用原始论文
-            的 \(x_1\) 差异也保留在机器可读结果中，没有用其中任一数反向调节
-            本仓库 FRG 参数。
-          </div>
-        </li>
-      </ol>
+    <section id="uncertainty">
+      <h2>9. 系统误差、可控部分与仍不可控部分</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>误差来源</th>
+              <th>本仓库如何检查</th>
+              <th>结论</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>非线性求解和配点残差</td>
+              <td>阶数 \(8,10,12\)；两调节器族必须共同满足残差小于 \(10^{-8}\)</td>
+              <td>\(D=2\) 接受 12 阶；\(D=3\) 接受 10 阶，拒绝指数型 12 阶</td>
+            </tr>
+            <tr>
+              <td>动量积分与 \(p\to0\) 外推</td>
+              <td>径向节点 \(96\to128\)、角节点 \(24\to32\)、积分上限与 \(p\) 点同时变化</td>
+              <td>远小于 DE 截断误差</td>
+            </tr>
+            <tr>
+              <td>场区间 \(\rho_{\max}\)</td>
+              <td>缩短区间后重新求固定点，不只在旧解上重新评估</td>
+              <td>\(D=2\) 位移约 \(10^{-6}\)，\(D=3\) 约 \(10^{-9}\)</td>
+            </tr>
+            <tr>
+              <td>调节器依赖</td>
+              <td>Wetterich 型与指数型各自 PMS，再取族间半差</td>
+              <td>可见但小于导数展开误差</td>
+            </tr>
+            <tr>
+              <td>体相导数展开</td>
+              <td>按已知 \(1/9\)–\(1/4\) 收敛因子取最保守端 \(1/4\)</td>
+              <td>体相误差的主导项，尤其 \(D=2\)</td>
+            </tr>
+            <tr>
+              <td>ordinary 边界高阶项</td>
+              <td>一圈／两圈差、重求和参数平台、未重求和与重求和差</td>
+              <td>三个初态指数中最大的未决系统误差</td>
+            </tr>
+            <tr>
+              <td>随机边界非高斯 cumulants</td>
+              <td>只按 ordinary 固定点附近的 leading variance 与 mean-bias 方向处理</td>
+              <td>主幂次可靠性由随机固定点是否仍流向 ordinary 决定；强无序 crossover 未直接求解</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warning">
+        <strong>为什么 \(D=2\) 的 FRG 数值没有写成 \(0.375000\)？</strong>
+        因为那会把精确 Ising 结果伪装成本仓库两圈边界截断的输出。本仓库真正算出的
+        ordinary 中心是 0.4455，且误差约
+        0.1986。精确 \(\frac38\)
+        是独立验证。更多小数可以描述数值求解，却不能消除缺失三圈及更高边界顶角的物理误差。
+      </div>
+
+      <p>
+        “尽可能精确”在这里的正确含义是：把可计算的数值误差压低，把截断选择显式扫描，
+        并把尚未计算的高阶算符诚实放入误差；它不等于让中心值靠近文献。若要显著缩小下一版
+        误差，优先级应是完整的场依赖边界 DE2 或三圈以上边界顶角流，其次才是把当前积分节点
+        再增加一倍。
+      </p>
     </section>
 
     <section id="reproduce">
-      <h2>7. 从空仓库到结果：如何完整复现</h2>
+      <h2>10. 复现方法与产物</h2>
       <p>
-        项目由 <code>uv</code> 锁定 Python 环境。以下命令会从大场渐近条件
-        重新积分两个全局固定点、求边界投影、写出 JSON/CSV、生成 PDF 与
-        \(320\,{\rm dpi}\) PNG，并渲染本 HTML：
+        项目使用 <code>uv</code> 管理 Python 环境。完整重算会求解两个维数、两个调节器族、
+        PMS 网格、配点序列、场区间与高分辨率检查，然后重建数据、图和 HTML：
       </p>
       <pre><code>uv sync
 uv run python scripts/run_analysis.py
 uv run pytest
-python -m http.server 8000</code></pre>
-      <p>
-        然后访问 <code>http://127.0.0.1:8000/show/frg-quantum-ising-initial-slip/</code>。关键产物：
-      </p>
+uv run ruff check src tests scripts</code></pre>
+      <p>主要可审计产物：</p>
       <ul>
-        <li><a href="./data/results.json">机器可读的全部结果与来源标签</a></li>
-        <li><a href="./data/exponents.csv">本仓库 FRG 六行指数表</a></li>
-        <li><a href="./data/benchmark_exponents.csv">独立外部对照指数表</a></li>
-        <li><a href="./data/lpa_convergence_D3.json">\(D=3\) LPA′ 阶数收敛序列</a></li>
-        <li><a href="./data/reference_audit.json">逐条书目核验记录</a></li>
-        <li><a href="./src/frg_initial_slip/bulk_lpa.py">固定点与稳定性矩阵实现</a></li>
-        <li><a href="./src/frg_initial_slip/surface_frg.py">全局势与半空间 one-loop 边界投影实现</a></li>
-        <li><a href="./src/frg_initial_slip/boundary_rg.py">三类边界标度恒等式实现</a></li>
-        <li><a href="./src/frg_initial_slip/figures.py">全部图形的可重复绘图代码</a></li>
+        <li><a href="./data/results.json">完整结果与 provenance：results.json</a></li>
+        <li><a href="./data/exponents.csv">本仓库指数表：exponents.csv</a></li>
+        <li><a href="./data/benchmark_exponents.csv">外部对照表：benchmark_exponents.csv</a></li>
+        <li><a href="./data/bulk_precision_campaigns.json">体相 PMS 与收敛原始数据</a></li>
+        <li><a href="./data/boundary_resummation.json">边界重求和景观与摘要</a></li>
+        <li><a href="./data/reference_audit.json">书目和数值来源审计</a></li>
+        <li><a href="./src/frg_initial_slip/bulk_de2.py">DE2 固定点实现</a></li>
+        <li><a href="./src/frg_initial_slip/boundary_resummation.py">边界重求和实现</a></li>
       </ul>
-      <p class="fineprint">
-        软件环境：Python 3.12；NumPy、SciPy、SymPy、Matplotlib、Pandas 与 Jinja2。
-        图形同时交付矢量 PDF 和 \(320\,{\rm dpi}\) PNG。随机示意图使用固定种子
-        \(20260726\)，不参与任何指数估计。报告中的所有小数均可在
-        <code>results.json</code> 中追溯到“本项目 FRG”或“外部对照”字段。
+      <p class="small">
+        图 1 的随机图案使用固定随机种子 \(20260726\)，仅用于说明边界几何，不参与任何指数
+        估计。所有表格和曲线由同一个 <code>results</code> 对象生成，避免手工复制数字。
       </p>
     </section>
 
     <section id="references">
-      <h2>参考文献与数值来源</h2>
+      <h2>参考文献</h2>
       <ol class="references">
-        <li>
-          S. Yin, P. Mai, and F. Zhong,
-          “Universal short-time quantum critical dynamics in imaginary time,”
-          <a href="https://doi.org/10.1103/PhysRevB.89.144115">Phys. Rev. B 89, 144115 (2014)</a>。
-          给出小初始磁化的虚时间 initial-slip 标度。
+        <li id="ref-1">
+          S. Yin, P. Mai, and F. Zhong, “Universal short-time quantum critical dynamics in imaginary time,”
+          <em>Phys. Rev. B</em> <strong>89</strong>, 144115 (2014).
+          <a href="https://doi.org/10.1103/PhysRevB.89.144115">DOI</a> ·
+          <a href="https://arxiv.org/abs/1311.0108">arXiv:1311.0108</a>.
         </li>
-        <li>
-          Y.-R. Shu, S. Yin, and D.-X. Yao,
-          “Universal short-time quantum critical dynamics of finite-size systems,”
-          <a href="https://doi.org/10.1103/PhysRevB.96.094304">Phys. Rev. B 96, 094304 (2017)</a>。
-          零磁化、零相关长度 disordered product state 的 QMC initial-slip
-          响应结果：\(0.3734(2)\) 与 \(0.209(4)\)；不是 quenched 随机 fixed
-          边界的直接模拟。
-          <strong>版本 1.0 对本条的作者、题名和协议归类均有误，本条为核验后的更正。</strong>
+        <li id="ref-2">
+          Y.-R. Shu, S. Yin, and D.-X. Yao, “Universal short-time quantum critical dynamics of finite-size systems,”
+          <em>Phys. Rev. B</em> <strong>96</strong>, 094304 (2017).
+          <a href="https://doi.org/10.1103/PhysRevB.96.094304">DOI</a> ·
+          <a href="https://arxiv.org/abs/1705.05931">arXiv:1705.05931</a>.
         </li>
-        <li>
+        <li id="ref-3">
           Y.-R. Shu, Y.-B. Li, and S. Yin,
           “Universal Short-Imaginary-Time Quantum Critical Dynamics Near Boundaries,”
-          <a href="https://arxiv.org/abs/2607.01076">arXiv:2607.01076v1 (2026)</a>。
-          给出并数值验证空间边界短距离因子
-          \((\beta_1-\beta)/\nu\)；正文已单独记录其 v1 数值与所引文献的不一致。
+          arXiv:2607.01076v1 (2026).
+          <a href="https://arxiv.org/abs/2607.01076">arXiv</a>.
         </li>
-        <li>
+        <li id="ref-4">
           I. Balog, H. Chaté, B. Delamotte, M. Marohnić, and N. Wschebor,
           “Convergence of Nonperturbative Approximations to the Renormalization Group,”
-          <a href="https://doi.org/10.1103/PhysRevLett.123.240604">Phys. Rev. Lett. 123, 240604 (2019)</a>。
-          直接把三维 Ising 导数展开推进到 \(O(\partial^6)\)。
+          <em>Phys. Rev. Lett.</em> <strong>123</strong>, 240604 (2019).
+          <a href="https://doi.org/10.1103/PhysRevLett.123.240604">DOI</a> ·
+          <a href="https://arxiv.org/abs/1907.01829">arXiv:1907.01829</a>.
         </li>
-        <li>
+        <li id="ref-5">
           G. De Polsi, I. Balog, M. Tissier, and N. Wschebor,
-          “Precision calculation of critical exponents in the \(O(N)\) universality classes
-          with the nonperturbative renormalization group,”
-          <a href="https://doi.org/10.1103/PhysRevE.101.042113">Phys. Rev. E 101, 042113 (2020)</a>。
-          汇总 \(O(\partial^6)\) NPRG 的 \(\eta=0.0361(11)\) 并给出系统误差方法。
+          “Precision calculation of critical exponents in the O(N) universality classes with the nonperturbative renormalization group,”
+          <em>Phys. Rev. E</em> <strong>101</strong>, 042113 (2020).
+          <a href="https://doi.org/10.1103/PhysRevE.101.042113">DOI</a> ·
+          <a href="https://arxiv.org/abs/2001.07525">arXiv:2001.07525</a>.
         </li>
-        <li>
+        <li id="ref-6">
           Y.-Y. Tan, C. Huang, Y.-R. Chen, and W.-J. Fu,
-          “Criticality of the \(O(N)\) universality via global solutions to nonperturbative
-          fixed-point equations,”
-          <a href="https://doi.org/10.1140/epjc/s10052-024-13291-7">Eur. Phys. J. C 84, 897 (2024)</a>。
-          说明从大场渐近条件积分全局 FRG 固定点的方法，并报告
-          \(D=2\) LPA′ 的独立对照。
-          <strong>版本 1.0 对本条作者和卷内文章号有误，本条为核验后的更正。</strong>
+          “Criticality of the O(N) universality via global solutions to nonperturbative fixed-point equations,”
+          <em>Eur. Phys. J. C</em> <strong>84</strong>, 897 (2024).
+          <a href="https://doi.org/10.1140/epjc/s10052-024-13291-7">DOI</a> ·
+          <a href="https://arxiv.org/abs/2211.10249">arXiv:2211.10249</a>.
         </li>
-        <li>
-          H. W. Diehl,
-          “The Theory of Boundary Critical Phenomena,”
-          <a href="https://arxiv.org/abs/cond-mat/9610143">Int. J. Mod. Phys. B 11, 3503 (1997)</a>。
-          ordinary Dirichlet 边界、\(\partial_n\phi\) 算符与边界标度关系的综述来源。
+        <li id="ref-7">
+          H. W. Diehl, “The Theory of Boundary Critical Phenomena,”
+          <em>Int. J. Mod. Phys. B</em> <strong>11</strong>, 3503–3523 (1997).
+          <a href="https://doi.org/10.1142/S0217979297001751">DOI</a> ·
+          <a href="https://arxiv.org/abs/cond-mat/9610143">arXiv:cond-mat/9610143</a>.
         </li>
-        <li>
-          M. Hasenbusch,
-          “The thermodynamic Casimir force: A Monte Carlo study of the crossover between
-          the ordinary and the normal surface universality class,”
-          <a href="https://doi.org/10.1103/PhysRevB.83.134425">Phys. Rev. B 83, 134425 (2011)</a>。
-          直接报告 \(y_{h_1}=0.7249(6)\)，并由
-          \(x_1=2-y_{h_1}\) 得 \(x_1=1.2751(6)\)；
-          原文另给 \((\beta_1-\beta)/\nu=0.7570(7)\)。
+        <li id="ref-8">
+          M. Hasenbusch, “The thermodynamic Casimir force: A Monte Carlo study of the crossover between the ordinary and the normal surface universality class,”
+          <em>Phys. Rev. B</em> <strong>83</strong>, 134425 (2011).
+          <a href="https://doi.org/10.1103/PhysRevB.83.134425">DOI</a> ·
+          <a href="https://arxiv.org/abs/1012.4986">arXiv:1012.4986</a>.
         </li>
-        <li>
+        <li id="ref-9">
           M. Pleimling, F. A. Bagaméry, L. Turban, and F. Iglói,
           “Logarithmic corrections in the two-dimensional Ising model in a random surface field,”
-          <a href="https://doi.org/10.1088/0305-4470/37/37/003">J. Phys. A 37, 8801 (2004)</a>。
-          推导 \(D=2\) 随机表面场的 marginally irrelevant RG 流与对数修正。
+          <em>J. Phys. A</em> <strong>37</strong>, 8801–8809 (2004).
+          <a href="https://doi.org/10.1088/0305-4470/37/37/003">DOI</a> ·
+          <a href="https://arxiv.org/abs/cond-mat/0402188">arXiv:cond-mat/0402188</a>.
         </li>
-        <li>
+        <li id="ref-10">
           A. Maciołek, O. Vasilyev, V. Dotsenko, and S. Dietrich,
           “Critical Casimir forces in the presence of random surface fields,”
-          <a href="https://doi.org/10.1103/PhysRevE.91.032408">Phys. Rev. E 91, 032408 (2015)</a>。
-          给出 \(y_w=y_{h_1}-(D-1)/2\)，并讨论强随机 fixed 的 ordinary 渐近行为。
+          <em>Phys. Rev. E</em> <strong>91</strong>, 032408 (2015).
+          <a href="https://doi.org/10.1103/PhysRevE.91.032408">DOI</a> ·
+          <a href="https://arxiv.org/abs/1502.02575">arXiv:1502.02575</a>.
         </li>
-        <li>
-          Z. Zhou and Y. Zou,
-          “Studying the 3d Ising surface CFTs on the fuzzy sphere,”
-          <a href="https://doi.org/10.21468/SciPostPhys.18.1.031">SciPost Phys. 18, 031 (2025)</a>。
-          汇总 ordinary 奇算符的 Monte Carlo 值 \(1.2751(6)\) 与 bootstrap
-          值 \(1.276(2)\)，作为独立交叉核对。
+        <li id="ref-11">
+          Z. Zhou and Y. Zou, “Studying the 3d Ising surface CFTs on the fuzzy sphere,”
+          <em>SciPost Phys.</em> <strong>18</strong>, 031 (2025).
+          <a href="https://doi.org/10.21468/SciPostPhys.18.1.031">DOI</a> ·
+          <a href="https://arxiv.org/abs/2407.15914">arXiv:2407.15914</a>.
         </li>
-        <li>
-          C. Wetterich,
-          “Exact evolution equation for the effective potential,”
-          <a href="https://doi.org/10.1016/0370-2693(93)90726-X">Phys. Lett. B 301,
-          90–94 (1993)</a>。
-          本报告所用有效平均作用量精确流方程的原始来源。
+        <li id="ref-12">
+          C. Wetterich, “Exact evolution equation for the effective potential,”
+          <em>Phys. Lett. B</em> <strong>301</strong>, 90–94 (1993).
+          <a href="https://doi.org/10.1016/0370-2693(93)90726-X">DOI</a>.
         </li>
-        <li>
-          D. F. Litim,
-          “Optimized renormalization group flows,”
-          <a href="https://doi.org/10.1103/PhysRevD.64.105007">Phys. Rev. D 64,
-          105007 (2001)</a>。
-          本报告体相 LPA′ 流所用优化红外截止函数的原始来源。
+        <li id="ref-13">
+          D. F. Litim, “Optimized renormalization group flows,”
+          <em>Phys. Rev. D</em> <strong>64</strong>, 105007 (2001).
+          <a href="https://doi.org/10.1103/PhysRevD.64.105007">DOI</a> ·
+          <a href="https://arxiv.org/abs/hep-th/0103195">arXiv:hep-th/0103195</a>.
+        </li>
+        <li id="ref-14">
+          H. W. Diehl and S. Dietrich,
+          “Field-theoretical approach to static critical phenomena in semi-infinite systems,”
+          <em>Z. Phys. B</em> <strong>42</strong>, 65–86 (1981).
+          <a href="https://doi.org/10.1007/BF01298293">DOI</a>.
+        </li>
+        <li id="ref-15">
+          H. W. Diehl and M. Shpot,
+          “Massive Field-Theory Approach to Surface Critical Behavior in Three-Dimensional Systems,”
+          <em>Nucl. Phys. B</em> <strong>528</strong>, 595–647 (1998).
+          <a href="https://doi.org/10.1016/S0550-3213(98)00489-1">DOI</a> ·
+          <a href="https://arxiv.org/abs/cond-mat/9804083">arXiv:cond-mat/9804083</a>.
+        </li>
+        <li id="ref-16">
+          N. Dupuis, L. Canet, A. Eichhorn, W. Metzner, J. M. Pawlowski, M. Tissier, and N. Wschebor,
+          “The nonperturbative functional renormalization group and its applications,”
+          <em>Phys. Rep.</em> <strong>910</strong>, 1–114 (2021).
+          <a href="https://doi.org/10.1016/j.physrep.2021.01.001">DOI</a> ·
+          <a href="https://arxiv.org/abs/2006.04853">arXiv:2006.04853</a>.
+        </li>
+        <li id="ref-17">
+          I. Balog, L. N. Farkaš, M. Marohnić, and G. Tarjus,
+          “Effect of droplet configurations within the functional renormalization group of the Ising model approaching the lower critical dimension,”
+          <em>Phys. Rev. E</em> <strong>113</strong>, 034128 (2026).
+          <a href="https://doi.org/10.1103/66y2-fwf2">DOI</a> ·
+          <a href="https://arxiv.org/abs/2506.23415">arXiv:2506.23415</a>.
         </li>
       </ol>
-      <p class="fineprint">
-        核对日期：2026-07-26。作者、题名、期刊、卷、页／文章号和 DOI/arXiv
-        均逐条记录于 <a href="./data/reference_audit.json">reference_audit.json</a>。
-        外部数值只进入对照区，不进入本仓库 FRG 固定点或边界流。
-      </p>
     </section>
 
-    <footer class="footer">
-      <p>
-        版本 1.1 · ordinary/random 公式与书目已勘误 · 结果、图形与报告由同一可复现流水线生成 ·
-        所有行内与行间公式均由 LaTeX/MathJax 渲染。
-      </p>
+    <footer>
+      版本 2.0 · 所有正文外部数值均有编号引用 · 公式由 MathJax 以 LaTeX 渲染 ·
+      数据、图形和正文由同一可复现流水线生成。
     </footer>
   </main>
 </body>

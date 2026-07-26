@@ -39,7 +39,7 @@
         "https://doi.org/10.1103/PhysRevB.96.094304",
         "https://arxiv.org/abs/1705.05931"
       ],
-      "correction_note": "Version 1.0 of this report had incorrect authors and title. The paper prepares a zero-magnetization, zero-correlation-length disordered product state and measures the small-M0 response through an imaginary-time correlation. It does not directly simulate quenched random +/- fixed temporal boundary conditions, so its theta values are only an indirect benchmark for the conjugate-field response and are not ordinary-profile exponents."
+      "correction_note": "Version 1.0 of this report had incorrect authors and title. The paper uses a translation-invariant coherent product state with zero longitudinal magnetization and zero longitudinal correlation length at M0=0, then measures the small-M0 response through an imaginary-time correlation. It does not directly simulate quenched random +/- fixed temporal boundary conditions, so its theta values are only an indirect benchmark for the conjugate-field response and are not ordinary-profile exponents."
     },
     {
       "id": 3,
@@ -75,8 +75,14 @@
       "year": 2019,
       "doi": "10.1103/PhysRevLett.123.240604",
       "verified_urls": [
-        "https://doi.org/10.1103/PhysRevLett.123.240604"
-      ]
+        "https://doi.org/10.1103/PhysRevLett.123.240604",
+        "https://arxiv.org/abs/1907.01829"
+      ],
+      "arxiv": "1907.01829",
+      "checked_numerical_claims": {
+        "O(partial^6)_eta_summary": "0.0361(11), as conservatively tabulated in De Polsi et al. (2020)",
+        "preferred_Ising_summary_in_PRL": "eta=0.0358(6)"
+      }
     },
     {
       "id": 5,
@@ -176,7 +182,11 @@
       "verified_urls": [
         "https://doi.org/10.1088/0305-4470/37/37/003",
         "https://arxiv.org/abs/cond-mat/0402188"
-      ]
+      ],
+      "checked_numerical_claims": {
+        "running_uniform_surface_field": "h_s(l)=h_s exp(l/2)/sqrt(1+kappa h^2 l)",
+        "response_log_factor": "[1+kappa*g0*ln(tau/tau0)]^(-1/2)"
+      }
     },
     {
       "id": 10,
@@ -247,6 +257,98 @@
         "https://doi.org/10.1103/PhysRevD.64.105007",
         "https://arxiv.org/abs/hep-th/0103195"
       ]
+    },
+    {
+      "id": 14,
+      "authors": [
+        "H. W. Diehl",
+        "S. Dietrich"
+      ],
+      "title": "Field-theoretical approach to static critical phenomena in semi-infinite systems",
+      "venue": "Zeitschrift für Physik B Condensed Matter",
+      "volume": "42",
+      "issue": "1",
+      "pages": "65-86",
+      "year": 1981,
+      "doi": "10.1007/BF01298293",
+      "verified_urls": [
+        "https://doi.org/10.1007/BF01298293",
+        "https://pure.mpg.de/view/item_3279382"
+      ],
+      "checked_numerical_claims": {
+        "Ising_ordinary_boundary_series": "eta_1,infinity = -epsilon/3 - 17 epsilon^2/81 + O(epsilon^3)",
+        "derived_profile_series": "theta_ord = 1 - epsilon/6 - 17 epsilon^2/162 + O(epsilon^3)"
+      }
+    },
+    {
+      "id": 15,
+      "authors": [
+        "H. W. Diehl",
+        "M. Shpot"
+      ],
+      "title": "Massive Field-Theory Approach to Surface Critical Behavior in Three-Dimensional Systems",
+      "venue": "Nuclear Physics B",
+      "volume": "528",
+      "issue": "3",
+      "pages": "595-647",
+      "year": 1998,
+      "doi": "10.1016/S0550-3213(98)00489-1",
+      "arxiv": "cond-mat/9804083",
+      "verified_urls": [
+        "https://doi.org/10.1016/S0550-3213(98)00489-1",
+        "https://arxiv.org/abs/cond-mat/9804083"
+      ],
+      "checked_numerical_claims": {
+        "ordinary_D3_Ising_eta_parallel_Pade_Borel": "1.528 at two-loop fixed-dimension order",
+        "ordinary_D3_Ising_beta1_scaling_combination": "0.796 in the authors' f(eta_parallel,nu,eta) column"
+      }
+    },
+    {
+      "id": 16,
+      "authors": [
+        "N. Dupuis",
+        "L. Canet",
+        "A. Eichhorn",
+        "W. Metzner",
+        "J. M. Pawlowski",
+        "M. Tissier",
+        "N. Wschebor"
+      ],
+      "title": "The nonperturbative functional renormalization group and its applications",
+      "venue": "Physics Reports",
+      "volume": "910",
+      "pages": "1-114",
+      "year": 2021,
+      "doi": "10.1016/j.physrep.2021.01.001",
+      "arxiv": "2006.04853",
+      "verified_urls": [
+        "https://doi.org/10.1016/j.physrep.2021.01.001",
+        "https://arxiv.org/abs/2006.04853"
+      ]
+    },
+    {
+      "id": 17,
+      "authors": [
+        "Ivan Balog",
+        "Lucija Nora Farkaš",
+        "Maroje Marohnić",
+        "Gilles Tarjus"
+      ],
+      "title": "Effect of droplet configurations within the functional renormalization group of the Ising model approaching the lower critical dimension",
+      "venue": "Physical Review E",
+      "volume": "113",
+      "article": "034128",
+      "year": 2026,
+      "doi": "10.1103/66y2-fwf2",
+      "arxiv": "2506.23415",
+      "verified_urls": [
+        "https://doi.org/10.1103/66y2-fwf2",
+        "https://arxiv.org/abs/2506.23415"
+      ],
+      "checked_numerical_claims": {
+        "method": "field-dependent second-order derivative expansion",
+        "lower_dimension_warning": "field convergence becomes nonuniform as the lower critical dimension is approached"
+      }
     }
   ]
 }
