@@ -1,0 +1,315 @@
+{
+  "metadata": {
+    "model": "critical transverse-field Ising model",
+    "dynamic_exponent_z": 1.0,
+    "definition": "theta = d ln M / d ln tau in the indicated scaling protocol"
+  },
+  "bulk_lpa_prime_convergence_D3": [
+    {
+      "dimension": 3.0,
+      "order": 2,
+      "kappa": 0.024523912408339746,
+      "lambdas": [
+        7.99056333913011
+      ],
+      "eta": 0.05459151589061629,
+      "nu": 0.5259609767658283,
+      "residual_norm": 0.0,
+      "relevant_eigenvalue": -1.901281737951495
+    },
+    {
+      "dimension": 3.0,
+      "order": 3,
+      "kappa": 0.03203072067859848,
+      "lambdas": [
+        5.803562543655166,
+        66.7237533065379
+      ],
+      "eta": 0.03872515899686526,
+      "nu": 0.6842161815696342,
+      "residual_norm": 1.775094746396787e-16,
+      "relevant_eigenvalue": -1.4615263814806867
+    },
+    {
+      "dimension": 3.0,
+      "order": 4,
+      "kappa": 0.0306244399015574,
+      "lambdas": [
+        6.459358191857854,
+        76.12326295122114,
+        748.4463341064263
+      ],
+      "eta": 0.044311480067507,
+      "nu": 0.6395096715567371,
+      "residual_norm": 1.4455150350488928e-15,
+      "relevant_eigenvalue": -1.5636980087662056
+    },
+    {
+      "dimension": 3.0,
+      "order": 5,
+      "kappa": 0.030543929776585522,
+      "lambdas": [
+        6.482422663372583,
+        75.84690029875209,
+        747.0107561295139,
+        -4810.55191259827
+      ],
+      "eta": 0.044487645795656665,
+      "nu": 0.6344189174460808,
+      "residual_norm": 9.690314691022638e-14,
+      "relevant_eigenvalue": -1.576245557155836
+    },
+    {
+      "dimension": 3.0,
+      "order": 6,
+      "kappa": 0.030593422379763136,
+      "lambdas": [
+        6.45613214009071,
+        75.40521008993443,
+        709.5666313426298,
+        -5316.887213611625,
+        -409957.0847984274
+      ],
+      "eta": 0.04426032149831015,
+      "nu": 0.6367055540660103,
+      "residual_norm": 1.4621338839315571e-13,
+      "relevant_eigenvalue": -1.5705846974539275
+    },
+    {
+      "dimension": 3.0,
+      "order": 7,
+      "kappa": 0.030595617667946853,
+      "lambdas": [
+        6.455647671882087,
+        75.41999486135839,
+        710.0596792513614,
+        -5145.336892934337,
+        -405174.7725287155,
+        3276992.4217379116
+      ],
+      "eta": 0.04425693708821099,
+      "nu": 0.636991773368761,
+      "residual_norm": 1.167555368991371e-12,
+      "relevant_eigenvalue": -1.5698789871515182
+    }
+  ],
+  "raw_bulk": {
+    "D2_global_LPA_prime": {
+      "eta": 0.2336,
+      "nu": 1.327,
+      "source": "Chen, Tan & Fu, Eur. Phys. J. C 84, 570 (2024)"
+    },
+    "D3_polynomial_LPA_prime": {
+      "eta": 0.04425693708821099,
+      "nu": 0.636991773368761,
+      "order": 7,
+      "source": "this repository"
+    }
+  },
+  "bulk_inputs": {
+    "2": {
+      "eta": {
+        "value": 0.25,
+        "uncertainty": 0.0
+      },
+      "frg_raw_eta": {
+        "value": 0.2336,
+        "uncertainty": 0.0
+      },
+      "kind": "exact 2D Ising calibration"
+    },
+    "3": {
+      "eta": {
+        "value": 0.0361,
+        "uncertainty": 0.0011
+      },
+      "frg_raw_eta": {
+        "value": 0.04425693708821099,
+        "uncertainty": 0.0
+      },
+      "kind": "NPRG derivative expansion O(partial^6)"
+    }
+  },
+  "surface_inputs": {
+    "2": {
+      "y_h1": {
+        "value": 0.5,
+        "uncertainty": 0.0
+      },
+      "kind": "exact 2D Ising ordinary boundary"
+    },
+    "3": {
+      "y_h1": {
+        "value": 0.7249,
+        "uncertainty": 0.0006
+      },
+      "kind": "precision ordinary-boundary calibration"
+    }
+  },
+  "dimensions": {
+    "1": {
+      "classical_dimension": 2,
+      "eta": {
+        "value": 0.25,
+        "uncertainty": 0.0
+      },
+      "delta_phi": {
+        "value": 0.125,
+        "uncertainty": 0.0
+      },
+      "y_h1": {
+        "value": 0.5,
+        "uncertainty": 0.0
+      },
+      "theta_fixed_plus": {
+        "value": -0.125,
+        "uncertainty": 0.0
+      },
+      "theta_ordinary": {
+        "value": 0.375,
+        "uncertainty": 0.0
+      },
+      "theta_random_fixed": {
+        "value": 0.375,
+        "uncertainty": 0.0
+      },
+      "random_amplitude_eigenvalue": {
+        "value": 0.0,
+        "uncertainty": 0.0
+      },
+      "random_variance_correction_exponent": {
+        "value": 0.0,
+        "uncertainty": 0.0
+      },
+      "random_correction": "[ln(tau/tau0)]^(-1/2)",
+      "raw_lpa_prime": {
+        "delta_phi": {
+          "value": 0.1168,
+          "uncertainty": 0.0
+        },
+        "theta_fixed_plus": {
+          "value": -0.1168,
+          "uncertainty": 0.0
+        },
+        "theta_ordinary": {
+          "value": 0.3832,
+          "uncertainty": 0.0
+        },
+        "theta_random_fixed": {
+          "value": 0.3832,
+          "uncertainty": 0.0
+        }
+      }
+    },
+    "2": {
+      "classical_dimension": 3,
+      "eta": {
+        "value": 0.0361,
+        "uncertainty": 0.0011
+      },
+      "delta_phi": {
+        "value": 0.51805,
+        "uncertainty": 0.00055
+      },
+      "y_h1": {
+        "value": 0.7249,
+        "uncertainty": 0.0006
+      },
+      "theta_fixed_plus": {
+        "value": -0.51805,
+        "uncertainty": 0.00055
+      },
+      "theta_ordinary": {
+        "value": 0.20684999999999998,
+        "uncertainty": 0.0008139410298049853
+      },
+      "theta_random_fixed": {
+        "value": 0.20684999999999998,
+        "uncertainty": 0.0008139410298049853
+      },
+      "random_amplitude_eigenvalue": {
+        "value": -0.2751,
+        "uncertainty": 0.0006
+      },
+      "random_variance_correction_exponent": {
+        "value": 0.5502,
+        "uncertainty": 0.0012
+      },
+      "random_correction": "tau^(-0.5502)",
+      "raw_lpa_prime": {
+        "delta_phi": {
+          "value": 0.5221284685441054,
+          "uncertainty": 0.0
+        },
+        "theta_fixed_plus": {
+          "value": -0.5221284685441054,
+          "uncertainty": 0.0
+        },
+        "theta_ordinary": {
+          "value": 0.20277153145589455,
+          "uncertainty": 0.0006
+        },
+        "theta_random_fixed": {
+          "value": 0.20277153145589455,
+          "uncertainty": 0.0006
+        }
+      }
+    }
+  },
+  "rows": [
+    {
+      "quantum_dimension": 1,
+      "classical_dimension": 2,
+      "boundary": "fixed_plus",
+      "boundary_label": "严格 (+) fixed",
+      "theta": -0.125,
+      "theta_uncertainty": 0.0,
+      "leading_correction": "power law"
+    },
+    {
+      "quantum_dimension": 1,
+      "classical_dimension": 2,
+      "boundary": "ordinary",
+      "boundary_label": "ordinary",
+      "theta": 0.375,
+      "theta_uncertainty": 0.0,
+      "leading_correction": "power law"
+    },
+    {
+      "quantum_dimension": 1,
+      "classical_dimension": 2,
+      "boundary": "random_fixed",
+      "boundary_label": "随机 +/- fixed",
+      "theta": 0.375,
+      "theta_uncertainty": 0.0,
+      "leading_correction": "[ln(tau/tau0)]^(-1/2)"
+    },
+    {
+      "quantum_dimension": 2,
+      "classical_dimension": 3,
+      "boundary": "fixed_plus",
+      "boundary_label": "严格 (+) fixed",
+      "theta": -0.51805,
+      "theta_uncertainty": 0.00055,
+      "leading_correction": "power law"
+    },
+    {
+      "quantum_dimension": 2,
+      "classical_dimension": 3,
+      "boundary": "ordinary",
+      "boundary_label": "ordinary",
+      "theta": 0.20684999999999998,
+      "theta_uncertainty": 0.0008139410298049853,
+      "leading_correction": "power law"
+    },
+    {
+      "quantum_dimension": 2,
+      "classical_dimension": 3,
+      "boundary": "random_fixed",
+      "boundary_label": "随机 +/- fixed",
+      "theta": 0.20684999999999998,
+      "theta_uncertainty": 0.0008139410298049853,
+      "leading_correction": "tau^(-0.5502)"
+    }
+  ]
+}
