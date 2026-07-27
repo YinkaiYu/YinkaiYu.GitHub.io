@@ -1,0 +1,30 @@
+{
+  "source_eta": 0.2611078028398023,
+  "projected_eta": 0.26110780283909907,
+  "eta_shift": -7.032152637975742e-13,
+  "residual_norm": 1.6675346186719523e-08,
+  "minimum_inverse_propagator": 0.4892131578210446,
+  "configuration": {
+    "dimension": 2,
+    "regulator_alpha": 1.1,
+    "regulator_family": "exponential",
+    "collocation_order": 8,
+    "rho_max": 0.3,
+    "radial_nodes": 16,
+    "radial_cutoff": 18.0,
+    "polar_nodes": 5,
+    "azimuthal_nodes": 6,
+    "planar_angle_nodes": 32,
+    "momentum_samples": [
+      0.06,
+      0.085,
+      0.115,
+      0.15,
+      0.19
+    ],
+    "momentum_fit_degree": 4,
+    "high_derivative_feedback": 0.45,
+    "strict_vertex_products": true,
+    "strict_product_order": 4
+  }
+}

@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="一维和二维量子 Ising 模型在三种固定时间边界下的虚时间临界短时指数：DE2 泛函重整化群计算、边界两圈重求和与系统误差审计。">
-  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <meta name="description" content="一维和二维量子 Ising 模型在三种时间边界下的虚时间临界短时指数：完整 O(∂⁴) 非微扰泛函重整化群、边界两圈重求和与系统误差审计。">
+  <link rel="icon" href="data:,">
   <title>量子 Ising 临界虚时间短时指数：三种时间边界的泛函重整化群计算</title>
   <style>
     :root {
@@ -252,6 +252,8 @@
 
 
 
+
+
   <header class="masthead">
     <div class="masthead-inner">
       <p class="kicker">FUNCTIONAL RENORMALIZATION GROUP · REPRODUCIBLE REPORT</p>
@@ -259,12 +261,12 @@
       <p class="deck">
         一维与二维横场 Ising 模型；严格 \(+\) fixed、ordinary profile，以及
         quenched 随机 \(+/-\) fixed 初态的小平均偏置响应。本文从问题定义、边界算符、
-        DE2 数值流、两圈边界重求和到误差预算逐层说明。
+        完整 \(O(\partial^4)\) 非微扰体相流、两圈边界重求和到误差预算逐层说明。
       </p>
       <div class="meta">
-        <span class="status">版本 2.0</span>
-        <span>更新：2026-07-26</span>
-        <span>体相：场依赖 \(O(\partial^2)\) 导数展开（DE2）</span>
+        <span class="status">版本 3.0</span>
+        <span>更新：2026-07-27</span>
+        <span>体相：完整五函数 \(O(\partial^4)\) NPRG 导数展开</span>
         <span>边界：通用两圈顶角流 + conformal–Borel–Leroy 重求和</span>
       </div>
     </div>
@@ -278,7 +280,7 @@
         <li><a href="#problem">模型与问题</a></li>
         <li><a href="#protocols">三种边界协议</a></li>
         <li><a href="#scaling">标度关系</a></li>
-        <li><a href="#bulk-frg">体相 DE2 FRG</a></li>
+        <li><a href="#bulk-frg">高阶非微扰体相 FRG</a></li>
         <li><a href="#boundary-frg">ordinary 边界计算</a></li>
         <li><a href="#results">数值结果</a></li>
         <li><a href="#random">随机 fixed 与对数修正</a></li>
@@ -292,10 +294,21 @@
     <section id="summary">
       <h2>结论先行</h2>
       <p class="lede">
-        本仓库不再把 LPA′ 当作最终方法。体相直接求解场依赖的 DE2 Wetterich 固定点；
-        ordinary 边界使用通用两圈边界算符级数，再由本仓库完成重求和和参数稳定性扫描。
-        下表是这条流水线给出的有符号对数斜率 \(\theta\)，误差为保守的系统误差估计。
+        体相已从 DE2 升级为 Ising 标量场完整的五函数
+        \(O(\partial^4)\) 非微扰泛函重整化群（NPRG）固定点，并按参考文献
+        <a class="cite" href="#ref-4">[4]</a><a class="cite" href="#ref-5">[5]</a>
+        的 PMS 与交替收敛方法估计截断误差。ordinary 边界仍采用通用两圈边界算符级数，
+        再由本仓库完成重求和和参数稳定性扫描。下表中的误差是系统误差估计，不是统计误差。
       </p>
+
+      <div class="warning">
+        <strong>D=2 的接受状态：</strong>
+        完整 \(O(\partial^4)\) 方程已经实际运行，但同伦尚未同时满足
+        \(s=1\)、场区间稳定性和双调节器 PMS 三个门槛。因此一维量子模型的主表仍保留
+        受控 DE2 中心值及其宽误差；未完成的 DE4 轨迹只作为失败诊断，不参与中心值。
+        D=3（二维量子模型）的完整 \(O(\partial^4)\) 结果已通过并进入主表。
+      </div>
+
 
       <div class="table-wrap">
         <table>
@@ -321,13 +334,16 @@
             </tr>
             <tr>
               <td class="random">随机 fixed 的平均偏置响应</td>
-              <td class="num">\(0.2636\pm0.2123\)</td>
-              <td class="num">\(0.375\) 加 \(-\frac12\) 次幂的对数因子</td>
+              <td class="num">\(0.2636\pm0.2735\)</td>
+              <td class="num">
+                \(0.375\)，并带
+                \([1+\kappa g_0\ln(\tau/\tau_0)]^{-1/2}\) 对数修正
+              </td>
             </tr>
             <tr>
               <td rowspan="3">\(d=2\)</td>
               <td class="fixed">严格 \(+\) fixed 的磁化</td>
-              <td class="num">\(-0.5223\pm0.0057\)</td>
+              <td class="num">\(-0.5179\pm0.0008\)</td>
               <td class="num">\(-0.51805\pm0.00055\)</td>
             </tr>
             <tr>
@@ -337,7 +353,7 @@
             </tr>
             <tr>
               <td class="random">随机 fixed 的平均偏置响应</td>
-              <td class="num">\(0.1962\pm0.0330\)</td>
+              <td class="num">\(0.2048\pm0.0326\)</td>
               <td class="num">\(0.20685\pm0.00081\)</td>
             </tr>
           </tbody>
@@ -354,10 +370,11 @@
 
       <div class="integrity">
         <strong>计算与文献的边界。</strong>
-        \(U_k(\rho)\) 与 \(Z_k(\rho)\) 的 DE2 固定点、调节器扫描、PMS、配点收敛和重求和
-        都由本仓库实际计算。ordinary 的两圈级数系数是通用解析输入，来源和核验见
-        <a class="cite" href="#ref-14">[14]</a>；外部精确值、Monte Carlo 和高阶 NPRG
-        只作为对照，没有拿来校准中心值。早期版本曾有错误书目信息；本版的每条外部
+        五个体相场函数的固定点、两类调节器扫描、PMS、场离散化检查和边界重求和都由
+        本仓库实际计算。参考文献 [4,5] 的已发表数值只用于计算完成后的盲对照，没有进入
+        流方程或中心值选择；它们研究的是体相，并没有给出 ordinary 边界算符的高阶 NPRG
+        数值。ordinary 的两圈级数系数是通用解析输入，来源见
+        <a class="cite" href="#ref-14">[14]</a>。早期版本曾有错误书目信息；本版的每条外部
         数值都带引用，并在 <a href="./data/reference_audit.json">reference_audit.json</a>
         中记录核验来源。
       </div>
@@ -519,7 +536,7 @@
     </section>
 
     <section id="bulk-frg">
-      <h2>4. 体相：从 LPA′ 升级到场依赖 DE2</h2>
+      <h2>4. 体相：完整 \(O(\partial^4)\) 非微扰泛函重整化群</h2>
       <p>
         泛函重整化群使用尺度依赖的有效作用量 \(\Gamma_k\)。\(k\) 是逐步降低的动量尺度，
         \(R_k\) 是压制动量 \(q\lesssim k\) 模的红外调节器。精确 Wetterich 方程为
@@ -534,118 +551,164 @@
       \]
       <p>
         \(\Lambda\) 是紫外起始尺度，\(\Gamma_k^{(2)}\) 是对场取两次泛函导数，
-        \(\operatorname{Tr}\) 表示对内部动量积分。方程本身精确，但包含无穷多个动量与场依赖
-        顶角，必须系统截断；FRG 的标准结构和近似体系见
+        \(\operatorname{Tr}\) 表示内部动量积分。方程本身精确，但它耦合无穷多个动量和场依赖
+        顶角，因此必须用可系统升级的导数展开截断
         <a class="cite" href="#ref-16">[16]</a>。
       </p>
 
+      <h3>4.1 五个独立的场函数</h3>
       <p>
-        LPA′ 只保留常数波函数因子 \(Z_k\)。本版采用 \(N=1\) Ising 标量场的完整
-        \(O(\partial^2)\) 导数展开：
+        对单分量 Ising 场，保留到四阶空间导数时，完整截断形式含五个独立函数：
       </p>
       \[
-        \Gamma_k[\phi]=\int d^Dx\left[
+        \begin{aligned}
+        \Gamma_k[\phi]=\int d^Dx\Bigl\{&
           U_k(\rho)+\frac12 Z_k(\rho)(\partial_\mu\phi)^2
-        \right],\qquad \rho=\frac{\phi^2}{2}.
+          +\frac12 W_{a,k}(\rho)(\partial_\mu\partial_\nu\phi)^2\\
+          &+\frac12\phi W_{b,k}(\rho)(\partial^2\phi)(\partial_\mu\phi)^2
+          +\frac12W_{c,k}(\rho)\bigl[(\partial_\mu\phi)^2\bigr]^2
+        \Bigr\},\qquad \rho=\frac{\phi^2}{2}.
+        \end{aligned}
       \]
       <p>
-        \(U_k(\rho)\) 是场依赖有效势，\(Z_k(\rho)\) 是场依赖波函数重整化。代码直接对
-        Wetterich 两点流作外动量 \(p^2\) 投影，使用四个小而非零的 \(p\) 值外推到
-        \(p\to0\)，而不是把 \(Z_k\) 设成常数。
+        \(U_k\) 是有效势，\(Z_k\) 是二阶导数项的场依赖系数，
+        \(W_{a,k},W_{b,k},W_{c,k}\) 是四阶导数项的三个独立系数；
+        \(\partial^2=\partial_\mu\partial_\mu\)，重复的方向指标按惯例求和。
+        这正是参考文献 [5] 对 \(N=1\) 情形使用的完整
+        \(O(\partial^4)\) 截断，而不是只把 DE2 的误差条缩小
+        <a class="cite" href="#ref-5">[5]</a>。
       </p>
 
-      <h3>4.1 全局场表示与调节器扫描</h3>
+      <h3>4.2 从精确顶角层级直接投影</h3>
       <p>
-        \(U_k\) 与 \(Z_k\) 在有限 \(\rho\) 区间用 Chebyshev–Lobatto 配点表示。
-        本仓库扫描两个平滑调节器族：
+        代码没有抄录某一组已化简的 beta functions（耦合常数随尺度的方程）。
+        它对 Wetterich 方程逐次取场导数，用 ordered set partitions（有序集合划分）
+        生成一至四点顶角流的全部一圈拓扑；相应项数为
+        \(1,3,13,75\)。两点流的 \(p^2,p^4\) 系数给出 \(Z_k,W_{a,k}\)；
+        两种三点外动量构型同时给出 \(\partial_\phi W_{a,k}\) 与
+        \(\phi W_{b,k}\)；三种四点构型再分离
+        \(\partial_\phi^2W_{a,k}\)、\(\partial_\phi(\phi W_{b,k})\) 与 \(W_{c,k}\)。
+        所有场函数在 \(\rho\) 上用全局 Chebyshev 配点表示；这类直接求全局固定点函数的
+        数值策略可与参考文献 <a class="cite" href="#ref-6">[6]</a> 的独立实现对照。
+      </p>
+      <p>
+        为与参考文献 [4,5] 的定义一致，每个顶角乘积先按总外动量次数分级，再丢弃高于
+        \(p^4\) 的项；这避免把不完整的 \(O(\partial^6)\) 片段混进
+        \(O(\partial^4)\) 结果
+        <a class="cite" href="#ref-4">[4]</a><a class="cite" href="#ref-5">[5]</a>。
+        内部检查包括：关闭三个 \(W\) 函数后，两点流与独立 DE2 实现的差小于
+        \(4\times10^{-12}\)；零外动量的一至四点流与场导数恒等式分别符合到
+        \(10^{-14},10^{-11},10^{-8}\) 量级；树级投影能精确恢复五个输入函数。
+      </p>
+
+      <h3>4.3 调节器、PMS 与导数展开外推</h3>
+      <p>
+        本仓库独立扫描两个平滑调节器族
       </p>
       \[
         r_{\rm W}(y)=\alpha\frac{y}{e^y-1},
         \qquad
         r_{\rm E}(y)=\alpha e^{-y},
-        \qquad y=\frac{q^2}{k^2}.
+        \qquad
+        y=\frac{q^2}{k^2},
       \]
       <p>
-        \(r(y)=R_k/(Z_k k^2)\) 是无量纲调节器形状，\(\alpha\) 是形状参数。有限截断下结果
-        依赖 \(\alpha\)；principle of minimal sensitivity（最小敏感性原理，PMS）选择
-        \(\partial\eta/\partial\alpha=0\) 的局部稳定点。两个调节器族的 PMS 差异保留为误差，
-        不平均掉后假装不存在。
+        其中 \(r(y)=R_k/(Z_{k,0}k^2)\)，\(Z_{k,0}=Z_k(\rho=0)\)，
+        \(\alpha\) 是形状参数。principle of minimal sensitivity（PMS）以
+        \(\partial\eta/\partial\alpha=0\) 的局部极值选取截断内最稳定的结果。
+        调节器优化的一般背景见参考文献 <a class="cite" href="#ref-13">[13]</a>。
+        参考文献 [5] 对交替收敛序列采用保守收敛半径 \(\mathcal R=4\)；本报告按同一规则写成
+      </p>
+      \[
+        \eta_{\rm imp}^{(4)}
+        =\eta_{\rm ext}^{(4)}
+        +\frac{\eta_{\rm ext}^{(2)}-\eta_{\rm ext}^{(4)}}{2\mathcal R}
+        =\frac{7\eta_{\rm ext}^{(4)}+\eta_{\rm ext}^{(2)}}{8},
+        \qquad
+        \delta_{\rm DE}
+        =\frac{\left|\eta_{\rm ext}^{(2)}-\eta_{\rm ext}^{(4)}\right|}{8}.
+      \]
+      <p>
+        下标 “ext” 表示在各调节器 PMS 极值组成的包络上取保守端点。
+        场离散化、PMS 拟合和动量积分误差在 \(\delta_{\rm DE}\) 之外线性加入；
+        它们不是被假定为相互独立的统计噪声。
       </p>
 
       <figure>
-        <img src="./figures/frg_convergence.png" alt="DE2 调节器 PMS 扫描和 Chebyshev 配点收敛">
+        <img src="./figures/frg_convergence.png" alt="完整 O(∂4) NPRG 的同伦、调节器 PMS、场离散化与导数展开收敛">
         <figcaption>
-          <strong>图 2｜体相 DE2 的调节器与数值收敛审计。</strong>
-          (a,b) 两个平滑调节器族的 \(\eta(\alpha)\)，空心大点是 PMS；
-          (c,d) 配点阶数 \(8,10,12\) 的序列。\(D=3\) 的指数型 12 阶解未通过共同残差门槛，
-          所以主结果采用 10 阶；\(D=2\) 采用 12 阶。外部横线只用于验证：二维经典 Ising
-          的精确 \(\eta=\frac14\)，以及高阶 NPRG 的三维结果
-          \(\eta=0.0361(11)\) <a class="cite" href="#ref-4">[4]</a><a class="cite" href="#ref-5">[5]</a>。
-          靠近低临界维数时场收敛会变得非均匀，这也是 \(D=2\) 误差必须放宽的原因
+          <strong>图 2｜完整 \(O(\partial^4)\) NPRG 的收敛审计。</strong>
+          图中分别给出 \(O(\partial^2)\) 与 \(O(\partial^4)\) 的 PMS、
+          开启三个四阶导数函数的同伦路径、Chebyshev 阶数和高分辨率积分检查。
+          \(D=3\) 的指数调节器原始 \(O(\partial^4)\) PMS 值为
+          \(0.03361966\)，
+          与参考文献 [4] 发表的同族数值 \(0.03357\) 的差约
+          \(5\times10^{-5}\)，而该文献数值未参与求解
+          <a class="cite" href="#ref-4">[4]</a>。
+          \(D=2\) 靠近低临界维数，场收敛更不均匀，因此另列更宽的系统误差
           <a class="cite" href="#ref-17">[17]</a>。
         </figcaption>
       </figure>
 
-      <h3>4.2 体相数值与误差预算</h3>
-      <p>
-        采用调节器族中心的平均作为 \(\eta\) 中心值。误差不按统计独立假设做平方和，
-        而是线性相加：
-      </p>
-      \[
-        \delta\eta=
-        \delta_{\rm DE}+\delta_{\rm reg}+\delta_{\rm coll}
-        +\delta_{\rho_{\max}}+\delta_{\rm mom}.
-      \]
-      <p>
-        五项依次是导数展开阶数、调节器族、配点阶数、场区间和动量积分／外推误差。
-        已发表的 Ising 导数展开显示相邻阶的有效小参数约在
-        \(\frac19\) 到 \(\frac14\) 之间
-        <a class="cite" href="#ref-4">[4]</a><a class="cite" href="#ref-5">[5]</a>；
-        本仓库取最保守的 \(\delta_{\rm DE}=|\eta|/4\)。
-      </p>
-
+      <h3>4.4 体相结果与误差账本</h3>
       <div class="table-wrap">
         <table>
           <thead>
             <tr>
               <th>经典维数</th>
-              <th class="num">DE2 \(\eta\)</th>
-              <th class="num">接受配点阶数</th>
+              <th class="num">本仓库采用的 \(\eta\)</th>
               <th class="num">\(\delta_{\rm DE}\)</th>
-              <th class="num">\(\delta_{\rm reg}\)</th>
-              <th class="num">\(\delta_{\rm coll}\)</th>
-              <th class="num">\(\delta_{\rho_{\max}}\)</th>
-              <th class="num">\(\delta_{\rm mom}\)</th>
+              <th class="num">场离散化</th>
+              <th class="num">PMS</th>
+              <th class="num">积分／\(p\to0\)</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>\(D=2\)</td>
               <td class="num">\(0.290878\pm0.074911\)</td>
-              <td class="num">12</td>
-              <td class="num">7.27e-02</td>
-              <td class="num">1.92e-03</td>
-              <td class="num">2.69e-04</td>
-              <td class="num">9.66e-07</td>
-              <td class="num">6.77e-12</td>
+              <td class="num">\(0.0727\)</td>
+              <td class="num">\(2.70\times10^{-4}\)</td>
+              <td class="num">\(1.92\times10^{-3}\)</td>
+              <td class="num">\(6.77\times10^{-12}\)</td>
             </tr>
             <tr>
               <td>\(D=3\)</td>
-              <td class="num">\(0.044522\pm0.011415\)</td>
-              <td class="num">10</td>
-              <td class="num">1.11e-02</td>
-              <td class="num">2.58e-04</td>
-              <td class="num">2.64e-05</td>
-              <td class="num">3.43e-09</td>
-              <td class="num">3.86e-07</td>
+              <td class="num">\(0.035874\pm0.001687\)</td>
+              <td class="num">\(1.30\times10^{-3}\)</td>
+              <td class="num">\(3.65\times10^{-4}\)</td>
+              <td class="num">\(3.00\times10^{-6}\)</td>
+              <td class="num">\(1.61\times10^{-5}\)</td>
             </tr>
           </tbody>
         </table>
       </div>
+
       <p class="small">
-        LPA′ 基线分别为 \(\eta=0.233594\) 和
-        \(\eta=0.044272\)。它们只作方法升级的
-        诊断，不进入主结果。
+        \(D=2\) 行的 \(\delta_{\rm DE}\) 是回退 DE2 的保守截断误差，不是
+        \(1/8\) 的 DE4 外推误差；其状态字段为
+        <code>de2_fallback_de4_not_accepted</code>。图 2(d) 显示的部分同伦没有被当作
+        \(s=1\) 的物理解。矩阵无关伪弧长校正把该分支推进到
+        \(s=0.450100131\)，此点残差为
+        \(2.48\times10^{-7}\)，但距离 \(s=1\) 仍很远。
+        以 \(s=0.45\) 的指数型调节器检查点为例，把场区间上限
+        \(\rho_{\max}\) 依次改为 \(0.27,0.28,0.30,0.32\) 时，固定点残差分别为
+        \(4.77\)、
+        \(3.42\)、
+        \(1.67\times10^{-8}\) 和
+        \(16.2\)。
+        只有原来的 \(0.30\) 区间通过，因此不能声称场函数已经收敛。
+      </p>
+
+      <p>
+        \(D=3\) 的最终独立估计为
+        \(\eta=0.03587356
+        \pm0.00168666\)。
+        De Polsi 等给出完整 \(O(\partial^4)\) 改进值 \(0.03622(115)\)
+        <a class="cite" href="#ref-5">[5]</a>，Balog 等进一步用
+        \(O(\partial^6)\) 得到 \(0.0358(6)\)
+        <a class="cite" href="#ref-4">[4]</a>；二者均落在本仓库误差内。
+        这项一致性是事后验证，不是校准。
       </p>
     </section>
 
@@ -676,9 +739,11 @@
 
       <div class="warning">
         <strong>方法边界必须说清楚：</strong>
-        这不是“完整的非微扰边界 DE2”。本仓库的体相是直接数值 DE2；边界部分采用已知且
-        可由顶角流逐圈复现的通用两圈系数，再进行本仓库自己的 conformal–Borel–Leroy
-        重求和。只有三项级数，尤其在 \(\epsilon=2\) 时不能声称高精度。
+        高阶 NPRG 升级发生在体相。参考文献 [4,5] 没有计算 ordinary 表面算符，
+        本仓库也没有把体相精度冒充成边界精度。边界部分采用可由顶角流逐圈复现的通用
+        两圈系数，再进行 conformal–Borel–Leroy 重求和。只有三项级数，尤其在
+        \(\epsilon=2\) 时不能声称与体相同等精度
+        <a class="cite" href="#ref-4">[4]</a><a class="cite" href="#ref-5">[5]</a>。
       </div>
 
       <h3>5.1 conformal–Borel–Leroy 重求和</h3>
@@ -747,11 +812,12 @@
     <section id="results">
       <h2>6. 完整数值结果与外部验证</h2>
       <p>
-        将 DE2 的 \(\eta\) 与边界重求和的 \(\theta_{\rm ord}\) 代入第 3 节恒等式，
+        将完整 \(O(\partial^4)\) NPRG 的 \(\eta\) 与边界重求和的
+        \(\theta_{\rm ord}\) 代入第 3 节恒等式，
         得到图 4。误差传播中，\(\theta_+\) 使用
         \(\delta\theta_+=\delta\eta/2\)；
-        \(\theta_{\rm rand}\) 对体相和边界误差作平方和。后者是为了避免把同一
-        \(\theta_{\rm ord}\) 误差重复线性计入，但仍不把它解释成统计置信区间。
+        \(\theta_{\rm rand}\) 对体相和边界系统误差作线性和。这个选择比平方和更保守，
+        因为两项都来自截断而不是可证明相互独立的统计噪声。
       </p>
 
       <figure>
@@ -771,14 +837,17 @@
       <h3>6.1 一维量子模型</h3>
       \[
         \begin{aligned}
-        \eta_{\rm DE2}&=0.290878
+
+        \eta_{\mathrm{DE2,\ fallback}}
+
+        &=0.290878
           \pm0.074911,\\
         \theta_+&=-0.145439
           \pm0.037455,\\
         \theta_{\rm ord}&=0.445529
           \pm0.198616,\\
         \theta_{\rm rand}&=0.263593
-          \pm0.212273.
+          \pm0.273527.
         \end{aligned}
       \]
       <p>
@@ -787,20 +856,21 @@
         \(x_1=y_{h_1}=\frac12\)，所以
         \((\theta_+,\theta_{\rm ord},\theta_{\rm rand})
         =(-\frac18,\frac38,\frac38)\)。
-        本仓库 DE2／两圈误差覆盖这些值，但 ordinary 的误差很宽；这不是高精度预测。
+        本仓库高阶体相／两圈边界误差覆盖这些值，但 ordinary 的误差仍很宽；
+        这不是高精度边界预测。
       </p>
 
       <h3>6.2 二维量子模型</h3>
       \[
         \begin{aligned}
-        \eta_{\rm DE2}&=0.044522
-          \pm0.011415,\\
-        \theta_+&=-0.522261
-          \pm0.005708,\\
+        \eta_{\rm NPRG}^{(4)}&=0.035874
+          \pm0.001687,\\
+        \theta_+&=-0.517937
+          \pm0.000843,\\
         \theta_{\rm ord}&=0.759314
           \pm0.030919,\\
-        \theta_{\rm rand}&=0.196165
-          \pm0.032959.
+        \theta_{\rm rand}&=0.204813
+          \pm0.032605.
         \end{aligned}
       \]
       <p>
@@ -828,7 +898,7 @@
     <section id="random">
       <h2>7. 随机 fixed：相关变量、无关变量和对数因子</h2>
       <p>
-        quenched 平均可用多个辅助场 \(\phi_a\) 表示；这些英文文献中的辅助副本直接称为
+        quenched 平均可用一组辅助场 \(\phi_a\) 表示；这组场在英文文献中称为
         <em>replicas</em>。对高斯随机边界场，方差 \(g\) 产生
       </p>
       \[
@@ -878,7 +948,7 @@
         }.
       \]
       <p>
-        对数括号是 \(-\frac12\) 次幂，而不是 \(+\frac12\) 次幂；有效斜率从
+        整个方括号的指数是 \(-\frac12\)，而不是 \(+\frac12\)；有效斜率从
         \(\frac38\) 的下方缓慢趋近：
       </p>
       \[
@@ -916,10 +986,21 @@
         <em>mean-bias leading power</em>（平均偏置主幂次）相同，但两个微观协议并不相同：
         2017 年工作没有逐点抽取并冻结随机 \(+/-\) 边界。更重要的是，它不是本报告定义的
         ordinary profile \(x_1-\Delta_\phi\)。所以二维量子 \(0.209(4)\) 应与
-        本仓库 \(\theta_{\rm rand}=0.1962
-        \pm0.0330\) 以及外部对照
+        本仓库 \(\theta_{\rm rand}=0.2048
+        \pm0.0326\) 以及外部对照
         \(0.20685(81)\) 比较，而不是与
         \(\theta_{\rm ord}\approx0.757\) 比较。
+      </p>
+      <p>
+        还要区分“主幂次相同”和“完整标度函数相同”。在一维量子模型中，随机 fixed
+        的方差是边缘无关变量，会额外产生
+        \([1+\kappa g_0\ln(\tau/\tau_0)]^{-1/2}\)
+        <a class="cite" href="#ref-9">[9]</a>；2017 年的平移不变相干态没有这项
+        quenched-disorder 对数。因此其 \(0.3734(2)\) 可检验
+        \(y_{h_1}-\Delta_\phi\) 的渐近幂次，却不能检验随机协议的整个有限时间曲线。
+        在二维量子模型中，本仓库与 2017 年数值的中心差为
+        \(-0.004187\)，
+        明显小于目前由两圈边界截断主导的误差。
       </p>
 
       <h3>8.2 arXiv:2607.01076v1 (2026)</h3>
@@ -992,11 +1073,34 @@
         \(\epsilon\)-展开／固定维数展开的不同，而不是把目标值塞入流方程。
       </p>
       <p>
-        体相方面，本仓库只到 DE2，三维中心值约 \(0.0445\)；已发表工作把 Ising 导数展开
-        推到 \(O(\partial^6)\)，保守汇总为 \(\eta=0.0361(11)\)
-        <a class="cite" href="#ref-4">[4]</a><a class="cite" href="#ref-5">[5]</a>。
-        本仓库没有复制完整 \(O(\partial^4)\) 或 \(O(\partial^6)\) 的全部独立场函数，
-        因而不能声称同等精度；其价值是直接、可审计地展示 DE2 的原始结果与系统误差。
+        体相方面，现在可以逐级作同方法比较。本仓库在 \(D=3\) 的指数调节器上得到
+        \(O(\partial^2)\) PMS 值
+        \(0.04541491\)，
+        参考文献 [4] 的对应序列值为 \(0.04551\)；本仓库的
+        \(O(\partial^4)\) 值
+        \(0.03361966\)
+        对应文献值 \(0.03357\)
+        <a class="cite" href="#ref-4">[4]</a>。两级均由本仓库流方程独立得到。
+      </p>
+      <p>
+        按参考文献 [5] 的 \(1/8\) 外推，本仓库给出
+        \(\eta=0.03587356
+        \pm0.00168666\)，
+        与其完整 \(O(\partial^4)\) 改进值 \(0.03622(115)\) 的中心差为
+        \(-0.00034644\)
+        <a class="cite" href="#ref-5">[5]</a>；与参考文献 [4] 结合
+        \(O(\partial^6)\) 后的 \(0.0358(6)\) 中心差为
+        \(0.00007356\)
+        <a class="cite" href="#ref-4">[4]</a>。剩余差异可由本仓库只到
+        \(O(\partial^4)\)、Wetterich 族尚未在最高场配点阶数收敛，以及动量投影和调节器
+        参数化差别解释；这些项都保留在误差账本中，没有通过移动中心值消除。
+      </p>
+      <p>
+        这项体相升级会直接缩小严格 \(+\) fixed 的误差，也会改善随机偏置指数中的
+        \(1-\eta\) 部分；但
+        \(\theta_{\rm ord}=(\eta_\parallel^{\rm ord}-\eta)/2\)
+        在两圈公式中恰好消去体相 \(\eta\)。所以 ordinary 和随机协议的总误差仍由
+        边界算符主导。声称三种 \(\theta\) 都已达到参考文献 [4,5] 的体相精度将是不诚实的。
       </p>
     </section>
 
@@ -1013,29 +1117,34 @@
           </thead>
           <tbody>
             <tr>
-              <td>非线性求解和配点残差</td>
-              <td>阶数 \(8,10,12\)；两调节器族必须共同满足残差小于 \(10^{-8}\)</td>
-              <td>\(D=2\) 接受 12 阶；\(D=3\) 接受 10 阶，拒绝指数型 12 阶</td>
+              <td>顶角生成与投影</td>
+              <td>有序集合划分计数；树级五函数恢复；零动量场导数恒等式；关闭 \(W\) 后与 DE2 比较</td>
+              <td>分别通过 \(1,3,13,75\) 项计数和 \(10^{-8}\) 或更好的数值恒等式门槛</td>
             </tr>
             <tr>
-              <td>动量积分与 \(p\to0\) 外推</td>
-              <td>径向节点 \(96\to128\)、角节点 \(24\to32\)、积分上限与 \(p\) 点同时变化</td>
-              <td>远小于 DE 截断误差</td>
+              <td>非线性固定点残差</td>
+              <td>每个同伦点和 PMS 点都必须满足统一残差门槛；失败的高阶解不进入包络</td>
+              <td>\(D=2\) 最大接受残差 2.73e-06；\(D=3\) 为 3.51e-07</td>
             </tr>
             <tr>
-              <td>场区间 \(\rho_{\max}\)</td>
-              <td>缩短区间后重新求固定点，不只在旧解上重新评估</td>
-              <td>\(D=2\) 位移约 \(10^{-6}\)，\(D=3\) 约 \(10^{-9}\)</td>
+              <td>场离散化与场区间</td>
+              <td>改变 Chebyshev 阶数和 \(\rho_{\max}\)，并重新求固定点；不把旧解上的单次投影误称为重求解</td>
+              <td>相应位移显式进入 \(\delta_{\rm field}\)；\(D=2\) 另保留低临界维数的非均匀收敛警告</td>
             </tr>
             <tr>
               <td>调节器依赖</td>
-              <td>Wetterich 型与指数型各自 PMS，再取族间半差</td>
-              <td>可见但小于导数展开误差</td>
+              <td>Wetterich 型与指数型分别求固定点并作局部二次 PMS</td>
+              <td>两个族先组成保守极值包络，再做导数展开外推，不把族间差平均掉</td>
+            </tr>
+            <tr>
+              <td>动量积分与 \(p\to0\) 外推</td>
+              <td>增加径向／角向节点，改变小外动量集合与拟合阶数，再投影或重求解</td>
+              <td>\(D=3\) 位移约 1.61e-05；\(D=2\) 位移约 6.77e-12</td>
             </tr>
             <tr>
               <td>体相导数展开</td>
-              <td>按已知 \(1/9\)–\(1/4\) 收敛因子取最保守端 \(1/4\)</td>
-              <td>体相误差的主导项，尤其 \(D=2\)</td>
+              <td>直接比较完整 \(O(\partial^2)\) 与 \(O(\partial^4)\)，按参考文献 <a class="cite" href="#ref-5">[5]</a> 的保守 \(1/8\) 尾项外推</td>
+              <td>不再用 \(|\eta|/4\) 猜测；仍未显式实现 13 函数的 \(O(\partial^6)\)</td>
             </tr>
             <tr>
               <td>ordinary 边界高阶项</td>
@@ -1043,8 +1152,8 @@
               <td>三个初态指数中最大的未决系统误差</td>
             </tr>
             <tr>
-              <td>随机边界非高斯 cumulants</td>
-              <td>只按 ordinary 固定点附近的 leading variance 与 mean-bias 方向处理</td>
+              <td>随机边界的非高斯累积量（高阶无序相关）</td>
+              <td>只处理 ordinary 固定点附近的最低阶方差与平均偏置方向</td>
               <td>主幂次可靠性由随机固定点是否仍流向 ordinary 决定；强无序 crossover 未直接求解</td>
             </tr>
           </tbody>
@@ -1062,30 +1171,42 @@
       <p>
         “尽可能精确”在这里的正确含义是：把可计算的数值误差压低，把截断选择显式扫描，
         并把尚未计算的高阶算符诚实放入误差；它不等于让中心值靠近文献。若要显著缩小下一版
-        误差，优先级应是完整的场依赖边界 DE2 或三圈以上边界顶角流，其次才是把当前积分节点
-        再增加一倍。
+        三种 \(\theta\) 的共同误差，优先级是构造完整的场依赖半空间边界 NPRG，或得到三圈
+        以上的 ordinary 边界顶角流；继续把已经很小的 D=3 体相积分误差再压低一倍，几乎不会
+        缩小 ordinary 和随机偏置指数的总误差。
       </p>
     </section>
 
     <section id="reproduce">
       <h2>10. 复现方法与产物</h2>
       <p>
-        项目使用 <code>uv</code> 管理 Python 环境。完整重算会求解两个维数、两个调节器族、
-        PMS 网格、配点序列、场区间与高分辨率检查，然后重建数据、图和 HTML：
+        项目使用 <code>uv</code> 管理 Python 环境。下列命令从已审计并纳入 Git 的
+        NPRG 固定点记录重建结果、图和 HTML，再运行全部测试：
       </p>
       <pre><code>uv sync
+uv run python scripts/assemble_nprg_campaign.py
 uv run python scripts/run_analysis.py
 uv run pytest
 uv run ruff check src tests scripts</code></pre>
+      <p>
+        单个高阶固定点和同伦序列可分别用以下入口重新计算；所有调节器、配点、积分节点、
+        动量点、反馈强度和残差门槛都是命令行参数，不依赖隐藏的 notebook 状态：
+      </p>
+      <pre><code>uv run python scripts/run_de4_fixed_point.py --help
+uv run python scripts/run_de4_continuation.py --help
+uv run python scripts/run_de4_arclength.py --help
+uv run python scripts/audit_de4_projection.py --help</code></pre>
       <p>主要可审计产物：</p>
       <ul>
         <li><a href="./data/results.json">完整结果与 provenance：results.json</a></li>
         <li><a href="./data/exponents.csv">本仓库指数表：exponents.csv</a></li>
         <li><a href="./data/benchmark_exponents.csv">外部对照表：benchmark_exponents.csv</a></li>
-        <li><a href="./data/bulk_precision_campaigns.json">体相 PMS 与收敛原始数据</a></li>
+        <li><a href="./data/nprg_de4_campaign.json">完整 \(O(\partial^4)\) NPRG 扫描、固定点与误差账本</a></li>
+        <li><a href="./data/bulk_precision_campaigns.json">旧 DE2 扫描（仅作阶数比较）</a></li>
         <li><a href="./data/boundary_resummation.json">边界重求和景观与摘要</a></li>
         <li><a href="./data/reference_audit.json">书目和数值来源审计</a></li>
-        <li><a href="./src/frg_initial_slip/bulk_de2.py">DE2 固定点实现</a></li>
+        <li><a href="./src/frg_initial_slip/bulk_de4.py">完整五函数 \(O(\partial^4)\) 顶角流与固定点实现</a></li>
+        <li><a href="./src/frg_initial_slip/high_order_nprg.py">PMS 与交替收敛误差实现</a></li>
         <li><a href="./src/frg_initial_slip/boundary_resummation.py">边界重求和实现</a></li>
       </ul>
       <p class="small">
@@ -1210,7 +1331,7 @@ uv run ruff check src tests scripts</code></pre>
     </section>
 
     <footer>
-      版本 2.0 · 所有正文外部数值均有编号引用 · 公式由 MathJax 以 LaTeX 渲染 ·
+      版本 3.0 · 所有正文外部数值均有编号引用 · 公式由 MathJax 以 LaTeX 渲染 ·
       数据、图形和正文由同一可复现流水线生成。
     </footer>
   </main>

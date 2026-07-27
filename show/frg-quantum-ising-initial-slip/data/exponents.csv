@@ -1,7 +1,7 @@
 result_type,quantum_dimension,classical_dimension,boundary,boundary_label,theta,theta_uncertainty,leading_correction
 this_repository_controlled_frg,1,2,fixed_plus,严格 (+) fixed,-0.14543888927723858,0.03745530772812321,power-law corrections
 this_repository_controlled_frg,1,2,ordinary,ordinary profile,0.44552949382246565,0.19861591357555197,power-law corrections
-this_repository_controlled_frg,1,2,random_fixed,随机 +/- fixed：平均偏置响应,0.2635927276230572,0.21227312932513326,pure-FRG two-loop central flow is irrelevant but cannot resolve the exact marginal logarithm within its truncation error
-this_repository_controlled_frg,2,3,fixed_plus,严格 (+) fixed,-0.5222608602673482,0.005707628964393074,power-law corrections
+this_repository_controlled_frg,1,2,random_fixed,随机 +/- fixed：平均偏置响应,0.2635927276230572,0.2735265290317984,pure-FRG two-loop central flow is irrelevant but cannot resolve the exact marginal logarithm within its truncation error
+this_repository_controlled_frg,2,3,fixed_plus,严格 (+) fixed,-0.5179367794892024,0.0008433308040699018,power-law corrections
 this_repository_controlled_frg,2,3,ordinary,ordinary profile,0.7593137645669057,0.030918702838510614,power-law corrections
-this_repository_controlled_frg,2,3,random_fixed,随机 +/- fixed：平均偏置响应,0.19616451489839792,0.032958675622616264,tau^(-0.563)
+this_repository_controlled_frg,2,3,random_fixed,随机 +/- fixed：平均偏置响应,0.2048126764546897,0.032605364446650416,tau^(-0.555)

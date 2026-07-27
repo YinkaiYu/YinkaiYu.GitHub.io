@@ -1,0 +1,823 @@
+{
+  "metadata": {
+    "method": "strict nonperturbative derivative expansion",
+    "derivative_orders": [
+      2,
+      4
+    ],
+    "regulator_families": [
+      "exponential",
+      "wetterich"
+    ],
+    "external_values_used_for_validation_only": true
+  },
+  "dimensions": {
+    "D2": {
+      "dimension": 2,
+      "method": "controlled global DE2 primary; complete DE4 attempted but not accepted unless feedback reaches one with field-domain stability",
+      "order2": {
+        "scans": {
+          "exponential": [
+            {
+              "alpha": 0.8,
+              "eta": 0.29794695506841773,
+              "residual_norm": 5.779955250683328e-12,
+              "collocation_order": 8
+            },
+            {
+              "alpha": 1.0,
+              "eta": 0.2936419908452341,
+              "residual_norm": 7.629502369582859e-12,
+              "collocation_order": 8
+            },
+            {
+              "alpha": 1.1,
+              "eta": 0.29301831539794826,
+              "residual_norm": 6.354951460679384e-12,
+              "collocation_order": 8
+            },
+            {
+              "alpha": 1.2,
+              "eta": 0.2931076117802512,
+              "residual_norm": 4.300418526303783e-12,
+              "collocation_order": 8
+            },
+            {
+              "alpha": 1.4,
+              "eta": 0.2947811573652072,
+              "residual_norm": 5.4255361170077075e-12,
+              "collocation_order": 8
+            }
+          ],
+          "wetterich": [
+            {
+              "alpha": 1.5,
+              "eta": 0.29309558106067757,
+              "residual_norm": 4.8748791054167945e-12,
+              "collocation_order": 8
+            },
+            {
+              "alpha": 1.8,
+              "eta": 0.28966005343287027,
+              "residual_norm": 6.946945806955385e-12,
+              "collocation_order": 8
+            },
+            {
+              "alpha": 2.0,
+              "eta": 0.2891909207366474,
+              "residual_norm": 5.769111661091558e-12,
+              "collocation_order": 8
+            },
+            {
+              "alpha": 2.2,
+              "eta": 0.28976839247805697,
+              "residual_norm": 1.0157612068313181e-11,
+              "collocation_order": 8
+            },
+            {
+              "alpha": 2.5,
+              "eta": 0.29202119247130504,
+              "residual_norm": 1.0074827900315691e-11,
+              "collocation_order": 8
+            }
+          ]
+        },
+        "pms": {
+          "exponential": {
+            "alpha": 1.1672660774851873,
+            "value": 0.2928391498050766,
+            "fit_residual": 0.00024028625848410146
+          },
+          "wetterich": {
+            "alpha": 2.032899194528574,
+            "value": 0.28916561882808134,
+            "fit_residual": 0.00023829493626165155
+          }
+        }
+      },
+      "order4": {
+        "homotopy": {
+          "exponential": [
+            {
+              "feedback": 0.265,
+              "eta": 0.282450629292353,
+              "residual_norm": 6.301150030807639e-09
+            },
+            {
+              "feedback": 0.2675,
+              "eta": 0.2822474817273825,
+              "residual_norm": 3.87076250083811e-09
+            },
+            {
+              "feedback": 0.27,
+              "eta": 0.2820426755284151,
+              "residual_norm": 6.157184639848477e-09
+            },
+            {
+              "feedback": 0.2725,
+              "eta": 0.2818362043211777,
+              "residual_norm": 1.126387017151749e-08
+            },
+            {
+              "feedback": 0.275,
+              "eta": 0.28162806111580535,
+              "residual_norm": 9.358800439847011e-09
+            },
+            {
+              "feedback": 0.2775,
+              "eta": 0.28141823827410256,
+              "residual_norm": 9.788892467524553e-09
+            },
+            {
+              "feedback": 0.28,
+              "eta": 0.28120672752879317,
+              "residual_norm": 5.2562725926782e-09
+            },
+            {
+              "feedback": 0.285,
+              "eta": 0.2807786058395536,
+              "residual_norm": 4.112337515056209e-09
+            },
+            {
+              "feedback": 0.29,
+              "eta": 0.2803436159142938,
+              "residual_norm": 3.024141246780122e-09
+            },
+            {
+              "feedback": 0.295,
+              "eta": 0.27990166585941656,
+              "residual_norm": 6.080606744322592e-09
+            },
+            {
+              "feedback": 0.3,
+              "eta": 0.2794526509917417,
+              "residual_norm": 4.845001134459397e-09
+            },
+            {
+              "feedback": 0.31,
+              "eta": 0.27853293910832283,
+              "residual_norm": 1.0380424133836445e-08
+            },
+            {
+              "feedback": 0.32,
+              "eta": 0.2775833517889728,
+              "residual_norm": 8.461912776865017e-09
+            },
+            {
+              "feedback": 0.33,
+              "eta": 0.27660248710175883,
+              "residual_norm": 8.123798847477873e-09
+            },
+            {
+              "feedback": 0.34,
+              "eta": 0.2755886221419253,
+              "residual_norm": 6.3255218626124526e-09
+            },
+            {
+              "feedback": 0.35,
+              "eta": 0.2745396516269797,
+              "residual_norm": 8.527836793594976e-09
+            },
+            {
+              "feedback": 0.375,
+              "eta": 0.271745395100545,
+              "residual_norm": 1.126024947431963e-08
+            },
+            {
+              "feedback": 0.4,
+              "eta": 0.2686556973528939,
+              "residual_norm": 9.396461452869257e-09
+            },
+            {
+              "feedback": 0.425,
+              "eta": 0.2651708989446546,
+              "residual_norm": 7.840512645738306e-09
+            },
+            {
+              "feedback": 0.45,
+              "eta": 0.2611078028398023,
+              "residual_norm": 1.6675346186719523e-08
+            },
+            {
+              "feedback": 0.450100131313376,
+              "eta": 0.26109194616203374,
+              "residual_norm": 2.4804985600707464e-07
+            }
+          ],
+          "wetterich": [
+            {
+              "feedback": 0.0,
+              "eta": 0.2891964395445174,
+              "residual_norm": 1.8763293960703254e-12
+            },
+            {
+              "feedback": 0.0001,
+              "eta": 0.2891964395445174,
+              "residual_norm": 6.8003225459936036e-09
+            },
+            {
+              "feedback": 0.0002,
+              "eta": 0.2891964395445174,
+              "residual_norm": 2.7205465906981883e-08
+            },
+            {
+              "feedback": 0.0004,
+              "eta": 0.2891964395445174,
+              "residual_norm": 1.0883804679003564e-07
+            },
+            {
+              "feedback": 0.0006,
+              "eta": 0.28919643954451724,
+              "residual_norm": 2.44924402021013e-07
+            },
+            {
+              "feedback": 0.0008,
+              "eta": 0.2891964395445169,
+              "residual_norm": 4.3552252023511205e-07
+            },
+            {
+              "feedback": 0.001,
+              "eta": 0.28919643954451635,
+              "residual_norm": 6.807018395763023e-07
+            },
+            {
+              "feedback": 0.0015,
+              "eta": 0.28919643954451496,
+              "residual_norm": 1.5331339001987242e-06
+            },
+            {
+              "feedback": 0.002,
+              "eta": 0.2891964395445136,
+              "residual_norm": 2.7294277970591098e-06
+            }
+          ]
+        },
+        "status": "diagnostic_until_complete_and_domain_stable"
+      },
+      "estimate": {
+        "eta": 0.29087777855447716,
+        "uncertainty": 0.07491061545624642,
+        "derivative_expansion_error": 0.07271944463861929,
+        "field_discretization_error": 0.000269923192173116,
+        "pms_error": 0.0019212476186805383,
+        "momentum_quadrature_error": 6.77347067323808e-12,
+        "error_combination": "linear conservative sum",
+        "status": "de2_fallback_de4_not_accepted"
+      },
+      "validation": {
+        "maximum_accepted_residual": 2.7294277970591098e-06,
+        "full_feedback_reached": false,
+        "field_domain_stable": false,
+        "two_regulator_pms_available": false,
+        "field_domain_audits": {
+          "de4_D2_exp_s045_rho0p27_audit": {
+            "source_eta": 0.2611078028398023,
+            "projected_eta": 0.2611078028391419,
+            "eta_shift": -6.603606550470431e-13,
+            "residual_norm": 4.767209162329337,
+            "minimum_inverse_propagator": 0.4892131578210446,
+            "configuration": {
+              "dimension": 2,
+              "regulator_alpha": 1.1,
+              "regulator_family": "exponential",
+              "collocation_order": 8,
+              "rho_max": 0.27,
+              "radial_nodes": 16,
+              "radial_cutoff": 18.0,
+              "polar_nodes": 5,
+              "azimuthal_nodes": 6,
+              "planar_angle_nodes": 32,
+              "momentum_samples": [
+                0.06,
+                0.085,
+                0.115,
+                0.15,
+                0.19
+              ],
+              "momentum_fit_degree": 4,
+              "high_derivative_feedback": 0.45,
+              "strict_vertex_products": true,
+              "strict_product_order": 4
+            }
+          },
+          "de4_D2_exp_s045_rho0p28_audit": {
+            "source_eta": 0.2611078028398023,
+            "projected_eta": 0.2611078028395916,
+            "eta_shift": -2.1066481892262345e-13,
+            "residual_norm": 3.416656952195901,
+            "minimum_inverse_propagator": 0.48921315782104435,
+            "configuration": {
+              "dimension": 2,
+              "regulator_alpha": 1.1,
+              "regulator_family": "exponential",
+              "collocation_order": 8,
+              "rho_max": 0.28,
+              "radial_nodes": 16,
+              "radial_cutoff": 18.0,
+              "polar_nodes": 5,
+              "azimuthal_nodes": 6,
+              "planar_angle_nodes": 32,
+              "momentum_samples": [
+                0.06,
+                0.085,
+                0.115,
+                0.15,
+                0.19
+              ],
+              "momentum_fit_degree": 4,
+              "high_derivative_feedback": 0.45,
+              "strict_vertex_products": true,
+              "strict_product_order": 4
+            }
+          },
+          "de4_D2_exp_s045_rho0p30_audit": {
+            "source_eta": 0.2611078028398023,
+            "projected_eta": 0.26110780283909907,
+            "eta_shift": -7.032152637975742e-13,
+            "residual_norm": 1.6675346186719523e-08,
+            "minimum_inverse_propagator": 0.4892131578210446,
+            "configuration": {
+              "dimension": 2,
+              "regulator_alpha": 1.1,
+              "regulator_family": "exponential",
+              "collocation_order": 8,
+              "rho_max": 0.3,
+              "radial_nodes": 16,
+              "radial_cutoff": 18.0,
+              "polar_nodes": 5,
+              "azimuthal_nodes": 6,
+              "planar_angle_nodes": 32,
+              "momentum_samples": [
+                0.06,
+                0.085,
+                0.115,
+                0.15,
+                0.19
+              ],
+              "momentum_fit_degree": 4,
+              "high_derivative_feedback": 0.45,
+              "strict_vertex_products": true,
+              "strict_product_order": 4
+            }
+          },
+          "de4_D2_exp_s045_rho0p32_audit": {
+            "source_eta": 0.2611078028398023,
+            "projected_eta": 0.2611078028390136,
+            "eta_shift": -7.887024366937112e-13,
+            "residual_norm": 16.202032083259247,
+            "minimum_inverse_propagator": 0.48921315782104335,
+            "configuration": {
+              "dimension": 2,
+              "regulator_alpha": 1.1,
+              "regulator_family": "exponential",
+              "collocation_order": 8,
+              "rho_max": 0.32,
+              "radial_nodes": 16,
+              "radial_cutoff": 18.0,
+              "polar_nodes": 5,
+              "azimuthal_nodes": 6,
+              "planar_angle_nodes": 32,
+              "momentum_samples": [
+                0.06,
+                0.085,
+                0.115,
+                0.15,
+                0.19
+              ],
+              "momentum_fit_degree": 4,
+              "high_derivative_feedback": 0.45,
+              "strict_vertex_products": true,
+              "strict_product_order": 4
+            }
+          }
+        },
+        "acceptance_rule": "feedback=1, residual<=3e-6, stable field domain, and independent PMS extrema for two regulator families",
+        "failure_reason": "The complete DE4 trajectory did not reach feedback=1 and the s=0.45 exponential checkpoint is not stable when the Chebyshev field domain is varied.",
+        "lower_critical_dimension_warning": true,
+        "published_or_exact_values_not_used_as_inputs": true
+      }
+    },
+    "D3": {
+      "dimension": 3,
+      "method": "complete five-function O(partial^4) NPRG with two smooth regulator families",
+      "order2": {
+        "scans": {
+          "exponential": [
+            {
+              "source_file": "data/nprg_raw/de2_D3_strict_exp_o6_a1p2.json",
+              "alpha": 1.2,
+              "eta": 0.04545498498540841,
+              "residual_norm": 1.100467285794536e-11,
+              "collocation_order": 6,
+              "radial_nodes": 32,
+              "momentum_fit_degree": 4
+            },
+            {
+              "source_file": "data/nprg_raw/de2_D3_strict_exp_o6_a1p4.json",
+              "alpha": 1.4,
+              "eta": 0.04541818384589864,
+              "residual_norm": 3.398906197848152e-12,
+              "collocation_order": 6,
+              "radial_nodes": 32,
+              "momentum_fit_degree": 4
+            },
+            {
+              "source_file": "data/nprg_raw/de2_D3_strict_exp_o6_a1p6.json",
+              "alpha": 1.6,
+              "eta": 0.045513910905395485,
+              "residual_norm": 9.834707590851796e-13,
+              "collocation_order": 6,
+              "radial_nodes": 32,
+              "momentum_fit_degree": 4
+            },
+            {
+              "source_file": "data/nprg_raw/de2_D3_strict_exp_o6_a1p8.json",
+              "alpha": 1.8,
+              "eta": 0.045696068467376304,
+              "residual_norm": 4.22096401479825e-11,
+              "collocation_order": 6,
+              "radial_nodes": 32,
+              "momentum_fit_degree": 4
+            }
+          ],
+          "wetterich": [
+            {
+              "source_file": "data/nprg_raw/de2_D3_strict_wet_o6_a2p0.json",
+              "alpha": 2.0,
+              "eta": 0.04502916550279825,
+              "residual_norm": 9.203863925196587e-11,
+              "collocation_order": 6,
+              "radial_nodes": 32,
+              "momentum_fit_degree": 4
+            },
+            {
+              "source_file": "data/nprg_raw/de2_D3_strict_wet_o6_a2p2.json",
+              "alpha": 2.2,
+              "eta": 0.04499350174562377,
+              "residual_norm": 1.4692782155071097e-12,
+              "collocation_order": 6,
+              "radial_nodes": 32,
+              "momentum_fit_degree": 4
+            },
+            {
+              "source_file": "data/nprg_raw/de2_D3_strict_wet_o6_a2p4.json",
+              "alpha": 2.4,
+              "eta": 0.04502826811244736,
+              "residual_norm": 2.4586887439671133e-12,
+              "collocation_order": 6,
+              "radial_nodes": 32,
+              "momentum_fit_degree": 4
+            }
+          ]
+        },
+        "pms": {
+          "exponential": {
+            "alpha": 1.3555370702773053,
+            "value": 0.04541490882209958,
+            "curvature": 0.003313204975165588,
+            "fit_residual": 2.7755575615628914e-17,
+            "alpha_points": [
+              1.2,
+              1.4,
+              1.6
+            ],
+            "value_points": [
+              0.04545498498540841,
+              0.04541818384589864,
+              0.045513910905395485
+            ]
+          },
+          "wetterich": {
+            "alpha": 2.2012741569941414,
+            "value": 0.04499350031635352,
+            "curvature": 0.0017607530999516948,
+            "fit_residual": 2.0816681711721685e-17,
+            "alpha_points": [
+              2.0,
+              2.2,
+              2.4
+            ],
+            "value_points": [
+              0.04502916550279825,
+              0.04499350174562377,
+              0.04502826811244736
+            ]
+          }
+        }
+      },
+      "order4": {
+        "scans": {
+          "exponential_order6": [
+            {
+              "source_file": "data/nprg_raw/de4_D3_direct_exp_a0p75_r32.json",
+              "alpha": 0.75,
+              "eta": 0.03386871044834459,
+              "residual_norm": 7.525543897686714e-10,
+              "collocation_order": 6,
+              "radial_nodes": 32,
+              "momentum_fit_degree": 4
+            },
+            {
+              "source_file": "data/nprg_raw/de4_D3_direct_exp_a0p82_r32.json",
+              "alpha": 0.82,
+              "eta": 0.033983178364508836,
+              "residual_norm": 8.280167997296833e-10,
+              "collocation_order": 6,
+              "radial_nodes": 32,
+              "momentum_fit_degree": 4
+            },
+            {
+              "source_file": "data/nprg_raw/de4_D3_direct_o6_a084.json",
+              "alpha": 0.84,
+              "eta": 0.033981833278717295,
+              "residual_norm": 1.0672421301219944e-09,
+              "collocation_order": 6,
+              "radial_nodes": 32,
+              "momentum_fit_degree": 4
+            },
+            {
+              "source_file": "data/nprg_raw/de4_D3_direct_exp_a0p90_r32.json",
+              "alpha": 0.9,
+              "eta": 0.0339084367338742,
+              "residual_norm": 9.758973924465817e-10,
+              "collocation_order": 6,
+              "radial_nodes": 32,
+              "momentum_fit_degree": 4
+            }
+          ],
+          "exponential_order8": [
+            {
+              "source_file": "data/nprg_raw/de4_D3_direct_o8_a082.json",
+              "alpha": 0.82,
+              "eta": 0.033602664884817515,
+              "residual_norm": 3.5968546906672035e-09,
+              "collocation_order": 8,
+              "radial_nodes": 32,
+              "momentum_fit_degree": 4
+            },
+            {
+              "source_file": "data/nprg_raw/de4_D3_direct_o8_a084.json",
+              "alpha": 0.84,
+              "eta": 0.033616784289945835,
+              "residual_norm": 3.51322748901064e-07,
+              "collocation_order": 8,
+              "radial_nodes": 32,
+              "momentum_fit_degree": 4
+            },
+            {
+              "source_file": "data/nprg_raw/de4_D3_direct_o8_a090.json",
+              "alpha": 0.9,
+              "eta": 0.033588466978007686,
+              "residual_norm": 5.693511536932912e-09,
+              "collocation_order": 8,
+              "radial_nodes": 32,
+              "momentum_fit_degree": 4
+            }
+          ],
+          "wetterich_order6": [
+            {
+              "source_file": "data/nprg_raw/de4_D3_direct_wet_o6_a1p4.json",
+              "alpha": 1.4,
+              "eta": 0.034505567274343854,
+              "residual_norm": 1.065353202105604e-09,
+              "collocation_order": 6,
+              "radial_nodes": 32,
+              "momentum_fit_degree": 4
+            },
+            {
+              "source_file": "data/nprg_raw/de4_D3_direct_wet_o6_a1p5.json",
+              "alpha": 1.5,
+              "eta": 0.03456899333300217,
+              "residual_norm": 1.0899412952194747e-09,
+              "collocation_order": 6,
+              "radial_nodes": 32,
+              "momentum_fit_degree": 4
+            },
+            {
+              "source_file": "data/nprg_raw/de4_D3_direct_wet_o6_a1p7.json",
+              "alpha": 1.7,
+              "eta": 0.0344215934109553,
+              "residual_norm": 1.0332091624858452e-09,
+              "collocation_order": 6,
+              "radial_nodes": 32,
+              "momentum_fit_degree": 4
+            }
+          ]
+        },
+        "pms": {
+          "exponential_order6": {
+            "alpha": 0.8327727714182548,
+            "value": 0.03398434970246084,
+            "curvature": -0.03370213557632754,
+            "fit_residual": 1.636244734357084e-06,
+            "alpha_points": [
+              0.75,
+              0.82,
+              0.84,
+              0.9
+            ],
+            "value_points": [
+              0.03386871044834459,
+              0.033983178364508836,
+              0.033981833278717295,
+              0.0339084367338742
+            ]
+          },
+          "exponential_order8": {
+            "alpha": 0.853973342394071,
+            "value": 0.03361965922753947,
+            "curvature": -0.029448136384627413,
+            "fit_residual": 1.3877787807814457e-17,
+            "alpha_points": [
+              0.82,
+              0.84,
+              0.9
+            ],
+            "value_points": [
+              0.033602664884817515,
+              0.033616784289945835,
+              0.033588466978007686
+            ]
+          },
+          "wetterich_order6": {
+            "alpha": 1.5193807697534512,
+            "value": 0.03457071021584053,
+            "curvature": -0.009141734645449505,
+            "fit_residual": 0.0,
+            "alpha_points": [
+              1.4,
+              1.5,
+              1.7
+            ],
+            "value_points": [
+              0.034505567274343854,
+              0.03456899333300217,
+              0.0344215934109553
+            ]
+          }
+        },
+        "field_sequences": {
+          "exponential": [
+            {
+              "collocation_order": 6,
+              "eta": 0.03398434970246084
+            },
+            {
+              "collocation_order": 8,
+              "eta": 0.03361965922753947
+            }
+          ],
+          "wetterich": [
+            {
+              "collocation_order": 6,
+              "eta": 0.03457071021584053
+            }
+          ]
+        }
+      },
+      "projection_audits": {
+        "de4_D3_a084_o8_projection_angles": {
+          "source_eta": 0.033616784289945835,
+          "projected_eta": 0.03361677682056602,
+          "eta_shift": -7.46937981604967e-09,
+          "residual_norm": 0.00042744925882884735,
+          "minimum_inverse_propagator": 0.6488021610211235,
+          "configuration": {
+            "dimension": 3,
+            "regulator_alpha": 0.84,
+            "regulator_family": "exponential",
+            "collocation_order": 8,
+            "rho_max": 0.15,
+            "radial_nodes": 32,
+            "radial_cutoff": 18.0,
+            "polar_nodes": 8,
+            "azimuthal_nodes": 10,
+            "planar_angle_nodes": 48,
+            "momentum_samples": [
+              0.06,
+              0.085,
+              0.115,
+              0.15,
+              0.19
+            ],
+            "momentum_fit_degree": 4,
+            "high_derivative_feedback": 1.0,
+            "strict_vertex_products": true,
+            "strict_product_order": 4
+          }
+        },
+        "de4_D3_a084_o8_projection_base": {
+          "source_eta": 0.033616784289945835,
+          "projected_eta": 0.03361677682042688,
+          "eta_shift": -7.469518954750232e-09,
+          "residual_norm": 3.51322748901064e-07,
+          "minimum_inverse_propagator": 0.6488021610211235,
+          "configuration": {
+            "dimension": 3,
+            "regulator_alpha": 0.84,
+            "regulator_family": "exponential",
+            "collocation_order": 8,
+            "rho_max": 0.15,
+            "radial_nodes": 32,
+            "radial_cutoff": 18.0,
+            "polar_nodes": 5,
+            "azimuthal_nodes": 6,
+            "planar_angle_nodes": 48,
+            "momentum_samples": [
+              0.06,
+              0.085,
+              0.115,
+              0.15,
+              0.19
+            ],
+            "momentum_fit_degree": 4,
+            "high_derivative_feedback": 1.0,
+            "strict_vertex_products": true,
+            "strict_product_order": 4
+          }
+        },
+        "de4_D3_a084_o8_projection_combined": {
+          "source_eta": 0.033616784289945835,
+          "projected_eta": 0.03360066191929153,
+          "eta_shift": -1.6122370654306217e-05,
+          "residual_norm": 0.0039143605756521635,
+          "minimum_inverse_propagator": 0.6464311619622128,
+          "configuration": {
+            "dimension": 3,
+            "regulator_alpha": 0.84,
+            "regulator_family": "exponential",
+            "collocation_order": 8,
+            "rho_max": 0.15,
+            "radial_nodes": 48,
+            "radial_cutoff": 18.0,
+            "polar_nodes": 8,
+            "azimuthal_nodes": 10,
+            "planar_angle_nodes": 48,
+            "momentum_samples": [
+              0.035,
+              0.05,
+              0.07,
+              0.095,
+              0.125,
+              0.16,
+              0.205
+            ],
+            "momentum_fit_degree": 5,
+            "high_derivative_feedback": 1.0,
+            "strict_vertex_products": true,
+            "strict_product_order": 4
+          }
+        },
+        "de4_D3_a084_o8_projection_radial48": {
+          "source_eta": 0.033616784289945835,
+          "projected_eta": 0.03360066191899539,
+          "eta_shift": -1.612237095044433e-05,
+          "residual_norm": 0.004308274397874786,
+          "minimum_inverse_propagator": 0.6464311619622128,
+          "configuration": {
+            "dimension": 3,
+            "regulator_alpha": 0.84,
+            "regulator_family": "exponential",
+            "collocation_order": 8,
+            "rho_max": 0.15,
+            "radial_nodes": 48,
+            "radial_cutoff": 18.0,
+            "polar_nodes": 5,
+            "azimuthal_nodes": 6,
+            "planar_angle_nodes": 48,
+            "momentum_samples": [
+              0.06,
+              0.085,
+              0.115,
+              0.15,
+              0.19
+            ],
+            "momentum_fit_degree": 4,
+            "high_derivative_feedback": 1.0,
+            "strict_vertex_products": true,
+            "strict_product_order": 4
+          }
+        }
+      },
+      "estimate": {
+        "order2_extreme": 0.04499350031635352,
+        "order4_extreme": 0.03457071021584053,
+        "uncertainty": 0.0016866616081398036,
+        "derivative_expansion_error": 0.0013028487625641235,
+        "field_discretization_error": 0.0003646904749213739,
+        "pms_error": 3e-06,
+        "momentum_quadrature_error": 1.6122370654306217e-05,
+        "assumed_convergence_radius": 4.0,
+        "error_combination": "linear sum of truncation and numerical systematics",
+        "eta": 0.035873558978404656,
+        "status": "accepted_complete_de4"
+      },
+      "validation": {
+        "maximum_accepted_residual": 3.51322748901064e-07,
+        "published_values_not_used_as_inputs": true,
+        "published_exponential_order2_eta": 0.04551,
+        "published_exponential_order4_eta": 0.03357
+      }
+    }
+  }
+}

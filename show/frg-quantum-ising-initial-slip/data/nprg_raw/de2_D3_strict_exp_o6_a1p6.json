@@ -1,0 +1,82 @@
+{
+  "dimension": 3,
+  "regulator": "exponential",
+  "regulator_alpha": 1.6,
+  "collocation_order": 6,
+  "rho_max": 0.15,
+  "rho_nodes": [
+    0.0,
+    0.010048094716167097,
+    0.03749999999999999,
+    0.07499999999999998,
+    0.11249999999999998,
+    0.13995190528383292,
+    0.15
+  ],
+  "potential_values": [
+    0.0,
+    -0.002408985101985806,
+    -0.00601707189099114,
+    -0.0020804302639109823,
+    0.015471998247942804,
+    0.03934442562911167,
+    0.050801156540683165
+  ],
+  "wavefunction_values": [
+    1.0,
+    1.0143914192871049,
+    1.0485806564800515,
+    1.079059007358009,
+    1.0916950353561765,
+    1.0933663328352237,
+    1.0930205729975078
+  ],
+  "wa_values": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "wb_values": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "wc_values": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "eta": 0.045513910905395485,
+  "kappa": 0.042619973073306214,
+  "residual_norm": 9.834707590851796e-13,
+  "function_evaluations": 6,
+  "radial_nodes": 32,
+  "polar_nodes": 5,
+  "azimuthal_nodes": 6,
+  "planar_angle_nodes": 48,
+  "radial_cutoff": 18.0,
+  "momentum_samples": [
+    0.06,
+    0.085,
+    0.115,
+    0.15,
+    0.19
+  ],
+  "momentum_fit_degree": 4,
+  "minimum_inverse_propagator": 1.2109272163191114,
+  "high_derivative_feedback": 0.0,
+  "strict_vertex_products": true,
+  "strict_product_order": 2
+}

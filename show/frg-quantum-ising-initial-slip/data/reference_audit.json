@@ -1,5 +1,5 @@
 {
-  "audit_date": "2026-07-26",
+  "audit_date": "2026-07-27",
   "policy": "Metadata was checked against the primary arXiv record and/or DOI registry. Numerical claims were checked in the paper text. External numbers are benchmarks and are not inserted into this repository's FRG flow.",
   "references": [
     {
@@ -80,6 +80,7 @@
       ],
       "arxiv": "1907.01829",
       "checked_numerical_claims": {
+        "published_exponential_regulator_sequence_eta": "LPA: 0; O(partial^2): 0.04551; O(partial^4): 0.03357; O(partial^6): 0.03648",
         "O(partial^6)_eta_summary": "0.0361(11), as conservatively tabulated in De Polsi et al. (2020)",
         "preferred_Ising_summary_in_PRL": "eta=0.0358(6)"
       }
@@ -102,7 +103,11 @@
       "verified_urls": [
         "https://doi.org/10.1103/PhysRevE.101.042113",
         "https://arxiv.org/abs/2001.07525"
-      ]
+      ],
+      "checked_numerical_claims": {
+        "complete_N1_O(partial^4)_improved_eta": "0.03622(115)",
+        "alternating_improvement": "Q_imp^(4) = [7 Q_ext^(4) + Q_ext^(2)] / 8, with |Q_ext^(4)-Q_ext^(2)|/8 as the conservative derivative-expansion error"
+      }
     },
     {
       "id": 6,
