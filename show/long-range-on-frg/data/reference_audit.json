@@ -1,0 +1,753 @@
+{
+  "schema_version": "1.0",
+  "audit_date": "2026-07-31",
+  "scope": "Primary literature and official publication records relevant to long-range O(N) criticality, functional renormalization group calculations, the long-range/short-range crossover, and the bibliography of arXiv:2602.07818v2.",
+  "verification_policy": {
+    "bibliographic_metadata": "Checked against an official journal record or the current arXiv record. No metadata inferred from secondary summaries is included.",
+    "claims": "Each allowed_claim is deliberately narrower than the paper's full conclusions and may be cited in the report only for the stated purpose.",
+    "preprints": "An arXiv DOI is not treated as evidence of peer review. Preprints without a verified journal record have peer_reviewed=false.",
+    "numerical_values": "Values are transcribed from the cited paper's table or from exact short-range results; parenthetical digits are the uncertainty quoted by the source."
+  },
+  "references": [
+    {
+      "id": "target_li_chen_deng_2026",
+      "title": "The 4-ε Expansion for Long-range Interacting Systems",
+      "authors": [
+        "Zhiyi Li",
+        "Kun Chen",
+        "Youjin Deng"
+      ],
+      "venue": "arXiv preprint",
+      "year": 2026,
+      "doi": "10.48550/arXiv.2602.07818",
+      "arxiv": "2602.07818",
+      "url": "https://arxiv.org/abs/2602.07818",
+      "peer_reviewed": false,
+      "allowed_claims": [
+        "The v2 manuscript claims a two-loop correction to η beyond 2-σ and argues for a crossover at σ*=2.",
+        "The manuscript uses a finite-momentum subtraction with a derivative with respect to |q|^σ while not independently renormalizing the local q² operator.",
+        "The discussion explicitly leaves simultaneous renormalization of the short-range operator K_s(-Δ) as future work."
+      ]
+    },
+    {
+      "id": "fisher_ma_nickel_1972",
+      "title": "Critical Exponents for Long-Range Interactions",
+      "authors": [
+        "Michael E. Fisher",
+        "Shang-keng Ma",
+        "B. G. Nickel"
+      ],
+      "venue": "Physical Review Letters 29, 917–920",
+      "year": 1972,
+      "doi": "10.1103/PhysRevLett.29.917",
+      "arxiv": null,
+      "url": "https://doi.org/10.1103/PhysRevLett.29.917",
+      "peer_reviewed": true,
+      "allowed_claims": [
+        "Introduces the perturbative expansion controlled by ε'=2σ-d for long-range O(N) models.",
+        "Finds η=2-σ through the calculated second order and conjectures that this relation is exact in the long-range regime.",
+        "Provides the standard leading perturbative results near the long-range upper critical dimension d=2σ."
+      ]
+    },
+    {
+      "id": "sak_1973",
+      "title": "Recursion Relations and Fixed Points for Ferromagnets with Long-Range Interactions",
+      "authors": [
+        "J. Sak"
+      ],
+      "venue": "Physical Review B 8, 281–285",
+      "year": 1973,
+      "doi": "10.1103/PhysRevB.8.281",
+      "arxiv": null,
+      "url": "https://doi.org/10.1103/PhysRevB.8.281",
+      "peer_reviewed": true,
+      "allowed_claims": [
+        "Original source of the crossover criterion σ*=2-η_SR.",
+        "Supports treating the long-range interaction as a perturbation whose stability must be evaluated at the interacting short-range fixed point."
+      ]
+    },
+    {
+      "id": "honkonen_nalimov_1989",
+      "title": "Crossover between field theories with short-range and long-range exchange or correlations",
+      "authors": [
+        "J. Honkonen",
+        "M. Yu. Nalimov"
+      ],
+      "venue": "Journal of Physics A: Mathematical and General 22, 751–763",
+      "year": 1989,
+      "doi": "10.1088/0305-4470/22/6/024",
+      "arxiv": null,
+      "url": "https://doi.org/10.1088/0305-4470/22/6/024",
+      "peer_reviewed": true,
+      "allowed_claims": [
+        "Gives an all-orders perturbative analysis of the crossover between long-range and short-range field theories.",
+        "Supports the continuity and fixed-point stability structure underlying the Sak crossover criterion."
+      ]
+    },
+    {
+      "id": "defenu_trombettoni_codello_2015",
+      "title": "Fixed-point structure and effective fractional dimensionality for O(N) models with long-range interactions",
+      "authors": [
+        "Nicolò Defenu",
+        "Andrea Trombettoni",
+        "Alessandro Codello"
+      ],
+      "venue": "Physical Review E 92, 052113",
+      "year": 2015,
+      "doi": "10.1103/PhysRevE.92.052113",
+      "arxiv": "1409.8322",
+      "url": "https://arxiv.org/abs/1409.8322",
+      "peer_reviewed": true,
+      "allowed_claims": [
+        "Provides a nonperturbative functional renormalization group treatment of long-range O(N) models.",
+        "In a truncation containing both Z_σ q^σ and Z_2 q², obtains no flow of the nonanalytic Z_σ term while the analytic Z_2 term flows.",
+        "Finds that the long-range fixed point branches from or merges with the short-range fixed point at σ*=2-η_SR.",
+        "Introduces an effective-dimension correspondence in LPA and LPA', but that correspondence is an approximation and not an exact identity for interacting fixed points."
+      ]
+    },
+    {
+      "id": "solfanelli_defenu_2024",
+      "title": "Universality in long-range interacting systems: The effective dimension approach",
+      "authors": [
+        "Andrea Solfanelli",
+        "Nicolò Defenu"
+      ],
+      "venue": "Physical Review E 110, 044121",
+      "year": 2024,
+      "doi": "10.1103/PhysRevE.110.044121",
+      "arxiv": "2406.14651",
+      "url": "https://arxiv.org/abs/2406.14651",
+      "peer_reviewed": true,
+      "allowed_claims": [
+        "Reviews and extends the effective-dimension approach using functional RG methods.",
+        "States that the effective-dimension mapping is approximate at non-Gaussian fixed points and reports typical agreement above 97% in the comparisons performed.",
+        "May support a quantitative comparison between an FRG approximation and bootstrap data, but not a claim that the mapping is exact."
+      ]
+    },
+    {
+      "id": "paulos_rychkov_van_rees_zan_2016",
+      "title": "Conformal Invariance in the Long-Range Ising Model",
+      "authors": [
+        "Miguel F. Paulos",
+        "Slava Rychkov",
+        "Balt C. van Rees",
+        "Bernardo Zan"
+      ],
+      "venue": "Nuclear Physics B 902, 246–291",
+      "year": 2016,
+      "doi": "10.1016/j.nuclphysb.2015.10.018",
+      "arxiv": "1509.00008",
+      "url": "https://arxiv.org/abs/1509.00008",
+      "peer_reviewed": true,
+      "allowed_claims": [
+        "Proves conformal invariance of the long-range Ising fixed point to all orders in the long-range ε expansion by embedding it as a defect theory.",
+        "Supports the nonlocal continuum description and the special conformal structure of the long-range fixed point."
+      ]
+    },
+    {
+      "id": "behan_rastelli_rychkov_zan_prl_2017",
+      "title": "Long-Range Critical Exponents near the Short-Range Crossover",
+      "authors": [
+        "Connor Behan",
+        "Leonardo Rastelli",
+        "Slava Rychkov",
+        "Bernardo Zan"
+      ],
+      "venue": "Physical Review Letters 118, 241601",
+      "year": 2017,
+      "doi": "10.1103/PhysRevLett.118.241601",
+      "arxiv": "1703.03430",
+      "url": "https://arxiv.org/abs/1703.03430",
+      "peer_reviewed": true,
+      "allowed_claims": [
+        "Provides a weakly coupled description of long-range critical exponents near the short-range crossover.",
+        "Supports a continuous crossover at σ*=2-η_SR and the protected long-range field dimension Δ_φ=(d-σ)/2."
+      ]
+    },
+    {
+      "id": "behan_rastelli_rychkov_zan_jpa_2017",
+      "title": "A scaling theory for the long-range to short-range crossover and an infrared duality",
+      "authors": [
+        "Connor Behan",
+        "Leonardo Rastelli",
+        "Slava Rychkov",
+        "Bernardo Zan"
+      ],
+      "venue": "Journal of Physics A: Mathematical and Theoretical 50, 354002",
+      "year": 2017,
+      "doi": "10.1088/1751-8121/aa8099",
+      "arxiv": "1703.05325",
+      "url": "https://arxiv.org/abs/1703.05325",
+      "peer_reviewed": true,
+      "allowed_claims": [
+        "Develops the detailed scaling theory and infrared duality for the long-range/short-range crossover.",
+        "Gives Δ_φ=(d-σ)/2 on the long-range branch and σ*=2-η_SR.",
+        "Explains the crossover using the short-range fixed point coupled to an additional Gaussian field and discusses logarithmic corrections at the crossover."
+      ]
+    },
+    {
+      "id": "behan_lauria_nocchi_van_vliet_2024",
+      "title": "Analytic and numerical bootstrap for the long-range Ising model",
+      "authors": [
+        "Connor Behan",
+        "Edoardo Lauria",
+        "Maria Nocchi",
+        "Philine van Vliet"
+      ],
+      "venue": "Journal of High Energy Physics 03 (2024) 136",
+      "year": 2024,
+      "doi": "10.1007/JHEP03(2024)136",
+      "arxiv": "2311.02742",
+      "url": "https://arxiv.org/abs/2311.02742",
+      "peer_reviewed": true,
+      "allowed_claims": [
+        "Combines analytic and numerical conformal bootstrap for the long-range Ising model in two and three dimensions.",
+        "Uses the exact protected dimension Δ_φ=(d-σ)/2 and exact operator-product relations following from the local higher-dimensional description.",
+        "The current arXiv version incorporates the corrected three-loop input from arXiv:2411.00805."
+      ]
+    },
+    {
+      "id": "lohmann_slade_wallace_2017",
+      "title": "Critical Two-Point Function for Long-Range O(n) Models Below the Upper Critical Dimension",
+      "authors": [
+        "Martin Lohmann",
+        "Gordon Slade",
+        "Benjamin C. Wallace"
+      ],
+      "venue": "Journal of Statistical Physics 169, 1132–1161",
+      "year": 2017,
+      "doi": "10.1007/s10955-017-1904-x",
+      "arxiv": "1705.08540",
+      "url": "https://arxiv.org/abs/1705.08540",
+      "peer_reviewed": true,
+      "allowed_claims": [
+        "Provides a rigorous renormalization-group proof near the long-range upper critical dimension that the critical two-point function decays as r^{-(d-α)} for the stated weak-coupling regime.",
+        "Supports exact sticking of the long-range two-point exponent in the theorem's stated domain; it should not be cited as a theorem for every dimension, coupling, or crossover point."
+      ]
+    },
+    {
+      "id": "benedetti_gurau_harribey_suzuki_2020",
+      "title": "Long-range multi-scalar models at three loops",
+      "authors": [
+        "Dario Benedetti",
+        "Razvan Gurau",
+        "Sabine Harribey",
+        "Kenta Suzuki"
+      ],
+      "venue": "Journal of Physics A: Mathematical and Theoretical 53, 445008",
+      "year": 2020,
+      "doi": "10.1088/1751-8121/abb6ae",
+      "arxiv": "2007.04603",
+      "url": "https://arxiv.org/abs/2007.04603",
+      "peer_reviewed": true,
+      "allowed_claims": [
+        "Computes three-loop beta functions and critical exponents for long-range quartic multi-scalar models at fixed dimension using ε'=2σ-d.",
+        "Supports the standard renormalization organization in which the nonlocal kinetic term is protected.",
+        "Any numerical three-loop value must be taken together with the 2025 addendum that corrects one diagram."
+      ]
+    },
+    {
+      "id": "benedetti_gurau_harribey_addendum_2025",
+      "title": "Addendum: Long-range multi-scalar models at three loops",
+      "authors": [
+        "Dario Benedetti",
+        "Razvan Gurau",
+        "Sabine Harribey"
+      ],
+      "venue": "Journal of Physics A: Mathematical and Theoretical 58, 129401",
+      "year": 2025,
+      "doi": "10.1088/1751-8121/adbfe4",
+      "arxiv": "2411.00805",
+      "url": "https://arxiv.org/abs/2411.00805",
+      "peer_reviewed": true,
+      "allowed_claims": [
+        "Corrects one Feynman diagram in the 2020 three-loop beta functions and supplies updated numerical critical exponents.",
+        "Must be cited whenever corrected three-loop numerical data from the 2020 calculation are used."
+      ]
+    },
+    {
+      "id": "balog_chate_delamotte_marohnic_wschebor_2019",
+      "title": "Convergence of Nonperturbative Approximations to the Renormalization Group",
+      "authors": [
+        "Ivan Balog",
+        "Hugues Chaté",
+        "Bertrand Delamotte",
+        "Maroje Marohnić",
+        "Nicolás Wschebor"
+      ],
+      "venue": "Physical Review Letters 123, 240604",
+      "year": 2019,
+      "doi": "10.1103/PhysRevLett.123.240604",
+      "arxiv": "1907.01829",
+      "url": "https://arxiv.org/abs/1907.01829",
+      "peer_reviewed": true,
+      "allowed_claims": [
+        "Provides analytical arguments and a three-dimensional Ising test supporting convergence of the derivative expansion for well-behaved regulators.",
+        "Studies the derivative expansion through order six and gives regulator-selection and error-estimation guidance.",
+        "Provides the O(∂⁶) three-dimensional Ising estimates later tabulated as ν=0.63012(16) and η=0.0361(11) by De Polsi et al.",
+        "Does not directly establish convergence rates for the nonanalytic long-range two-kinetic-operator truncation."
+      ]
+    },
+    {
+      "id": "de_polsi_balog_tissier_wschebor_2020",
+      "title": "Precision calculation of critical exponents in the O(N) universality classes with the nonperturbative renormalization group",
+      "authors": [
+        "Gonzalo De Polsi",
+        "Ivan Balog",
+        "Matthieu Tissier",
+        "Nicolás Wschebor"
+      ],
+      "venue": "Physical Review E 101, 042113",
+      "year": 2020,
+      "doi": "10.1103/PhysRevE.101.042113",
+      "arxiv": "2001.07525",
+      "url": "https://arxiv.org/abs/2001.07525",
+      "peer_reviewed": true,
+      "allowed_claims": [
+        "Computes ν, η, and ω for short-range O(N) universality classes with the nonperturbative RG derivative expansion through O(∂⁴).",
+        "Its N=1 comparison table separately transcribes the earlier Balog et al. O(∂⁶) estimates ν=0.63012(16), η=0.0361(11) and the Kos et al. conformal-bootstrap benchmark.",
+        "Reports apparent order-by-order convergence with an empirical small parameter typically between 1/9 and 1/4 and supplies error bars.",
+        "May be used to motivate higher derivative orders and systematic truncation estimates, but it is not itself a long-range O(N) FRG calculation."
+      ]
+    },
+    {
+      "id": "bianchi_cardinale_de_sabbata_2025",
+      "title": "Defects in the long-range O(N) model",
+      "authors": [
+        "Lorenzo Bianchi",
+        "Leonardo S. Cardinale",
+        "Elia de Sabbata"
+      ],
+      "venue": "Journal of Physics A: Mathematical and Theoretical 58, 335401",
+      "year": 2025,
+      "doi": "10.1088/1751-8121/adf788",
+      "arxiv": "2412.08697",
+      "url": "https://arxiv.org/abs/2412.08697",
+      "peer_reviewed": true,
+      "allowed_claims": [
+        "For the bulk long-range O(N) model, states that the nonlocal field does not renormalize because renormalization introduces local counterterms.",
+        "Describes a near-four-dimensional expansion with an additional parameter as treating nonlocality as a perturbation of the local four-dimensional theory.",
+        "Introduces and studies three constructions of conformal defects; it is not a bulk FRG computation."
+      ]
+    },
+    {
+      "id": "yamazaki_1977",
+      "title": "Critical exponent η of isotropic spin systems with long and short-range interactions",
+      "authors": [
+        "Yoshitake Yamazaki"
+      ],
+      "venue": "Physics Letters A 61, 207–210",
+      "year": 1977,
+      "doi": "10.1016/0375-9601(77)90139-6",
+      "arxiv": null,
+      "url": "https://doi.org/10.1016/0375-9601(77)90139-6",
+      "peer_reviewed": true,
+      "allowed_claims": [
+        "Discusses η and stability in weakly long-range, intermediate-range, and long-range regimes for isotropic N-component spin systems.",
+        "May be cited as an early competing field-theory analysis, with its approximation and historical context stated explicitly."
+      ]
+    },
+    {
+      "id": "luijten_blote_2002",
+      "title": "The Boundary between Long-Range and Short-Range Critical Behavior",
+      "authors": [
+        "Erik Luijten",
+        "Henk W. J. Blöte"
+      ],
+      "venue": "Physical Review Letters 89, 025703",
+      "year": 2002,
+      "doi": "10.1103/PhysRevLett.89.025703",
+      "arxiv": "cond-mat/0112472",
+      "url": "https://arxiv.org/abs/cond-mat/0112472",
+      "peer_reviewed": true,
+      "allowed_claims": [
+        "Monte Carlo study of the two-dimensional long-range Ising model finding the crossover at interaction decay r^{-15/4}.",
+        "For the convention J(r)∼r^{-(d+σ)} with d=2, this corresponds to σ*=7/4 and supports Sak's criterion."
+      ]
+    },
+    {
+      "id": "picco_2012",
+      "title": "Critical behavior of the Ising model with long range interactions",
+      "authors": [
+        "Marco Picco"
+      ],
+      "venue": "arXiv preprint",
+      "year": 2012,
+      "doi": "10.48550/arXiv.1207.1018",
+      "arxiv": "1207.1018",
+      "url": "https://arxiv.org/abs/1207.1018",
+      "peer_reviewed": false,
+      "allowed_claims": [
+        "Reports two-dimensional long-range Ising Monte Carlo results near the intermediate-to-short-range changeover that the author interprets as disagreement with the standard RG prediction.",
+        "The official arXiv record does not list a journal publication DOI; it must not be cited with 10.1103/PhysRevLett.28.240."
+      ]
+    },
+    {
+      "id": "angelini_parisi_ricci_tersenghi_2014",
+      "title": "Relations between Short Range and Long Range Ising models",
+      "authors": [
+        "Maria Chiara Angelini",
+        "Giorgio Parisi",
+        "Federico Ricci-Tersenghi"
+      ],
+      "venue": "Physical Review E 89, 062120",
+      "year": 2014,
+      "doi": "10.1103/PhysRevE.89.062120",
+      "arxiv": "1401.6805",
+      "url": "https://arxiv.org/abs/1401.6805",
+      "peer_reviewed": true,
+      "allowed_claims": [
+        "Finds that a subdominant second power law produces strong corrections in two-dimensional long-range Ising correlations near the crossover.",
+        "After including that correction, reports numerical data consistent with Sak's prediction."
+      ]
+    },
+    {
+      "id": "xiao_liu_fan_deng_2026",
+      "title": "On Sak's criterion for statistical models with long-range interaction",
+      "authors": [
+        "Tianning Xiao",
+        "Ziyu Liu",
+        "Zhijie Fan",
+        "Youjin Deng"
+      ],
+      "venue": "arXiv preprint, version 2",
+      "year": 2026,
+      "doi": "10.48550/arXiv.2512.04805",
+      "arxiv": "2512.04805",
+      "url": "https://arxiv.org/abs/2512.04805",
+      "peer_reviewed": false,
+      "allowed_claims": [
+        "Reports large-scale Monte Carlo simulations up to L=8192 for the two-dimensional long-range Ising model.",
+        "The authors interpret their critical polynomial, Binder ratio, η, and 1/ν data as evidence for σ*=2 rather than Sak's σ*=7/4.",
+        "This result is a recent non-peer-reviewed counterclaim and must be presented as disputed, not as established consensus."
+      ]
+    },
+    {
+      "id": "yao_xiao_zhang_deng_fan_2025",
+      "title": "The Nonclassical Regime of the Two-dimensional Long-range XY Model: A Comprehensive Monte Carlo Study",
+      "authors": [
+        "Dingyun Yao",
+        "Tianning Xiao",
+        "Chao Zhang",
+        "Youjin Deng",
+        "Zhijie Fan"
+      ],
+      "venue": "Physical Review B 112, 144429",
+      "year": 2025,
+      "doi": "10.1103/yghs-p5mg",
+      "arxiv": "2411.01811",
+      "url": "https://arxiv.org/abs/2411.01811",
+      "peer_reviewed": true,
+      "allowed_claims": [
+        "Reports Monte Carlo evidence for a single second-order transition into a long-range-ordered phase for σ≤2 in the two-dimensional long-range XY model.",
+        "Reports the Table 5 estimates of y_t=1/ν and η transcribed below and interprets them as supporting σ*=2.",
+        "Does not by itself settle the vortex-sector controversy; it should be discussed together with RG work that includes spin-wave/vortex coupling."
+      ]
+    },
+    {
+      "id": "xiao_yao_zhang_fan_deng_2025_cpl",
+      "title": "Two-Dimensional XY Ferromagnet Induced by Long-Range Interaction",
+      "authors": [
+        "Tianning Xiao",
+        "Dingyun Yao",
+        "Chao Zhang",
+        "Zhijie Fan",
+        "Youjin Deng"
+      ],
+      "venue": "Chinese Physics Letters 42, 070002",
+      "year": 2025,
+      "doi": "10.1088/0256-307X/42/7/070002",
+      "arxiv": "2404.08498",
+      "url": "https://arxiv.org/abs/2404.08498",
+      "peer_reviewed": true,
+      "allowed_claims": [
+        "Reports large-scale Monte Carlo evidence for long-range order for σ<2 and logarithmic behavior at σ=2 in the two-dimensional long-range XY model.",
+        "May be cited as a separate shorter XY study; it is not the same publication as Physical Review B 112, 144429."
+      ]
+    },
+    {
+      "id": "xiao_yao_polle_fan_deng_2026",
+      "title": "Spontaneous Symmetry Breaking in Two-dimensional Long-range Heisenberg Model",
+      "authors": [
+        "Tianning Xiao",
+        "Dingyun Yao",
+        "Lode Polle",
+        "Zhijie Fan",
+        "Youjin Deng"
+      ],
+      "venue": "arXiv preprint, version 2 (revised 2026)",
+      "year": 2025,
+      "doi": "10.48550/arXiv.2512.01956",
+      "arxiv": "2512.01956",
+      "url": "https://arxiv.org/abs/2512.01956",
+      "peer_reviewed": false,
+      "allowed_claims": [
+        "Reports two-dimensional long-range Heisenberg Monte Carlo simulations up to L=8192 and a continuous finite-temperature transition into a long-range-ordered phase for σ≤2.",
+        "The authors interpret the results as a crossover at σ*=2 and report the Table 1 exponent estimates transcribed below.",
+        "This is a non-peer-reviewed preprint; the current v2 author list differs from the stale entry in the target manuscript."
+      ]
+    },
+    {
+      "id": "walther_willsher_knolle_2026",
+      "title": "Persistence of the Berezinskii-Kosterlitz-Thouless Transition with Long-Range Couplings",
+      "authors": [
+        "Luis Walther",
+        "Josef Willsher",
+        "Johannes Knolle"
+      ],
+      "venue": "Physical Review Letters 136, 227102",
+      "year": 2026,
+      "doi": "10.1103/9y2v-ybdb",
+      "arxiv": "2511.07305",
+      "url": "https://arxiv.org/abs/2511.07305",
+      "peer_reviewed": true,
+      "allowed_claims": [
+        "Uses Landau-Peierls arguments and higher-order RG including spin-wave/topological-excitation coupling.",
+        "Finds no direct magnetized-to-disordered transition and concludes that the BKT transition persists for arbitrary long-range exponents.",
+        "Provides a published result directly conflicting with the recent single-transition XY Monte Carlo interpretation, demonstrating that the XY phase diagram remains actively disputed."
+      ]
+    },
+    {
+      "id": "kos_poland_simmons_duffin_2014",
+      "title": "Bootstrapping Mixed Correlators in the 3D Ising Model",
+      "authors": [
+        "Filip Kos",
+        "David Poland",
+        "David Simmons-Duffin"
+      ],
+      "venue": "Journal of High Energy Physics 11 (2014) 109",
+      "year": 2014,
+      "doi": "10.1007/JHEP11(2014)109",
+      "arxiv": "1406.4858",
+      "url": "https://arxiv.org/abs/1406.4858",
+      "peer_reviewed": true,
+      "allowed_claims": [
+        "Primary conformal-bootstrap source for the three-dimensional Ising scaling-dimension benchmark transcribed by De Polsi et al.",
+        "The benchmark values may be converted to eta and nu using the standard three-dimensional scaling-dimension relations."
+      ]
+    },
+    {
+      "id": "wu_mccoy_tracy_barouch_1976",
+      "title": "Spin-spin correlation functions for the two-dimensional Ising model: Exact theory in the scaling region",
+      "authors": [
+        "Tai Tsun Wu",
+        "Barry M. McCoy",
+        "Craig A. Tracy",
+        "Eytan Barouch"
+      ],
+      "venue": "Physical Review B 13, 316–374",
+      "year": 1976,
+      "doi": "10.1103/PhysRevB.13.316",
+      "arxiv": null,
+      "url": "https://doi.org/10.1103/PhysRevB.13.316",
+      "peer_reviewed": true,
+      "allowed_claims": [
+        "Provides the exact two-dimensional Ising spin-correlation functions and their scaling-region asymptotics.",
+        "Supports the standard exact short-range Ising benchmark eta=1/4 and correlation-length scaling nu=1 used only as a diagnostic comparison."
+      ]
+    }
+  ],
+  "numerical_benchmarks": {
+    "d2_short_range_exact": [
+      {
+        "model": "Ising O(1)",
+        "source_id": "wu_mccoy_tracy_barouch_1976",
+        "eta_sr": 0.25,
+        "nu_sr": 1.0,
+        "sak_sigma_star": 1.75,
+        "derivation": "σ*=2-η_SR=2-1/4=7/4",
+        "use": "Exact benchmark for the stability eigenvalue of a long-range perturbation at the two-dimensional short-range Ising fixed point."
+      },
+      {
+        "model": "XY O(2)",
+        "eta_at_bkt": 0.25,
+        "nu_power_law": null,
+        "use": "At the BKT transition the correlation length has an essential, not power-law, divergence; a finite Wilson-Fisher ν must not be assigned. A smooth-potential FRG without vortex fugacity is not a complete benchmark for this case."
+      },
+      {
+        "model": "Heisenberg O(3)",
+        "eta_sr": null,
+        "nu_sr": null,
+        "use": "The two-dimensional short-range classical Heisenberg model has no ordinary finite-temperature critical fixed point, so Sak's formula cannot be evaluated by inserting conventional finite-T η_SR and ν_SR values."
+      }
+    ],
+    "recent_d2_ising_counterclaim": {
+      "source_id": "xiao_liu_fan_deng_2026",
+      "status": "preprint_counterclaim",
+      "rows": [
+        {
+          "sigma": 1.75,
+          "beta_c": "0.329136(1)",
+          "R_p_c": "-0.342(5)",
+          "Q_m_c": "0.79(1)",
+          "eta": "0.335(4)",
+          "y_t_equals_inverse_nu": "0.999(6)"
+        },
+        {
+          "sigma": 1.875,
+          "beta_c": "0.336985(2)",
+          "R_p_c": "-0.207(9)",
+          "Q_m_c": "0.815(8)",
+          "eta": "0.293(3)",
+          "y_t_equals_inverse_nu": "1.008(9)"
+        },
+        {
+          "sigma": 2.0,
+          "beta_c": "0.344439(2)",
+          "R_p_c": "-0.065(8)",
+          "Q_m_c": "0.855(6)",
+          "eta": "0.273(3)",
+          "y_t_equals_inverse_nu": "1.002(7)"
+        },
+        {
+          "sigma": 2.5,
+          "beta_c": "0.369446(2)",
+          "R_p_c": "0.001(2)",
+          "Q_m_c": "0.857(1)",
+          "eta": "0.250(1)",
+          "y_t_equals_inverse_nu": "1.007(5)"
+        }
+      ],
+      "interpretation_limit": "These are the preprint authors' finite-size-scaling estimates. They are evidence in an active controversy, not exact values and not a substitute for an operator-resolved field-theory calculation."
+    },
+    "d2_xy_monte_carlo": {
+      "source_id": "yao_xiao_zhang_deng_fan_2025",
+      "rows": [
+        {
+          "sigma": 1.25,
+          "y_t_equals_inverse_nu": "0.987(4)",
+          "eta": "0.75(1)"
+        },
+        {
+          "sigma": 1.5,
+          "y_t_equals_inverse_nu": "0.86(3)",
+          "eta": "0.518(8)"
+        },
+        {
+          "sigma": 1.75,
+          "y_t_equals_inverse_nu": "0.60(4)",
+          "eta": "0.324(7)"
+        },
+        {
+          "sigma": 1.875,
+          "y_t_equals_inverse_nu": "0.48(4)",
+          "eta": "0.278(5)"
+        },
+        {
+          "sigma": 2.0,
+          "y_t_equals_inverse_nu": "0.37(4)",
+          "eta": "0.260(5)"
+        }
+      ],
+      "interpretation_limit": "The table is a benchmark for the published Monte Carlo fit, but the claimed one-transition topology is disputed by walther_willsher_knolle_2026, which includes vortex/spin-wave coupling."
+    },
+    "d2_heisenberg_preprint": {
+      "source_id": "xiao_yao_polle_fan_deng_2026",
+      "status": "preprint",
+      "rows": [
+        {
+          "sigma": 1.75,
+          "beta_c": "1.0641(4)",
+          "y_t_equals_inverse_nu": "0.34(3)",
+          "eta": "0.295(5)"
+        },
+        {
+          "sigma": 1.875,
+          "beta_c": "1.138(4)",
+          "y_t_equals_inverse_nu": "0.21(2)",
+          "eta": "0.192(6)"
+        },
+        {
+          "sigma": 2.0,
+          "beta_c": "1.29(2)",
+          "y_t_equals_inverse_nu": "0.13(2)",
+          "eta": "0.132(4)"
+        }
+      ],
+      "interpretation_limit": "These values are copied from arXiv:2512.01956v2 Table 1 and remain non-peer-reviewed."
+    }
+  },
+  "target_reference_issues": [
+    {
+      "id": "yamazaki_title_corruption",
+      "severity": "high",
+      "target_bibtex_key": "yamazaki_department_1977",
+      "observed": "The target Ref.bib gives the title as 'Department of Applied Physics, Tohoku University, Sendai 980, Japan', which is an affiliation, and omits the article pages and DOI.",
+      "verified_correction": "Yoshitake Yamazaki, 'Critical exponent η of isotropic spin systems with long and short-range interactions', Physics Letters A 61(4), 207–210 (1977), DOI 10.1016/0375-9601(77)90139-6.",
+      "correct_reference_id": "yamazaki_1977"
+    },
+    {
+      "id": "picco_metadata_collision",
+      "severity": "critical",
+      "target_bibtex_key": "Picco2012",
+      "observed": "The target entry combines Marco Picco's 2012 title and arXiv identifier with year 1972 and DOI 10.1103/PhysRevLett.28.240, which belong to a different publication.",
+      "verified_correction": "Marco Picco, 'Critical behavior of the Ising model with long range interactions', arXiv:1207.1018 (2012). The official arXiv record lists no related journal DOI.",
+      "correct_reference_id": "picco_2012"
+    },
+    {
+      "id": "heisenberg_text_cites_xy_paper",
+      "severity": "critical",
+      "target_location": "main.tex introduction, sentence listing Ising, XY, and Heisenberg simulations",
+      "observed": "The Heisenberg clause cites BibTeX key yao_nonclassical_2025, which is 'The Nonclassical Regime of the Two-dimensional Long-range XY Model' (Physical Review B 112, 144429), not a Heisenberg paper.",
+      "verified_correction": "The current Heisenberg preprint is arXiv:2512.01956v2 by Tianning Xiao, Dingyun Yao, Lode Polle, Zhijie Fan, and Youjin Deng.",
+      "correct_reference_id": "xiao_yao_polle_fan_deng_2026"
+    },
+    {
+      "id": "duplicate_ising_entries",
+      "severity": "medium",
+      "target_bibtex_keys": [
+        "Xiao2025_Ising",
+        "xiao_saks_2026"
+      ],
+      "observed": "Both entries identify arXiv:2512.04805 and the same four authors; they are duplicate records of one preprint.",
+      "verified_correction": "Keep one record using the current arXiv v2 year 2026 and reference_id xiao_liu_fan_deng_2026."
+    },
+    {
+      "id": "duplicate_xy_prb_entries",
+      "severity": "medium",
+      "target_bibtex_keys": [
+        "yaodingyun2025",
+        "yao_nonclassical_2025"
+      ],
+      "observed": "Both entries identify the same Physical Review B 112, 144429 paper, arXiv:2411.01811, DOI 10.1103/yghs-p5mg.",
+      "verified_correction": "Keep one record using reference_id yao_xiao_zhang_deng_fan_2025."
+    },
+    {
+      "id": "duplicate_xy_cpl_entries",
+      "severity": "medium",
+      "target_bibtex_keys": [
+        "Xiao2025_XY",
+        "xiao_two-dimensional_2025"
+      ],
+      "observed": "Both entries describe Chinese Physics Letters 42, 070002; the first omits the DOI and arXiv identifier.",
+      "verified_correction": "Keep one record with DOI 10.1088/0256-307X/42/7/070002 and arXiv:2404.08498, using reference_id xiao_yao_zhang_fan_deng_2025_cpl."
+    },
+    {
+      "id": "duplicate_and_stale_heisenberg_entries",
+      "severity": "high",
+      "target_bibtex_keys": [
+        "Yao2025",
+        "yao_spontaneous_2025"
+      ],
+      "observed": "Both entries identify arXiv:2512.01956 and duplicate one another. They also contain the stale v1-style author list/order and omit Lode Polle relative to the current v2 record.",
+      "verified_correction": "Use the current v2 metadata: Tianning Xiao, Dingyun Yao, Lode Polle, Zhijie Fan, and Youjin Deng; originally submitted in 2025 and revised in 2026; reference_id xiao_yao_polle_fan_deng_2026."
+    },
+    {
+      "id": "benedetti_correction_missing_from_target_context",
+      "severity": "high",
+      "observed": "The target manuscript cites the 2020 three-loop long-range multi-scalar calculation without using the published 2025 addendum in the audited comparison.",
+      "verified_correction": "Any numerical use of the three-loop calculation must also cite DOI 10.1088/1751-8121/adbfe4, arXiv:2411.00805, because it corrects one diagram and updates the exponents.",
+      "correct_reference_ids": [
+        "benedetti_gurau_harribey_suzuki_2020",
+        "benedetti_gurau_harribey_addendum_2025"
+      ]
+    }
+  ],
+  "report_guardrails": [
+    "Do not describe σ*=2-η_SR as supported only by historical consensus: cite the operator-stability argument, nonperturbative FRG, all-orders perturbation theory, CFT, and the rigorous theorem within each source's domain.",
+    "Do not describe the recent σ*=2 Monte Carlo interpretation as settled. The two-dimensional Ising and Heisenberg results are preprints, and the XY transition topology has a directly conflicting peer-reviewed RG analysis.",
+    "Do not use De Polsi et al. 2020 as if it were a long-range FRG paper. It supports the high-order derivative-expansion methodology and error-budget strategy only.",
+    "Do not quote uncorrected numerical values from Benedetti et al. 2020 without the 2025 addendum.",
+    "At σ=2 the q^σ and q² operators become degenerate; results at that marginal point require a two-operator and logarithmic-crossover analysis rather than extrapolation of a single kinetic term."
+  ]
+}

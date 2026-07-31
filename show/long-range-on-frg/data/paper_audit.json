@@ -1,0 +1,401 @@
+{
+  "schema_version": "1.0",
+  "audit_date": "2026-07-31",
+  "language": "zh-CN",
+  "target": {
+    "title": "The 4-$\\epsilon$ Expansion for Long-range Interacting Systems",
+    "authors": [
+      "Zhiyi Li",
+      "Kun Chen",
+      "Youjin Deng"
+    ],
+    "year": 2026,
+    "arxiv": "2602.07818",
+    "version": "v2",
+    "doi": "10.48550/arXiv.2602.07818",
+    "url": "https://arxiv.org/abs/2602.07818",
+    "audited_source": "arXiv v2 TeX source",
+    "audited_equations": "Eqs. (20)-(41)",
+    "central_claims": [
+      "在 $d=4-\\epsilon$ 且 $0<\\delta=2-\\sigma<\\epsilon/2$ 时，长程固定点的 $\\eta$ 获得两圈修正。",
+      "分母 $1/(2\\epsilon-3\\delta)$ 产生非平凡的场反常维数。",
+      "长程与短程普适类的阈值严格位于 $\\sigma_*=2$，而不是 Sak 判据 $\\sigma_*=2-\\eta_{\\rm SR}$。"
+    ]
+  },
+  "notation": {
+    "d": "空间维数",
+    "sigma": "相互作用 $J(r)\\sim r^{-(d+\\sigma)}$ 的衰减指数，也是非解析二次项 $|q|^\\sigma$ 的幂次",
+    "epsilon": "$\\epsilon=4-d$",
+    "delta": "$\\delta=2-\\sigma$",
+    "epsilon_prime": "$\\epsilon'=2\\sigma-d=\\epsilon-2\\delta$，四次耦合在长程 Gaussian 固定点的正则维数",
+    "rho_eta": "$\\rho_\\eta=2\\epsilon-3\\eta$，Eq. (24) bootstrap sunset 的小参数",
+    "rho_delta": "$\\rho_\\delta=2\\epsilon-3\\delta$，Eqs. (36)-(38) 长程传播子 sunset 与投影的小参数",
+    "eta_conventional": "由 $G(q)\\sim |q|^{-2+\\eta}$ 定义的通常临界指数",
+    "two_point_basis": "$\\Gamma^{(2)}(q)=r+Z_\\sigma |q|^\\sigma+Z_2 q^2+\\cdots$"
+  },
+  "overall_assessment": {
+    "verdict": "论文的标准一圈长程 $\\phi^4$ 结果可以保留，但两圈 $\\eta$ 修正与 $\\sigma_*=2$ 的结论没有由所给推导建立。决定性问题是把共同原点处 sunset Laurent 极点的局域 $q^2$ 留数与非解析 $|q|^\\sigma$ 通道混同，并且在精确 Gamma 函数式到极点式的展开中还存在可直接核查的 factor-of-two 与符号不一致。",
+    "confidence": "high",
+    "strongest_internal_checks": [
+      "Eq. (24) 到 Eq. (25) 的 Gamma 函数极限少保留了分母 $\\Gamma(3)=2$，极点系数大了 2 倍。",
+      "Eq. (37) 到 Eq. (38) 同样多出 2 倍。",
+      "按 Eq. (36) 自身的符号和 Eq. (37) 第一行的定义求导，Eq. (37) 第二行还差一个负号。",
+      "原始 sunset 的 $\\Gamma(-1+\\rho/2)|q|^{2-\\rho}$ 极点留数明确乘 $q^2$；$\\Gamma(\\rho/2)$ 只在求导并使用 Gamma 递推后出现。"
+    ],
+    "scope_limit": "本审计判断的是 v2 所给微扰推导能否支持其结论；它不否定所有声称 $\\sigma_*=2$ 的数值工作，也不以传统结论为先验替代计算。"
+  },
+  "formula_checks": [
+    {
+      "equations": [20, 21],
+      "topic": "一圈四点顶角 counterterm",
+      "status": "conditionally_valid",
+      "severity": "low",
+      "paper_result": "$\\delta u\\simeq (n+8)u^2/[2\\pi^2(\\epsilon-2\\eta)]$",
+      "finding": "精确 Gamma 函数式到 leading pole 的系数在代数上相容。bootstrap 基底把自由传播子写为 $|q|^{2-\\eta}$，因此出现 $\\epsilon-2\\eta$；对实际长程裸理论，正则维数应组织为 $\\epsilon'=\\epsilon-2\\delta$。在只求 $u^*$ 的 leading order 时，用 $\\eta=\\delta+O(\\epsilon^2)$ 后两者一致。",
+      "retained_conclusion": "$u^*=2\\pi^2(\\epsilon-2\\delta)/(n+8)+O(\\epsilon^2)$ 可作为标准一圈结果保留。",
+      "limitation": "该式本身不能证明 bootstrap kinetic counterterm 的可重整化性。"
+    },
+    {
+      "equations": [22, 23],
+      "topic": "四次耦合 beta function 与固定点",
+      "status": "valid_at_stated_leading_order",
+      "severity": "low",
+      "paper_result": "$\\beta_u=-(\\epsilon-2\\eta)u+(n+8)u^2/(2\\pi^2)$",
+      "finding": "替换 $\\eta=\\delta+O(\\epsilon^2)$ 后，leading flow 与标准长程展开 $\\beta_u=-\\epsilon' u+(n+8)u^2/(2\\pi^2)+\\cdots$ 一致。",
+      "limitation": "把一个只在固定点自洽确定的 $\\eta$ 当作整条 RG 流上的常量属于非标准组织方式；它对 leading fixed-point coordinate 无影响，但不能据此建立全局流。"
+    },
+    {
+      "equations": [24, 25],
+      "topic": "bootstrap sunset 图及其小参数展开",
+      "status": "algebraically_inconsistent",
+      "severity": "high",
+      "paper_exact_structure": "$\\Sigma^S(q)=-16(n+2)u^2(4\\pi)^{-d}|q|^{2d-6+3\\eta}\\,\\Gamma[(6-3\\eta-2d)/2]/\\Gamma[(3d-6+3\\eta)/2]$，省略在共同原点趋于 1 的其他 Gamma 因子。",
+      "paper_expansion": "$\\Sigma^S\\propto [2/(2\\epsilon-3\\eta)]|q|^{2-\\eta}[1+2(2\\eta-\\epsilon)\\ln|q|]$",
+      "check": "令 $x=(2\\epsilon-3\\eta)/2$。则 $\\Gamma(-1+x)\\sim-1/x=-2/(2\\epsilon-3\\eta)$，同时分母 $\\Gamma(3+O(\\epsilon))\\to\\Gamma(3)=2$。因此 Gamma 比值为 $-1/(2\\epsilon-3\\eta)$，不是 $-2/(2\\epsilon-3\\eta)$。",
+      "correction": "若 Eq. (24) 的精确 prefactor 保持不变，Eq. (25) 方括号外的极点系数应比原文小 2 倍。",
+      "independent_numeric_limit": "$\\lim_{r\\to0}r\\,\\Gamma(-1+r/2)/\\Gamma(3)=-1$。",
+      "consequence": "Eq. (26)、Eq. (27) 的数值系数不能从打印的 Eq. (24) 推出。"
+    },
+    {
+      "equations": [26, 27],
+      "topic": "bootstrap 自洽方程与 $\\eta$",
+      "status": "not_established",
+      "severity": "critical",
+      "paper_result": "$\\eta-\\delta=[(n+2)/(n+8)^2](\\epsilon-2\\eta)^3/(2\\epsilon-3\\eta)$，继而 $\\eta=\\delta+[(n+2)/(n+8)^2](\\epsilon-2\\delta)^3/(2\\epsilon-3\\delta)$。",
+      "finding": "该匹配把共同原点附近由局域 $q^2$ 算符产生的 logarithmic mixing 强制解释为 $|q|^\\sigma$ 场归一化。bootstrap action 没有独立的 $Z_2q^2$ counterterm，也未证明对两个退化动量算符的 multiplicative renormalizability。",
+      "additional_problem": "即使暂时接受该投影，Eq. (24) 到 Eq. (25) 的 factor-of-two 不一致也会改变右端系数。",
+      "guarded_wording": "可以把 Eq. (27) 称为论文特定单通道、沿射线 subtraction prescription 的输出；不能把它当成已经建立的长程固定点物理 $\\eta$。"
+    },
+    {
+      "equations": [28],
+      "topic": "四次方向的稳定性指数",
+      "status": "valid_at_leading_order",
+      "severity": "low",
+      "paper_result": "$y_u=-(\\epsilon-2\\delta)+O(\\epsilon^2)$",
+      "finding": "这是长程 Gaussian 上四次耦合的标准 leading irrelevant eigenvalue，和 $\\epsilon'=2\\sigma-d$ 展开相容。",
+      "limitation": "它只说明临界超平面内的 quartic fixed point 稳定性，不是长程项与短程项交换稳定性的 crossover eigenvalue。"
+    },
+    {
+      "equations": [29, 30, 31, 32],
+      "topic": "质量重整化与 $\\nu$",
+      "status": "valid_at_stated_leading_order",
+      "severity": "low",
+      "paper_result": "$1/\\nu=2-\\delta-(n+2)(\\epsilon-2\\delta)/(n+8)+O(\\epsilon^2)$",
+      "finding": "等价于标准 leading 长程结果 $1/\\nu=\\sigma-(n+2)\\epsilon'/(n+8)+O(\\epsilon'^2)$。两圈 $\\eta-\\delta=O(\\epsilon^2)$ 不影响这里展示的一圈精度。",
+      "limitation": "这部分的正确性不能反向验证 Eq. (27) 的两圈 $\\eta$。"
+    },
+    {
+      "equations": [33, 34, 35],
+      "topic": "momentum-subtraction 重整化条件",
+      "status": "incomplete_basis",
+      "severity": "high",
+      "paper_conditions": [
+        "$\\Sigma(0)=r$",
+        "$\\partial\\Sigma/\\partial |q|^\\sigma|_{q=\\mu}=0$",
+        "$\\Gamma_4|_{\\rm sym,\\mu}=u$"
+      ],
+      "finding": "单个 $|q|^\\sigma$ slope condition 不能区分 $|q|^\\sigma$ 与同时存在或由 loop 生成的 $q^2$。在 $\\sigma\\to2$ 的退化极限，必须使用双算符基底和两个独立投影或完整 momentum dependence。",
+      "minor_notational_issue": "action 中 mass 和 vertex 带有 $\\mu$ 的正则维数，而条件写成无量纲形式；可以理解为在 $q=\\mu$ 后除去正则尺度，但原文没有明确说明。"
+    },
+    {
+      "equations": [36],
+      "topic": "$|q|^\\sigma$ 传播子的 sunset 精确式",
+      "status": "structurally_useful_but_prefactor_not_exact_in_general_d",
+      "severity": "medium",
+      "paper_result": "$\\Sigma^{(2s)}\\propto-[(n+2)u^2/(16\\pi^4)]\\mu^{4\\sigma-2d}|q|^{2d-3\\sigma}\\Gamma[(3\\sigma-2d)/2]/\\Gamma[(3d-3\\sigma)/2]$",
+      "finding": "动量幂次和 Gamma 函数结构可用于可靠识别极点通道。若等号被理解为任意 $d$ 的精确式，prefactor 应保留 $16/(4\\pi)^d$，而不是预先替换为 $1/(16\\pi^4)$；在只取 $d\\to4$ leading pole 时该替换不影响通道判断。"
+    },
+    {
+      "equations": [37, 38],
+      "topic": "所谓 $\\delta Z$ 的投影、符号与极点系数",
+      "status": "algebraically_and_conceptually_inconsistent",
+      "severity": "critical",
+      "paper_definition": "$\\delta Z=-\\partial\\Sigma^{(2s)}/\\partial |q|^\\sigma|_{q=\\mu}$",
+      "sign_check": "把 Eq. (36) 写成 $\\Sigma=-C R x^{-a}$，其中 $x=|q|^\\sigma$、$a=(3\\sigma-2d)/\\sigma$。则 $-\\partial_x\\Sigma=-C aR x^{-a-1}$；Eq. (37) 第二行打印为 $+C aR$。按原文自身定义少了一个负号。",
+      "factor_two_check": "在共同原点，$\\Gamma[(2\\epsilon-3\\delta)/2]/\\Gamma[3-3(\\epsilon-\\delta)/2]\\sim[2/(2\\epsilon-3\\delta)]/2=1/(2\\epsilon-3\\delta)$。因此从 Eq. (37) 打印的 prefactor 应得到 $(n+2)u^2/[16\\pi^4(2\\epsilon-3\\delta)]$，而 Eq. (38) 写成分母 $8\\pi^4$，大了 2 倍。",
+      "independent_numeric_limit": "$\\lim_{r\\to0}r\\,\\Gamma(r/2)/\\Gamma(3)=1$。",
+      "operator_check": "该 pole 的留数属于 $q^2$ 通道；把它命名为乘 $|q|^\\sigma$ 的 field $Z$ 没有在双算符基底中得到证明。",
+      "consequence": "Eq. (40) 与 Eq. (41) 的符号和系数都不能由打印的 Eqs. (36)-(38) 一致推出。"
+    },
+    {
+      "equations": [39, 40],
+      "topic": "Callan-Symanzik 方程与 field anomalous dimension",
+      "status": "formal_equation_valid_but_application_invalid",
+      "severity": "high",
+      "paper_result": "$\\gamma(u)=-(1/2)\\beta(u)\\partial_u\\delta Z$",
+      "finding": "在临界质量 $r=0$ 且给定一致的 multiplicative field renormalization 时，二点函数 CS 方程的形式可以成立；离开临界面还应包含 $\\beta_r\\partial_r$。这里的核心失败不是 CS 方程本身，而是输入的 $\\delta Z$ 没有被证明是 $|q|^\\sigma$ 的 field renormalization。",
+      "scheme_nuance": "沿 $\\delta=c\\epsilon\\to0$ 的射线，$q^2$ 与 $|q|^\\sigma$ 的 leading divergent pieces 会退化，单点 subtraction 可消去 leading 常数，但留下 $O(1)$ 的、依赖射线与 $\\ln q$ 的有限 operator mixing；省略 $Z_2$ 后不能把该 mixing 唯一解释为物理 $\\gamma_\\phi$。"
+    },
+    {
+      "equations": [41],
+      "topic": "最终 $\\eta$",
+      "status": "not_supported",
+      "severity": "critical",
+      "paper_result": "$\\eta=\\delta+[(n+2)/(n+8)^2](\\epsilon-2\\delta)^3/(2\\epsilon-3\\delta)$",
+      "finding": "定义 $\\eta=2-\\sigma+2\\gamma$ 本身可以作为 convention；但只有当 $\\gamma$ 来自支配性 $|q|^\\sigma$ kinetic/field normalization 时才适用。本文 $\\delta Z$ 实际混入局域 $q^2$ channel，且前序公式有 factor-of-two 和符号不一致，因此该物理结论未建立。",
+      "short_range_limit": "原式在 $\\delta=0$ 恢复熟知的短程两圈 $\\eta$，但这是两个动量算符完全重合的特殊点，不能验证任意 $\\delta>0$ 的长程分支。"
+    }
+  ],
+  "sunset_operator_assignment": {
+    "exact_momentum_power": "$|q|^{2d-3\\sigma}$",
+    "raw_identity": "$2d-3\\sigma=2-\\rho_\\delta$ 且 $\\Gamma[(3\\sigma-2d)/2]=\\Gamma(-1+\\rho_\\delta/2)$",
+    "raw_pole_expansion": "$\\Gamma(-1+\\rho_\\delta/2)|q|^{2-\\rho_\\delta}=\\left[-2/\\rho_\\delta+2\\ln|q|+O(1)\\right]q^2$",
+    "derivative_recurrence": "对 $|q|^\\sigma$ 求导带来 $(3\\sigma-2d)/\\sigma$；用 $z\\Gamma(z)=\\Gamma(z+1)$ 后才出现 $(2/\\sigma)\\Gamma(\\rho_\\delta/2)$。",
+    "assignment": "the_pole_residue_is_in_the_local_q_squared_channel",
+    "not_assignment": "nonanalytic_abs_q_to_sigma_field_channel",
+    "generic_full_sunset": "在一般参数处完整 sunset 仍具有非局域动量幂 $|q|^{2d-3\\sigma}$；这里的局域归属只针对共同原点 Laurent 极点的留数。",
+    "physical_interpretation": "该极点是 $d=4,\\sigma=2$ 共同原点处局域梯度算符 $q^2$ 与非局域算符 $|q|^\\sigma$ 退化时的 operator-mixing singularity。它要求在 RG ansatz 中保留 $Z_2q^2$；不能仅凭单点 slope subtraction 把其留数等同于 $Z_\\sigma$ 或物理场反常维数。",
+    "domain_check": "$0<\\delta<\\epsilon/2$ 蕴含 $2\\epsilon-3\\delta>\\epsilon/2>0$；极点超平面 $\\delta=2\\epsilon/3$ 不穿过论文声称的物理楔形，除共同原点外没有域内发散。",
+    "ray_limit_nuance": "若限定 $\\delta=c\\epsilon$、$0<c<1/2$ 后令 $\\epsilon\\to0$，分母确实按 $1/\\epsilon$ 增强；此时两算符也同时退化。这个沿射线的非一致极限可以产生有限 mixing，但不是覆盖独立 $(\\epsilon,\\delta)$ 邻域的普通多变量最小减除展开。"
+  },
+  "crossover_logic": {
+    "paper_inference": "论文令 $K_s=0$ 后计算单一长程固定点，并用把 dressed $q^2$ propagator 再取 $\\sigma/2$ 次幂的 heuristic argument 推断所有 $\\sigma<2$ 时长程项均相关。",
+    "audit": "该计算没有构造同时含 $K_L|q|^\\sigma$ 和 $K_sq^2$ 的 stability matrix，因此没有计算决定 $\\sigma_*$ 的 crossover eigenvalue。论文结尾把显式重整化 $K_s$ 列为未来工作，也与已严格确定 $\\sigma_*=2$ 的表述不相容。",
+    "bilocal_operator": "$\\mathcal O_{\\rm LR}=\\int d^dx\\,d^dy\\,\\phi(x)\\phi(y)/|x-y|^{d+\\sigma}$",
+    "exact_linear_eigenvalue_at_sr": "$y_{\\rm LR}=d-\\sigma-2\\Delta_{\\phi,\\rm SR}=2-\\eta_{\\rm SR}-\\sigma$",
+    "zero_of_eigenvalue": "$\\sigma_*=2-\\eta_{\\rm SR}$",
+    "why_paper_heuristic_fails": "非局域双线性扰动的标度由两个 interacting fields 的维数和固定的 bilocal kernel 共同决定；不能把完整 inverse propagator 的幂次机械地乘以 $\\sigma/2$。",
+    "boundary_layer": "在 $d=4-\\epsilon$，$\\eta_{\\rm SR}=O(\\epsilon^2)$，所以真正的 crossover shift $\\delta_*=2-\\sigma_*=O(\\epsilon^2)$。论文的 power counting 取 $\\delta=O(\\epsilon)$；generic rays 可写成 $\\delta=c\\epsilon$，对任意非零 $c$ 都已远离这条 $O(\\epsilon^2)$ boundary layer。要研究 crossover 必须解析该边界层，例如保持 $\\delta/\\epsilon^2$ 有限。"
+  },
+  "conclusions_that_remain_valid": [
+    {
+      "result": "$\\epsilon'=2\\sigma-d=\\epsilon-2\\delta$ 是长程 $\\phi^4$ 耦合的控制参数。",
+      "order": "engineering dimension"
+    },
+    {
+      "result": "$u^*=2\\pi^2\\epsilon'/(n+8)+O(\\epsilon'^2)$。",
+      "order": "one loop"
+    },
+    {
+      "result": "$y_u=-\\epsilon'+O(\\epsilon'^2)$。",
+      "order": "one loop"
+    },
+    {
+      "result": "$1/\\nu=\\sigma-(n+2)\\epsilon'/(n+8)+O(\\epsilon'^2)$。",
+      "order": "one loop"
+    },
+    {
+      "result": "在 $n\\to\\infty$ 或 $\\epsilon'\\to0$ 等相应极限，上述 leading expressions 与标准结果相容。",
+      "order": "stated limits"
+    }
+  ],
+  "conclusions_not_established_by_v2": [
+    "长程固定点物理指数 $\\eta$ 获得 Eq. (41) 所示两圈修正。",
+    "$1/(2\\epsilon-3\\delta)$ 是 $|q|^\\sigma$ kinetic term 的 field-renormalization pole。",
+    "bootstrap scheme 与 Z-factor scheme 构成两项独立验证；两者实际共享相同的单通道投影假设。",
+    "短程固定点对任意 $\\sigma<2$ 都不稳定。",
+    "crossover threshold 已由计算确定为 $\\sigma_*=2$。"
+  ],
+  "frg_discriminants": [
+    {
+      "id": "two_kinetic_operators",
+      "calculation": "在同一 truncation 中保留 $Z_{\\sigma,k}|q|^\\sigma+Z_{2,k}q^2$，并用两个独立 momentum projectors 求流。",
+      "observable": "$\\partial_t Z_{\\sigma,k}$、$\\partial_t Z_{2,k}$ 与二者的 stability matrix",
+      "diagnostic_value": "直接阻止单点 slope 把两个通道混同。"
+    },
+    {
+      "id": "lr_field_dimension",
+      "calculation": "沿长程固定点分支求 $\\Gamma_k^{(2)}(q)$ 的完整动量依赖。",
+      "observable": "$\\alpha(q)=d\\ln\\Gamma^{(2)}(q)/d\\ln q$ 在 $q\\to0$ 的极限",
+      "competing_predictions": {
+        "protected_lr_branch": "$\\alpha\\to\\sigma$，即 $\\eta=2-\\sigma$",
+        "paper_eq_41": "$\\alpha\\to2-\\eta_{\\rm paper}<\\sigma$，差值为 Eq. (41) 的修正"
+      }
+    },
+    {
+      "id": "sr_stability",
+      "calculation": "在短程固定点把非局域项作为独立 infinitesimal perturbation。",
+      "observable": "$\\widetilde g_\\sigma=(Z_\\sigma/Z_2)k^{\\sigma-2}$ 的线性 eigenvalue",
+      "expected_exact_form": "$y_{\\rm LR}=2-\\eta_{\\rm SR}-\\sigma$",
+      "threshold_test": "比较零点位于 $2-\\eta_{\\rm SR}$ 还是 2。"
+    },
+    {
+      "id": "sunset_channel",
+      "calculation": "对 FRG two-point flow 或直接 sunset 积分分别投影 $q^2$、$|q|^\\sigma$ 和非局域 remainder。",
+      "observable": "$q^2\\ln q$ residue 与 $|q|^\\sigma\\ln q$ residue",
+      "expected": "$1/(2\\epsilon-3\\delta)$ 对应局域 $q^2$ channel。"
+    },
+    {
+      "id": "fixed_point_exchange",
+      "calculation": "连续扫描 $\\sigma$，同时跟踪 LR 和 SR fixed points 及全部相关/无关 eigenvalues。",
+      "observable": "两 fixed points 的 stability exchange 与 correction-to-scaling exponent",
+      "precision_note": "$d=2$ 的 Sak shift $\\eta_{\\rm SR}=1/4$ 比 $d=3$ 的约 0.036 更容易数值区分；近 $d=4$ 时必须解析 $O(\\epsilon^2)$ boundary layer。"
+    }
+  ],
+  "wording_guardrails": [
+    "不要写成“$1/(2\\epsilon-3\\delta)$ 不存在”；它确实出现在 Gamma 函数结构中，但其算符归属和物理解读有误。",
+    "不要写成“任何 near-local 展开中的 $\\gamma_\\phi$ 必须为零”；在 local operator basis 中可以出现 field renormalization 和 mixing，但物理 LRI 分支仍须满足 $\\Delta_\\phi=(d-\\sigma)/2$，需要相应地调整参数轨迹或对角化算符混合。",
+    "不要仅以 Sak 判据被广泛接受为反驳；应展示 $q^2$ 留数、factor-of-two 极限和缺失 stability matrix 这些可复核证据。",
+    "把 Eq. (41) 描述为“未由 v2 的推导建立”，比断言所有可能的 $\\sigma_*=2$ 场景都被严格排除更准确。",
+    "沿 $\\delta=c\\epsilon$ 射线时 leading divergence 可以因算符退化而在单点被消去；问题在于剩余有限 mixing 没有在双算符基底中对角化，而不是简单声称任何抵消都不可能。"
+  ],
+  "primary_sources": [
+    {
+      "id": "fisher_ma_nickel_1972",
+      "title": "Critical Exponents for Long-Range Interactions",
+      "authors": [
+        "Michael E. Fisher",
+        "Shang-keng Ma",
+        "B. G. Nickel"
+      ],
+      "year": 1972,
+      "doi": "10.1103/PhysRevLett.29.917",
+      "arxiv": null,
+      "url": "https://doi.org/10.1103/PhysRevLett.29.917",
+      "relevance": "原始长程 $\\epsilon'=2\\sigma-d$ 展开与 leading $u^*$、$\\nu$。"
+    },
+    {
+      "id": "sak_1973",
+      "title": "Recursion Relations and Fixed Points for Ferromagnets with Long-Range Interactions",
+      "authors": [
+        "J. Sak"
+      ],
+      "year": 1973,
+      "doi": "10.1103/PhysRevB.8.281",
+      "arxiv": null,
+      "url": "https://doi.org/10.1103/PhysRevB.8.281",
+      "relevance": "长程到短程 crossover 与 $\\sigma_*=2-\\eta_{\\rm SR}$ 判据的原始来源。"
+    },
+    {
+      "id": "honkonen_nalimov_1989",
+      "title": "Crossover between field theories with short-range and long-range exchange or correlations",
+      "authors": [
+        "J. Honkonen",
+        "M. Yu. Nalimov"
+      ],
+      "year": 1989,
+      "doi": "10.1088/0305-4470/22/6/024",
+      "arxiv": null,
+      "url": "https://doi.org/10.1088/0305-4470/22/6/024",
+      "relevance": "同时讨论长程和短程 field theories 的 crossover 与 fixed-point stability。"
+    },
+    {
+      "id": "blanchard_picco_rajabpour_2013",
+      "title": "Influence of long-range interactions on the critical behavior of the Ising model",
+      "authors": [
+        "Thibault Blanchard",
+        "Marco Picco",
+        "M. A. Rajabpour"
+      ],
+      "year": 2013,
+      "doi": "10.1209/0295-5075/101/56003",
+      "arxiv": "1211.6758",
+      "url": "https://arxiv.org/abs/1211.6758",
+      "relevance": "目标稿 Eqs. (33)-(38) 所称 momentum-subtraction/double-expansion 灵感来源；该文提出的是争议性 prescription，不是非重整化结论的证明。"
+    },
+    {
+      "id": "paulos_rychkov_vanrees_zan_2016",
+      "title": "Conformal Invariance in the Long-Range Ising Model",
+      "authors": [
+        "Miguel F. Paulos",
+        "Slava Rychkov",
+        "Balt C. van Rees",
+        "Bernardo Zan"
+      ],
+      "year": 2016,
+      "doi": "10.1016/j.nuclphysb.2015.10.018",
+      "arxiv": "1509.00008",
+      "url": "https://arxiv.org/abs/1509.00008",
+      "relevance": "非局域 LRI continuum theory、长程场维数与全阶微扰 conformal structure。"
+    },
+    {
+      "id": "behan_rastelli_rychkov_zan_prl_2017",
+      "title": "Long-Range Critical Exponents near the Short-Range Crossover",
+      "authors": [
+        "Connor Behan",
+        "Leonardo Rastelli",
+        "Slava Rychkov",
+        "Bernardo Zan"
+      ],
+      "year": 2017,
+      "doi": "10.1103/PhysRevLett.118.241601",
+      "arxiv": "1703.03430",
+      "url": "https://arxiv.org/abs/1703.03430",
+      "relevance": "靠近短程 crossover 的弱耦合描述与 field-dimension non-renormalization 关系。"
+    },
+    {
+      "id": "behan_rastelli_rychkov_zan_jpa_2017",
+      "title": "A scaling theory for the long-range to short-range crossover and an infrared duality",
+      "authors": [
+        "Connor Behan",
+        "Leonardo Rastelli",
+        "Slava Rychkov",
+        "Bernardo Zan"
+      ],
+      "year": 2017,
+      "doi": "10.1088/1751-8121/aa8099",
+      "arxiv": "1703.05325",
+      "url": "https://arxiv.org/abs/1703.05325",
+      "relevance": "Eqs. (1.4)-(1.6) 明确给出 $\\Delta_{\\phi,\\rm LR}=(d-\\sigma)/2$、$\\sigma_*=2-\\eta_{\\rm SR}$ 和 SR fixed point 的 bilocal perturbation。"
+    },
+    {
+      "id": "benedetti_gurau_harribey_suzuki_2020",
+      "title": "Long-range multi-scalar models at three loops",
+      "authors": [
+        "Dario Benedetti",
+        "Razvan Gurau",
+        "Sabine Harribey",
+        "Kenta Suzuki"
+      ],
+      "year": 2020,
+      "doi": "10.1088/1751-8121/abb6ae",
+      "arxiv": "2007.04603",
+      "url": "https://arxiv.org/abs/2007.04603",
+      "relevance": "固定维数下以 $\\epsilon'=2\\sigma-d$ 组织的高阶长程多标量 RG；用于核对控制参数和长程理论的标准重整化组织。",
+      "version_note": "使用 arXiv v3；三圈图的后续 corrigendum 是 arXiv:2411.00805。"
+    },
+    {
+      "id": "bianchi_cardinale_desabbata_2025",
+      "title": "Defects in the long-range O(N) model",
+      "authors": [
+        "Lorenzo Bianchi",
+        "Leonardo S. Cardinale",
+        "Elia de Sabbata"
+      ],
+      "year": 2025,
+      "doi": "10.1088/1751-8121/adf788",
+      "arxiv": "2412.08697",
+      "url": "https://arxiv.org/abs/2412.08697",
+      "relevance": "说明 near-local basis 中可以出现非零 $Z_\\phi$ 和 $\\gamma_\\phi$，但参数轨迹必须维持物理 LRI 的 exact relation $\\Delta_\\phi=(d-\\sigma)/2$；用于限定本审计措辞。"
+    }
+  ],
+  "provenance": {
+    "target_equation_mapping": {
+      "20-23": "four-point counterterm, beta function, fixed point",
+      "24-27": "bootstrap sunset and eta self-consistency",
+      "28-32": "quartic stability and mass exponent",
+      "33-35": "momentum-subtraction conditions",
+      "36-38": "sunset and delta Z",
+      "39-41": "Callan-Symanzik equation, gamma, eta"
+    },
+    "algebra_checks": [
+      "$\\lim_{r\\to0}r\\Gamma(-1+r/2)/\\Gamma(3)=-1$",
+      "$\\lim_{r\\to0}r\\Gamma(r/2)/\\Gamma(3)=1$",
+      "$2d-3\\sigma=2-(2\\epsilon-3\\delta)$"
+    ],
+    "files_used": [
+      "/tmp/arxiv-2602.07818v2-src/main.tex",
+      "/tmp/arxiv-2602.07818v2-src/Ref.bib"
+    ]
+  }
+}

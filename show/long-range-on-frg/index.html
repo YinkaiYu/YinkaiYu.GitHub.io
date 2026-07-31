@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="用双动能算符非微扰泛函重整化群检验长程 O(N) 模型及 arXiv:2602.07818 的 4-epsilon 展开。">
+  <title>双动能算符 FRG 检验长程 O(N) 模型</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%231d4961'/><text x='16' y='22' text-anchor='middle' font-size='16' fill='white'>F</text></svg>">
+  <script>
+    window.MathJax = {
+      tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]},
+      options: {skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']}
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  <style>
+    :root {
+      --ink: #172b3a; --muted: #5d6b74; --blue: #236890; --teal: #197a70;
+      --orange: #c86f2d; --red: #a94343; --paper: #fffefa; --wash: #f1efe8;
+      --line: #d9ddd9; --soft-blue: #eaf2f6; --soft-orange: #fbefe5;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; color: var(--ink); background: var(--wash); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", "Microsoft YaHei", sans-serif; line-height: 1.78; }
+    a { color: var(--blue); text-decoration-thickness: .08em; text-underline-offset: .15em; }
+    .masthead { color: white; background: linear-gradient(122deg, #102839 0%, #1d4961 58%, #1c6d68 100%); border-bottom: 5px solid #d58a45; }
+    .hero { max-width: 1120px; margin: auto; padding: 72px 34px 56px; }
+    .eyebrow { margin: 0 0 12px; font-size: .78rem; letter-spacing: .15em; text-transform: uppercase; color: #b8d8df; }
+    h1 { max-width: 900px; margin: 0; font-family: Georgia, "Noto Serif SC", serif; font-size: clamp(2.15rem, 5.5vw, 4.25rem); line-height: 1.06; font-weight: 650; letter-spacing: -.03em; }
+    .dek { max-width: 830px; margin: 24px 0 0; color: #deebed; font-size: clamp(1rem, 2vw, 1.24rem); }
+    .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; margin-top: 38px; background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.18); }
+    .metric { padding: 20px 22px; background: rgba(8,27,38,.44); }
+    .metric strong { display: block; font: 650 clamp(1.35rem, 3vw, 2rem)/1.2 Georgia, serif; color: white; }
+    .metric span { display: block; margin-top: 7px; font-size: .83rem; color: #c9dde1; }
+    nav { position: sticky; top: 0; z-index: 20; border-bottom: 1px solid var(--line); background: rgba(255,254,250,.96); backdrop-filter: blur(10px); }
+    nav .inner { max-width: 1120px; margin: auto; padding: 10px 30px; display: flex; gap: 18px; overflow-x: auto; white-space: nowrap; font-size: .84rem; }
+    nav a { color: #334a59; text-decoration: none; }
+    main { max-width: 1120px; margin: 0 auto; padding: 40px 30px 90px; background: var(--paper); box-shadow: 0 14px 46px rgba(24,42,54,.08); }
+    section { padding: 34px 0 22px; border-top: 1px solid var(--line); }
+    section:first-child { border-top: 0; padding-top: 8px; }
+    h2 { margin: 0 0 20px; font: 650 clamp(1.55rem, 3vw, 2.25rem)/1.2 Georgia, "Noto Serif SC", serif; letter-spacing: -.02em; }
+    h3 { margin: 30px 0 10px; font-size: 1.15rem; line-height: 1.4; }
+    p { max-width: 78ch; margin: 12px 0; }
+    .lead { font-size: 1.08rem; color: #304856; }
+    .verdict { display: grid; grid-template-columns: 5px 1fr; gap: 18px; margin: 24px 0; padding: 24px 26px 24px 0; background: var(--soft-orange); }
+    .verdict::before { content: ""; background: var(--orange); }
+    .verdict h3 { margin-top: 0; }
+    .verdict p { margin-bottom: 0; }
+    .note { margin: 22px 0; padding: 17px 20px; border-left: 4px solid var(--blue); background: var(--soft-blue); }
+    .warning { border-left-color: var(--orange); background: var(--soft-orange); }
+    .math-scroll { overflow-x: auto; overflow-y: hidden; padding: 2px 0; }
+    .definition-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px 28px; margin: 22px 0; }
+    .definition { border-top: 2px solid var(--line); padding-top: 12px; }
+    .definition b { display: block; color: var(--blue); }
+    figure { margin: 34px 0 40px; }
+    figure img { display: block; width: 100%; height: auto; border: 1px solid #e0e3e1; background: white; }
+    figcaption { max-width: 88ch; margin: 11px auto 0; color: var(--muted); font-size: .9rem; line-height: 1.58; }
+    figcaption strong { color: var(--ink); }
+    .download { float: right; font-size: .8rem; }
+    .table-wrap { width: 100%; overflow-x: auto; margin: 20px 0 28px; }
+    table { width: 100%; border-collapse: collapse; font-size: .88rem; font-variant-numeric: tabular-nums; }
+    th { text-align: left; padding: 10px 11px; color: #334956; background: #edf1f1; border-bottom: 2px solid #cbd2d2; white-space: nowrap; }
+    td { padding: 10px 11px; border-bottom: 1px solid #e2e5e3; vertical-align: top; }
+    tr:hover td { background: #faf9f4; }
+    code { padding: .12em .34em; border-radius: 3px; background: #edf0ef; font: .86em ui-monospace, SFMono-Regular, Menlo, monospace; }
+    pre { overflow-x: auto; padding: 18px 20px; color: #dbe8ea; background: #132b39; border-radius: 4px; line-height: 1.55; }
+    pre code { padding: 0; color: inherit; background: none; }
+    .cite { font-size: .82em; white-space: nowrap; }
+    .status-good { color: var(--teal); font-weight: 650; }
+    .status-warn { color: var(--orange); font-weight: 650; }
+    .references { padding-left: 1.7rem; }
+    .references li { margin: 0 0 12px; padding-left: .35rem; font-size: .9rem; line-height: 1.55; }
+    .meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .hash { word-break: break-all; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .75rem; }
+    footer { max-width: 1120px; margin: auto; padding: 25px 30px 55px; color: var(--muted); font-size: .82rem; }
+    @media (max-width: 760px) {
+      .hero { padding: 48px 22px 38px; }
+      .metrics, .definition-grid, .meta-grid { grid-template-columns: 1fr; }
+      main { padding: 28px 18px 65px; box-shadow: none; }
+      nav .inner { padding-inline: 18px; }
+      .download { float: none; display: block; margin-top: 5px; }
+    }
+    @media print {
+      nav { display: none; } body { background: white; } main { box-shadow: none; max-width: none; }
+      a { color: inherit; } figure, table { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <header class="masthead">
+    <div class="hero">
+      <p class="eyebrow">Independent calculation · operator-resolved audit · 2026-07-31</p>
+      <h1>双动能算符 FRG 检验长程 \(O(N)\) 模型</h1>
+      <p class="dek">一项独立、可复现的非微扰泛函重整化群计算，并对 arXiv:2602.07818v2 的 \(4-\epsilon\) 展开逐式核查。核心问题不是把数值“凑”向某篇文献，而是先分清 \(|q|^\sigma\) 与 \(q^2\) 两个动量算符。</p>
+      <div class="metrics" aria-label="主要结果">
+        <div class="metric"><strong>\(\partial_t Z_{\sigma,k}=0\)</strong><span>非整数 \(\sigma&lt;2\) 的非解析动能项受到保护</span></div>
+        <div class="metric"><strong>1.956</strong><span>本截断 \(d=3,N=1,M=8\) 的 \(\sigma_*=2-\eta_{\rm SR}\)</span></div>
+        <div class="metric"><strong>1.9990</strong><span>本截断 \(d=3.8,N=1,M=8\)：很接近 2，但不等于 2</span></div>
+      </div>
+    </div>
+  </header>
+
+  <nav aria-label="报告目录"><div class="inner">
+    <a href="#answer">结论</a><a href="#problem">问题与定义</a><a href="#paper">目标论文</a>
+    <a href="#frg">FRG 方法</a><a href="#numbers">数值结果</a><a href="#sunset">两圈审计</a>
+    <a href="#epsilon">展开为何失焦</a><a href="#limits">误差与边界</a><a href="#reproduce">复现</a><a href="#references">参考文献</a>
+  </div></nav>
+
+  <main>
+    <section id="answer">
+      <h2>先给答案</h2>
+      <div class="verdict">
+        <div>
+          <h3>arXiv:2602.07818v2 的一圈 \(1/\nu\) 可以保留；两圈 \(\eta\) 修正与 \(\sigma_*=2\) 没有由其推导建立。</h3>
+          <p>独立 FRG 在同一有效作用量中保留 \(Z_{\sigma,k}|q|^\sigma\) 和 \(Z_{2,k}q^2\)。在固定未重整化场（bare field）的归一化并分开投影两个算符的约定下，抵消 UV（短距离、高动量）发散所需的 counterterm 是局域补偿项，因此预存的非整数幂核没有独立 loop counterterm：\(Z_{\sigma,k}\) 不流动，而 \(Z_{2,k}\) 流动；这不排除 \(k\to0\) 时最终完整的二点逆传播子含有限的非解析动量依赖。短程固定点处长程扰动的精确线性本征值为 \(y_{\rm LR}=2-\eta_{\rm SR}-\sigma\)，其零点是 \(\sigma_*=2-\eta_{\rm SR}\)，与早期 RG、非微扰 FRG、共形场论，以及严格 RG 在其弱耦合近上临界维适用域内的算符标度一致。<a class="cite" href="#ref-3">[3]</a><a class="cite" href="#ref-4">[4]</a><a class="cite" href="#ref-5">[5]</a><a class="cite" href="#ref-8">[8]</a><a class="cite" href="#ref-11">[11]</a></p>
+        </div>
+      </div>
+      <p class="lead">目标稿的两圈 sunset 自能含有 \(1/(2\epsilon-3\delta)\)，但该极点的留数乘在局域 \(q^2\) 算符上。目标稿在有限减法点对 \(|q|^\sigma\) 求导，把 \(q^2\) 的贡献混入所谓场重整化；此外，打印的 Eq. (24)→(25) 与 Eq. (37)→(38) 各有一个可直接复核的因子 2 不一致，Eq. (36)→(37) 还有符号不一致。结论应表述为“v2 的推导未建立其主张”，而不是以权威意见替代计算。</p>
+      <div class="note warning"><strong>精度说明。</strong> \(d=3\) 的势能阶数 \(M=6\to8\) 已稳定，但这只控制势能多项式误差；场依赖的波函数重整化与 regulator 误差仍未被本实现消除。因此本工作的 \(d=3\) 直接值 \(\eta_{\rm SR}=0.04427389118\) 不应冒充最终高精度物理值。已发表的高阶短程 FRG 给出 \(\eta_{\rm SR}=0.0361(11)\)，从而 \(\sigma_*=1.9639(11)\)。<a class="cite" href="#ref-15">[15]</a></div>
+    </section>
+
+    <section id="problem">
+      <h2>问题是什么？</h2>
+      <p>考虑 \(d\) 维晶格上的 \(O(N)\) 自旋模型。每个自旋 ‎\(\mathbf S_i\) 有 \(N\) 个分量，远距离耦合按幂律衰减：</p>
+      <div class="math-scroll">\[
+        H=-\frac{J}{2}\sum_{i\ne j}\frac{\mathbf S_i\!\cdot\!\mathbf S_j}{|i-j|^{d+\sigma}},
+        \qquad J>0.
+      \]</div>
+      <p>\(\sigma\) 越小，相互作用越长程。连续极限的二点逆传播子必须允许两个独立的低动量结构：</p>
+      <div class="math-scroll">\[
+        \Gamma^{(2)}(q)=r+Z_\sigma |q|^\sigma+Z_2q^2+\cdots .
+      \]</div>
+      <div class="definition-grid">
+        <div class="definition"><b>\(d\)：空间维数</b>例如普通三维经典磁体取 \(d=3\)。本报告也用 \(d=3.8\) 检验靠近四维时的展开。</div>
+        <div class="definition"><b>\(N\)：序参量分量数</b>\(N=1\) 是 Ising，\(N=2\) 是 XY，\(N=3\) 是 Heisenberg。</div>
+        <div class="definition"><b>\(\eta\)：反常维数</b>由临界传播子 \(G(q)\sim |q|^{-2+\eta}\) 定义，描述二点关联偏离 Gaussian 标度的程度。</div>
+        <div class="definition"><b>\(\nu\)：关联长度指数</b>约化温度 \(t\to0\) 时，关联长度按 \(\xi\sim|t|^{-\nu}\) 发散。</div>
+        <div class="definition"><b>固定点（fixed point）</b>粗粒化后无量纲耦合不再随尺度变化的 RG 状态；临界普适类由固定点及其稳定性决定。</div>
+        <div class="definition"><b>相关扰动</b>向红外放大、使系统离开固定点的扰动。其正本征指数 \(y\) 决定需要调节的物理参数。</div>
+      </div>
+      <p>长程相互作用的上临界维数是 \(d_{\rm up}=2\sigma\)。在 \(d/2&lt;\sigma\) 时四次相互作用不再是 Gaussian 意义下的无关项，问题进入相互作用固定点区域。真正有争议的是：当 \(\sigma\) 接近 2 时，长程固定点在哪个 \(\sigma_*\) 与短程固定点交换稳定性？</p>
+    </section>
+
+    <section id="paper">
+      <h2>目标论文的主张</h2>
+      <p>Li、Chen 与 Deng 的预印本 arXiv:2602.07818v2 取</p>
+      <div class="math-scroll">\[
+        \epsilon=4-d,\qquad \delta=2-\sigma,\qquad
+        \epsilon'=2\sigma-d=\epsilon-2\delta,
+      \]</div>
+      <p>并在 \(0&lt;\delta&lt;\epsilon/2\) 的长程相互作用区给出<a class="cite" href="#ref-1">[1]</a></p>
+      <div class="math-scroll">\[
+        \eta_{\rm paper}=\delta+
+        \frac{N+2}{(N+8)^2}\frac{(\epsilon-2\delta)^3}{2\epsilon-3\delta},
+      \]</div>
+      <div class="math-scroll">\[
+        \frac1{\nu_{\rm paper}}=2-\delta-
+        \frac{N+2}{N+8}(\epsilon-2\delta)+O(\epsilon^2).
+      \]</div>
+      <p>第二式等价于标准的一圈长程结果 \(1/\nu=\sigma-(N+2)\epsilon'/(N+8)+O(\epsilon'^2)\)，本审计没有否定它。第一式则给 \(\eta\) 添加两圈修正，并被用于支持 \(\sigma_*=2\)。要决定后一主张，必须同时计算短程与长程动能方向的稳定性；只在先令 \(Z_2=0\) 的单一长程理论中求一个固定点，并不能得到两固定点交换的位置。</p>
+    </section>
+
+    <section id="frg">
+      <h2>双动能算符的泛函重整化群</h2>
+      <p>泛函重整化群（functional renormalization group, FRG）把动量低于 \(k\) 的涨落暂时抑制，得到随 \(k\) 变化的有效平均作用量 \(\Gamma_k\)。它满足精确 Wetterich 方程：</p>
+      <div class="math-scroll">\[
+        \partial_t\Gamma_k=\frac12\operatorname{Tr}
+        \left[(\Gamma_k^{(2)}+R_k)^{-1}\partial_tR_k\right],
+        \qquad t=\ln(k/\Lambda).
+      \]</div>
+      <p>\(R_k\) 是红外 regulator：它只改变尚未积分的低动量模，并在 \(k\to0\) 消失。精确方程仍是泛函方程，数值计算必须选择保留哪些算符。本工作采用竞争动能 \(\mathrm{LPA}^{\prime\prime}\) 截断<a class="cite" href="#ref-5">[5]</a>：</p>
+      <div class="math-scroll">\[
+        \Gamma_k[\boldsymbol\phi]=\int d^dx\left\{
+        U_k(\rho)+\frac12Z_{\sigma,k}\boldsymbol\phi(-\partial^2)^{\sigma/2}\boldsymbol\phi
+        +\frac12Z_{2,k}(\partial_\mu\boldsymbol\phi)^2\right\},
+        \qquad \rho=\frac12\boldsymbol\phi^2.
+      \]</div>
+      <p>这里 \(U_k\) 是局域有效势；\(Z_{\sigma,k}\) 与 \(Z_{2,k}\) 分别乘非解析和解析动能。两者都放入 mixed optimized cutoff，避免预先指定哪一项支配红外。用短程动能归一化后定义</p>
+      <div class="math-scroll">\[
+        j_k=\frac{Z_{\sigma,k}}{Z_{2,k}}k^{\sigma-2},\qquad
+        \eta_2=-\partial_t\ln Z_{2,k}.
+      \]</div>
+
+      <h3>决定交叉的精确一行</h3>
+      <p>在上述固定 bare field 归一化约定中，重整化所需的 UV counterterms 是局域解析算符，不给既有非整数幂核 \(|q|^\sigma\) 添加独立 counterterm。因此 \(\partial_tZ_{\sigma,k}=0\)，并立刻得到</p>
+      <div class="math-scroll">\[
+        \boxed{\partial_tj_k=(\sigma-2+\eta_2)j_k}.
+      \]</div>
+      <p>在短程固定点 \(j_*=0\)，长程扰动的红外相关指数是</p>
+      <div class="math-scroll">\[
+        y_{\rm LR}=-(\sigma-2+\eta_{\rm SR})
+        =2-\eta_{\rm SR}-\sigma.
+      \]</div>
+      <p>它在 \(\sigma_*=2-\eta_{\rm SR}\) 变号。在长程固定点 \(j_*\ne0\)，同一个 beta 函数强制 \(\eta_2=2-\sigma\)。这两个结论不依赖有效势截断到多少阶；数值截断只影响 \(\eta_{\rm SR}\)、\(\nu\) 与固定点坐标的近似值。</p>
+
+      <h3>实际求解的流方程</h3>
+      <p>作用量中的有量纲场不变量记为 \(\rho_{\rm dim}=\boldsymbol\phi^2/2\)。先定义无量纲变量</p>
+      <div class="math-scroll">\[
+        \widetilde\rho=Z_{2,k}k^{2-d}\rho_{\rm dim},\qquad
+        u_k(\widetilde\rho)=k^{-d}U_k(\rho_{\rm dim}),\qquad
+        v_d=\left[2^{d+1}\pi^{d/2}\Gamma(d/2)\right]^{-1}.
+      \]</div>
+      <p>为使公式简洁，下文重新用 \(\rho\) 表示 \(\widetilde\rho\)，所有撇号都表示对这个无量纲变量求导。本代码实际求解</p>
+      <div class="math-scroll">\[
+      \begin{aligned}
+        \partial_tu={}&-du+(d-2+\eta_2)\rho u'\\
+        &+A_d\left[\frac{N-1}{1+j+u'}+
+        \frac1{1+j+u'+2\rho u''}\right],\\
+        A_d={}&\frac{4v_d}{d}\left(1-\frac{\eta_2}{d+2}+\frac{\sigma j}{2}\right),\\
+        \eta_2={}&\frac{16v_d}{d}\,
+        \frac{\kappa\lambda_2^2(1+\sigma j/2)^2}
+        {(1+j)^2(1+j+2\kappa\lambda_2)^2}.
+      \end{aligned}
+      \]</div>
+      <p>\(\kappa\) 是无量纲势能的最低点，\(\lambda_m=u^{(m)}(\kappa)\)。势能在移动最低点附近展开为</p>
+      <div class="math-scroll">\[
+        u(\rho)=\sum_{m=2}^{M}\frac{\lambda_m}{m!}(\rho-\kappa)^m.
+      \]</div>
+      <p>代码用截断 Taylor jet（保存有限阶 Taylor 系数并直接实现加、乘、倒数等运算）计算这些导数，不依赖符号展开。稳定矩阵 \(B_{ab}=\partial\beta_a/\partial g_b\) 用 complex-step 微分：给参数加入极小虚部，再由虚部读取导数，从而避免普通有限差分的相消误差。由于采用 \(t=\ln(k/\Lambda)\)，热方向本征值 \(\lambda_t&lt;0\)，且 \(\nu=-1/\lambda_t\)。在长程分支上，\(\nu\) 来自包含 \(j\) 与全部势耦合的完整矩阵，而不是删掉 \(j\) 后的子块。</p>
+    </section>
+
+    <section id="numbers">
+      <h2>数值结果与精度门槛</h2>
+      <p>所有被接受的固定点都满足：\(\kappa&gt;0\)、\(\lambda_2&gt;0\)、regulated propagator 分母为正、势能扇区只有一个相关方向、归一化 beta 残差低于设定门槛。\(d=2\) 的最低点多项式从 \(M=3\) 起产生额外相关伪方向，因此被拒绝；这比报告一串看似收敛的伪数值更重要。</p>
+      <p class="small">这里“归一化残差”定义为 \(\|(\beta_\kappa,\beta_{\lambda_2}/2!,\ldots,\beta_{\lambda_M}/M!,\beta_j)\|_\infty\)。它衡量离散非线性方程是否解准，而不是 FRG 截断的物理误差；未缩放导数坐标中的残差也保存在 JSON。</p>
+
+      <div class="table-wrap"><table>
+        <thead><tr><th>\(d\)</th><th>\(N\)</th><th>\(M\)</th><th>\(\eta_{\rm SR}\)</th><th>\(\nu_{\rm SR}\)</th><th>\(\sigma_*\)</th><th>归一化残差</th><th>判定</th></tr></thead>
+        <tbody>
+          <tr><td>2.0</td><td>1</td><td>2</td><td>0.51906136169</td><td>0.47133940404</td><td>1.4809386383</td><td>8.04e-18</td><td class="status-warn">仅低阶诊断</td></tr>
+          <tr><td>3.0</td><td>1</td><td>8</td><td>0.044273891177</td><td>0.63679051347</td><td>1.9557261088</td><td>1.6e-10</td><td class="status-good">通过 M=8 门槛</td></tr>
+          <tr><td>3.8</td><td>1</td><td>8</td><td>0.00098524130123</td><td>0.51853247185</td><td>1.9990147587</td><td>4.55e-12</td><td class="status-good">通过 M=8 门槛</td></tr>
+          <tr><td>3.0</td><td>2</td><td>8</td><td>0.043703197956</td><td>0.68597145122</td><td>1.956296802</td><td>8e-11</td><td class="status-good">通过 M=8 门槛</td></tr>
+          <tr><td>3.0</td><td>3</td><td>8</td><td>0.040896292397</td><td>0.73182562351</td><td>1.9591037076</td><td>2.09e-11</td><td class="status-good">通过 M=8 门槛</td></tr>
+        </tbody>
+      </table></div>
+
+      <figure>
+        <a href="./figures/potential_convergence.pdf" class="download">下载矢量 PDF</a>
+        <img src="./figures/potential_convergence.png" alt="三维 Ising 短程固定点反常维数和关联长度指数随势能阶数的收敛，以及二维只接受 M=2 的诊断点。" loading="lazy">
+        <figcaption><strong>图 1｜势能阶数不是全部误差。</strong> \(d=3,N=1\) 在 \(M=6,7,8\) 基本稳定；\(d=2\) 只有 \(M=2\) 通过物理解筛选，故不把其数值作为精确预测。图中的稳定只控制 \(U_k(\rho)\) 的多项式展开，不控制场依赖波函数或 regulator 误差。</figcaption>
+      </figure>
+
+      <h3>阈值：同一公式，三个精度层次</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>情形</th><th>\(\eta_{\rm SR}\)</th><th>\(\nu_{\rm SR}\)</th><th>\(\sigma_*=2-\eta_{\rm SR}\)</th><th>用途</th></tr></thead>
+        <tbody>
+          <tr><td>本工作 \(d=3\)，竞争 \(\mathrm{LPA}^{\prime\prime}\)，\(M=8\)</td><td>0.04427389118</td><td>0.6367905135</td><td>1.955726109</td><td>求解器输出；小数位不代表物理精度</td></tr>
+          <tr><td>已发表 \(d=3\) 短程 \(O(\partial^6)\) FRG<a class="cite" href="#ref-14">[14]</a><a class="cite" href="#ref-15">[15]</a></td><td>0.0361(11)</td><td>0.63012(16)</td><td>1.9639(11)</td><td>高阶 FRG 外部基准，未用于调参</td></tr>
+          <tr><td>\(d=3\) conformal bootstrap 基准<a class="cite" href="#ref-26">[26]</a></td><td>0.0362978(20)</td><td>0.629971(4)</td><td>1.9637022(20)</td><td>非 FRG 精确度基准</td></tr>
+          <tr><td>\(d=2\) Ising 精确结果<a class="cite" href="#ref-27">[27]</a></td><td>1/4</td><td>1</td><td>7/4</td><td>检验低维截断偏差</td></tr>
+        </tbody>
+      </table></div>
+      <p>本工作 \(d=3\) 的 \(M=7\to8\) 位移只有 \(\Delta\eta=1.695e-05\)，但与高阶导数展开的差约为 \(8.2\times10^{-3}\)。后者才揭示主要系统偏差来自 derivative expansion 层级，而不是势能阶数。高阶短程 FRG 的收敛与误差估计见 Refs. <a class="cite" href="#ref-14">[14]</a><a class="cite" href="#ref-15">[15]</a>。</p>
+
+      <figure>
+        <a href="./figures/fixed_point_exchange.pdf" class="download">下载矢量 PDF</a>
+        <img src="./figures/fixed_point_exchange.png" alt="三维和 3.8 维 Ising 模型短程固定点处长程扰动稳定性本征值随 sigma 线性变化。" loading="lazy">
+        <figcaption><strong>图 2｜直接决定阈值的是稳定性本征值。</strong> 蓝线是 \(y_{\rm LR}=2-\eta_{\rm SR}-\sigma\)。绿色虚线为本工作同一截断中的零点；红色点线是目标稿主张的 2。橙色带标出两种判据不同的窄区。靠近四维时带宽是 \(O(\epsilon^2)\)，肉眼很窄，但其符号决定固定点稳定性。</figcaption>
+      </figure>
+
+      <h3>长程分支：完整稳定矩阵</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>\(d\)</th><th>\(M\)</th><th>\(\sigma\) 范围</th><th>\(j_*\) 范围</th><th>\(\nu_{\rm FRG}\) 范围</th><th>施加关系的最大求解残差</th></tr></thead>
+        <tbody>
+          <tr><td>2.0</td><td>2</td><td>1.3309386–1.4749386</td><td>0.20603–16.867</td><td>0.48308729–0.74748531</td><td>1.11e-16</td></tr>
+          <tr><td>3.0</td><td>6</td><td>1.9307397–1.9527397</td><td>0.08641–0.81347</td><td>0.6367329–0.63702648</td><td>2.08e-17</td></tr>
+          <tr><td>3.8</td><td>4</td><td>1.9910155–1.9980155</td><td>1.0623–10.025</td><td>0.51859801–0.51908008</td><td>1.73e-18</td></tr>
+        </tbody>
+      </table></div>
+      <div class="note"><strong>为什么长程分支没有都用 \(M=8\)？</strong> \(d=3\) 的 \(M=6\) 通过全部近交叉点，\(d=3.8\) 的 \(M=4\) 通过；更高阶在 \(j_*\to0\) 的近简并 Jacobian 中未达到原定残差门槛。这里保留门槛并公开阶数错配，没有通过放松容差制造“更高阶”结果。短程端点的 \(M=8\) 值仍独立成立。</div>
+
+      <figure>
+        <a href="./figures/lr_branch_structure.pdf" class="download">下载矢量 PDF</a>
+        <img src="./figures/lr_branch_structure.png" alt="长程固定点坐标 j 星随 sigma 的分支，以及 eta 等于 2 减 sigma 的数值残差。" loading="lazy">
+        <figcaption><strong>图 3｜长程固定点从短程固定点分岔。</strong> 左图显示 \(j_*\) 在 \(\sigma\to\sigma_*^-\) 时趋小；右图是求根时施加的分支方程 \(\eta=2-\sigma\) 的数值残差。它只检验求解器是否满足该方程，不是对保护关系的独立物理验证。</figcaption>
+      </figure>
+
+      <figure>
+        <a href="./figures/eta_comparison.pdf" class="download">下载矢量 PDF</a>
+        <img src="./figures/eta_comparison.png" alt="竞争 FRG 与目标论文 eta 公式在三维和 3.8 维的比较。" loading="lazy">
+        <figcaption><strong>图 4｜\(\eta\) 的差异集中在算符解释和交叉窗口。</strong> FRG 长程分支严格沿 \(2-\sigma\)，到 \(\sigma_*\) 后接短程 \(\eta_{\rm SR}\)。目标公式在整个长程楔形添加两圈修正，并把交叉放在 2。\(d=3.8\) 时差异很小，正说明需要解析 \(O(\epsilon^2)\) 窄层，不能从“数值接近 2”推出“严格等于 2”。</figcaption>
+      </figure>
+
+      <figure>
+        <a href="./figures/nu_comparison.pdf" class="download">下载矢量 PDF</a>
+        <img src="./figures/nu_comparison.png" alt="二维、三维和 3.8 维长程 Ising 关联长度指数的直接 FRG 与一圈展开比较。" loading="lazy">
+        <figcaption><strong>图 5｜一圈 \(\nu\) 与两圈 \(\eta\) 审计是两件事。</strong> 蓝点来自完整 \(j\)-势能稳定矩阵；红虚线是目标稿同时也是标准长程理论的一圈 \(\nu\)。\(d=3.8\) 两者接近，\(d=3\) 已有可见截断差，\(d=2\) 的 \(\epsilon=2\) 外推和本工作 \(M=2\) 都只应视为低阶诊断。</figcaption>
+      </figure>
+    </section>
+
+    <section id="sunset">
+      <h2>sunset 极点究竟属于哪个算符？</h2>
+      <p>sunset diagram 是由三个内部传播子组成的两圈自能图。目标稿给出的动量结构本身足以判定通道：</p>
+      <div class="math-scroll">\[
+        \Sigma_{\rm sun}(q)\propto
+        \Gamma\!\left(\frac{3\sigma-2d}{2}\right)|q|^{2d-3\sigma}.
+      \]</div>
+      <p>定义 \(\varrho=2\epsilon-3\delta\)（这里用 \(\varrho\) 避免与场不变量 \(\rho\) 混淆），则</p>
+      <div class="math-scroll">\[
+        2d-3\sigma=2-\varrho,\qquad
+        \Gamma\!\left(-1+\frac{\varrho}{2}\right)|q|^{2-\varrho}
+        =\left[-\frac2\varrho+2\ln|q|+O(1)\right]q^2.
+      \]</div>
+      <p>这里展示的是 Eq. (36) Gamma 因子的展开；把该式打印的自能整体负号计入后，整行符号一起翻转，但极点仍明确乘 \(q^2\)。它是局域梯度算符在 \(d=4,\sigma=2\) 共同原点处与 \(|q|^\sigma\) 退化时的 operator mixing；operator mixing 指具有相同或近似标度的算符在重整化时线性组合，而不是它们在所有动量上变成同一个函数。对 \(|q|^\sigma\) 做导数后可通过 Gamma 函数递推出现 \(\Gamma(\varrho/2)\)；那是后续投影结构，不能替代上式中的自能系数。</p>
+
+      <figure>
+        <a href="./figures/operator_projection.pdf" class="download">下载矢量 PDF</a>
+        <img src="./figures/operator_projection.png" alt="非解析 p 的 sigma 次幂和解析 p 平方的比较，以及有限动量投影造成的混合。" loading="lazy">
+        <figcaption><strong>图 6｜有限动量斜率会混合两个通道。</strong> 若把解析 \(p^2\) 项除以 \(p^\sigma\)，污染量是 \(p^{2-\sigma}\)。对任意固定非整数 \(\sigma&lt;2\)，它在定义 \(Z_\sigma\) 的 \(p\to0\) 投影中消失；在有限减法点却非零，并在 \(\sigma\to2\) 时变得非一致。</figcaption>
+      </figure>
+
+      <h3>三个可复核的内部代数问题</h3>
+      <p class="small">两条极限使用不同的小参数：Eq. (24) 的 \(\varrho_\eta=2\epsilon-3\eta\)，Eq. (37) 的 \(\varrho_\delta=2\epsilon-3\delta\)。只有在 leading order 代入 \(\eta=\delta+O(\epsilon^2)\) 后，它们才可作同阶比较。</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>目标稿步骤</th><th>直接检查</th><th>结果</th></tr></thead>
+        <tbody>
+          <tr><td>Eq. (24)→(25)</td><td>\(\lim_{\varrho_\eta\to0}\varrho_\eta\Gamma(-1+\varrho_\eta/2)/\Gamma(3)=-1\)</td><td>数值 -1.000000021；打印的后一式相差因子 2</td></tr>
+          <tr><td>Eq. (37)→(38)</td><td>\(\lim_{\varrho_\delta\to0}\varrho_\delta\Gamma(\varrho_\delta/2)/\Gamma(3)=1\)</td><td>数值 0.9999999711；打印的后一式相差因子 2</td></tr>
+          <tr><td>Eq. (36)→(37)</td><td>按 Eq. (36) 的整体负号和 \(-\partial\Sigma/\partial|q|^\sigma\) 求导</td><td>Eq. (37) 第二行还缺一个负号，除非另行改变自能约定</td></tr>
+        </tbody>
+      </table></div>
+      <p>这不是说 \(1/(2\epsilon-3\delta)\) “不存在”。它确实存在，但其算符归属被错误解释。沿 \(\delta=c\epsilon\to0\) 的射线，\(q^2\) 与 \(|q|^\sigma\) 同时退化，单点 subtraction 可以消去 leading 常数发散；仍会留下依赖 \(c\) 与 \(\ln q\) 的有限 mixing。没有独立 \(Z_2q^2\) 的单通道方案不能唯一地把这部分叫作物理 \(\eta\)。在 near-local 基底中可以出现非零 field renormalization；正确做法是保留并对角化混合，同时维持长程分支的受保护场维数。一个相关例子见 Bianchi、Cardinale 与 de Sabbata 的局域展开组织方式。<a class="cite" href="#ref-16">[16]</a></p>
+    </section>
+
+    <section id="epsilon">
+      <h2>为什么 \(\delta=O(\epsilon)\) 的展开看不见真正边界层？</h2>
+      <p>短程 \(O(N)\) 模型在 \(d=4-\epsilon\) 的首个非零反常维数为</p>
+      <div class="math-scroll">\[
+        \eta_{\rm SR}=\frac{N+2}{2(N+8)^2}\epsilon^2+O(\epsilon^3).
+      \]</div>
+      <p>因此 Sak 位移是</p>
+      <div class="math-scroll">\[
+        \delta_*=2-\sigma_*=\eta_{\rm SR}=O(\epsilon^2).
+      \]</div>
+      <p>目标稿的幂次计数（power counting，即规定各小参数如何随 \(\epsilon\) 缩放）取 \(\delta=O(\epsilon)\)；一般的缩放射线可写为 \(\delta=c\epsilon\)。对任意非零常数 \(c\)，这些射线都比真正的 \(O(\epsilon^2)\) 交叉层宽一个参数阶。它们可以描述已经处于长程侧的固定点，却不能仅凭该展开判断极窄层内的稳定性交换。</p>
+      <figure>
+        <a href="./figures/epsilon_boundary_layer.pdf" class="download">下载矢量 PDF</a>
+        <img src="./figures/epsilon_boundary_layer.png" alt="Sak 边界层按 epsilon 平方缩放，而目标论文考虑的射线按 epsilon 缩放。" loading="lazy">
+        <figcaption><strong>图 7｜两种极限的参数阶不同。</strong> 蓝线是 \(N=1\) 两圈短程 \(\eta_{\rm SR}\) 给出的 \(\delta_*\propto\epsilon^2\)；虚线是 \(\delta=c\epsilon\) 的示例射线。右图显示 \(\delta_*/\epsilon\to0\)。要统一描述交叉，需要解析 \(\delta=O(\epsilon^2)\) 的边界层，例如保持 \(\delta/\epsilon^2\) 有限，并保留双动能算符，而不是先删去 \(q^2\)。</figcaption>
+      </figure>
+      <p>另一个简单域检查是：在目标稿声明的 \(0&lt;\delta&lt;\epsilon/2\) 内，\(2\epsilon-3\delta&gt;\epsilon/2&gt;0\)。所谓极点超平面 \(\delta=2\epsilon/3\) 不穿过物理楔形，只在共同原点与其相接。其 \(1/\epsilon\) 增强反映退化算符的非一致极限，不自动等于长程场的反常维数。</p>
+    </section>
+
+    <section id="limits">
+      <h2>能说什么，不能说什么</h2>
+      <h3>本计算支持的结论</h3>
+      <ul>
+        <li>在固定裸场归一化并保留 \(q^\sigma\) 与 \(q^2\) 的 FRG 中，\(\partial_tZ_\sigma=0\)，而 \(Z_2\) 流动；长程分支满足 \(\eta=2-\sigma\)。这与非微扰 FRG、CFT，以及严格 RG 在其靠近长程上临界维的弱耦合定理域内的非局域动能保护相一致。<a class="cite" href="#ref-5">[5]</a><a class="cite" href="#ref-7">[7]</a><a class="cite" href="#ref-10">[10]</a><a class="cite" href="#ref-11">[11]</a></li>
+        <li>短程固定点的长程扰动本征值是 \(y_{\rm LR}=2-\eta_{\rm SR}-\sigma\)，所以相同截断内的阈值必为 \(2-\eta_{\rm SR}\)。</li>
+        <li>目标稿的一圈 \(u^*\)、\(y_u\) 与 \(1/\nu\) 与标准 \(\epsilon'=2\sigma-d\) 展开相容；问题集中在两圈动量投影及由此推出的 \(\eta\) 和全局固定点图。</li>
+        <li>目标稿 sunset 极点的 leading operator 是 \(q^2\)，且打印公式存在两个因子 2 与一个符号问题。</li>
+      </ul>
+      <h3>本计算不声称的内容</h3>
+      <ul>
+        <li>不把本工作 \(\mathrm{LPA}^{\prime\prime}\) 的 \(d=3\) 小数位当作高精度物理预测；高阶 derivative expansion 的外部结果单独列出。</li>
+        <li>不把 \(d=2,M=2\) 的 \(\sigma_*=1.4809\ldots\) 当成可信阈值。二维最低点多项式失败；Ising 精确基准是 \(7/4\)，且没有拿它来调节求解器。</li>
+        <li>不宣称本报告单独解决了近期 Monte Carlo 争议。早期 Ising 模拟支持 Sak 边界<a class="cite" href="#ref-18">[18]</a><a class="cite" href="#ref-20">[20]</a>；2026 年预印本报告 \(\sigma_*=2\) 的相反拟合<a class="cite" href="#ref-21">[21]</a>。有限尺寸对数修正与 crossover length 使数值判别尤其困难。</li>
+        <li>不把二维 XY 或 Heisenberg 数据直接套入普通 Wilson–Fisher 势能流。XY 的 BKT 转变涉及 vortex fugacity，\(\xi\) 是本质奇异而非有限 \(\nu\) 幂律；近期含 vortex/spin-wave coupling 的 RG 甚至与部分 Monte Carlo 相反。<a class="cite" href="#ref-22">[22]</a><a class="cite" href="#ref-25">[25]</a> 二维短程 Heisenberg 也没有普通有限温临界固定点。</li>
+      </ul>
+      <p>有效维数映射可给出有用的 \(\nu\) 估计，但它在非 Gaussian 固定点不是精确等式；竞争动能 FRG 与现代比较均明确这一点。<a class="cite" href="#ref-6">[6]</a> 因此本报告没有用该映射替代直接稳定矩阵。</p>
+    </section>
+
+    <section id="audit">
+      <h2>学术与引用审计</h2>
+      <p>所有文献条目均从 DOI 或 arXiv 官方记录核对。目标稿参考文献中还发现以下元数据问题；它们不决定物理结论，但公开列出可避免继续传播错误。</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>严重性</th><th>位置/键</th><th>发现</th><th>核验修正</th></tr></thead>
+        <tbody>
+          <tr><td>high</td><td>yamazaki_department_1977</td><td>The target Ref.bib gives the title as 'Department of Applied Physics, Tohoku University, Sendai 980, Japan', which is an affiliation, and omits the article pages and DOI.</td><td>Yoshitake Yamazaki, 'Critical exponent η of isotropic spin systems with long and short-range interactions', Physics Letters A 61(4), 207–210 (1977), DOI 10.1016/0375-9601(77)90139-6.</td></tr>
+          <tr><td>critical</td><td>Picco2012</td><td>The target entry combines Marco Picco's 2012 title and arXiv identifier with year 1972 and DOI 10.1103/PhysRevLett.28.240, which belong to a different publication.</td><td>Marco Picco, 'Critical behavior of the Ising model with long range interactions', arXiv:1207.1018 (2012). The official arXiv record lists no related journal DOI.</td></tr>
+          <tr><td>critical</td><td>main.tex introduction, sentence listing Ising, XY, and Heisenberg simulations</td><td>The Heisenberg clause cites BibTeX key yao_nonclassical_2025, which is 'The Nonclassical Regime of the Two-dimensional Long-range XY Model' (Physical Review B 112, 144429), not a Heisenberg paper.</td><td>The current Heisenberg preprint is arXiv:2512.01956v2 by Tianning Xiao, Dingyun Yao, Lode Polle, Zhijie Fan, and Youjin Deng.</td></tr>
+          <tr><td>medium</td><td>duplicate_ising_entries</td><td>Both entries identify arXiv:2512.04805 and the same four authors; they are duplicate records of one preprint.</td><td>Keep one record using the current arXiv v2 year 2026 and reference_id xiao_liu_fan_deng_2026.</td></tr>
+          <tr><td>medium</td><td>duplicate_xy_prb_entries</td><td>Both entries identify the same Physical Review B 112, 144429 paper, arXiv:2411.01811, DOI 10.1103/yghs-p5mg.</td><td>Keep one record using reference_id yao_xiao_zhang_deng_fan_2025.</td></tr>
+          <tr><td>medium</td><td>duplicate_xy_cpl_entries</td><td>Both entries describe Chinese Physics Letters 42, 070002; the first omits the DOI and arXiv identifier.</td><td>Keep one record with DOI 10.1088/0256-307X/42/7/070002 and arXiv:2404.08498, using reference_id xiao_yao_zhang_fan_deng_2025_cpl.</td></tr>
+          <tr><td>high</td><td>duplicate_and_stale_heisenberg_entries</td><td>Both entries identify arXiv:2512.01956 and duplicate one another. They also contain the stale v1-style author list/order and omit Lode Polle relative to the current v2 record.</td><td>Use the current v2 metadata: Tianning Xiao, Dingyun Yao, Lode Polle, Zhijie Fan, and Youjin Deng; originally submitted in 2025 and revised in 2026; reference_id xiao_yao_polle_fan_deng_2026.</td></tr>
+          <tr><td>high</td><td>benedetti_correction_missing_from_target_context</td><td>The target manuscript cites the 2020 three-loop long-range multi-scalar calculation without using the published 2025 addendum in the audited comparison.</td><td>Any numerical use of the three-loop calculation must also cite DOI 10.1088/1751-8121/adbfe4, arXiv:2411.00805, because it corrects one diagram and updates the exponents.</td></tr>
+        </tbody>
+      </table></div>
+      <p>特别是 Yamazaki 1977 的正确题名是 “Critical exponent ‎\(\eta\) of isotropic spin systems with long and short-range interactions”<a class="cite" href="#ref-17">[17]</a>；目标稿条目把作者单位误放进题名。Benedetti 等人的三圈结果应与 2025 addendum 一起引用。<a class="cite" href="#ref-12">[12]</a><a class="cite" href="#ref-13">[13]</a></p>
+    </section>
+
+    <section id="reproduce">
+      <h2>复现方法</h2>
+      <p>从仓库根目录运行：</p>
+      <pre><code>uv sync
+uv run python projects/long-range-on-frg/scripts/run_campaign.py
+uv run python projects/long-range-on-frg/scripts/build_report.py
+uv run pytest projects/long-range-on-frg/tests -q
+uv run ruff check projects/long-range-on-frg</code></pre>
+      <p>第一条分析命令重新求固定点、完整稳定矩阵和审计极限；第二条从 JSON 重画 PNG/PDF 并渲染本页。主要可审查文件：</p>
+      <ul>
+        <li><a href="./src/long_range_on_frg/competitive.py">双动能算符 FRG 与 Taylor-jet 求解器</a></li>
+        <li><a href="./src/long_range_on_frg/paper_expansion.py">目标公式、sunset 幂次与 Gamma 留数检查</a></li>
+        <li><a href="./data/results.json">完整数值结果（JSON）</a></li>
+        <li><a href="./data/paper_audit.json">目标论文逐式审计（JSON）</a></li>
+        <li><a href="./data/reference_audit.json">文献元数据与允许支持的 claim（JSON）</a></li>
+      </ul>
+      <div class="meta-grid">
+        <div>
+          <h3>运行环境</h3>
+          <p>Python 3.12.12<br>NumPy 2.5.1<br>SciPy 1.18.0<br>Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39</p>
+        </div>
+        <div>
+          <h3>数据完整性</h3>
+          <p>结果 SHA-256<br><span class="hash">85544cf2da1d29041b55eb54fa823c53581075470f6f94a68bcff321d992af58</span></p>
+          <p>论文审计 SHA-256<br><span class="hash">fea8abf2f91d694318813a9afdf13806a9cad642c859c259ad482c23b9ca1293</span></p>
+          <p>文献审计 SHA-256<br><span class="hash">0498fd4834ba604e2f409be0b7e81cc4ee3c080c6ddc2d00e5686aa4ed495e14</span></p>
+        </div>
+      </div>
+      <p>数值生成时间：2026-07-31T14:40:38.263926+00:00。JSON 使用严格有限数，不包含 NaN。所有图同时提供位图预览与可缩放 PDF。</p>
+    </section>
+
+    <section id="references">
+      <h2>参考文献</h2>
+      <ol class="references">
+        <li id="ref-1"><span>Zhiyi Li, Kun Chen, Youjin Deng.</span> “<a href="https://arxiv.org/abs/2602.07818" rel="noopener">The 4-ε Expansion for Long-range Interacting Systems</a>.” <em>arXiv preprint</em> (2026). DOI: <a href="https://doi.org/10.48550/arXiv.2602.07818">10.48550/arXiv.2602.07818</a>. <strong>预印本，未同行评审。</strong></li>
+        <li id="ref-2"><span>Michael E. Fisher, Shang-keng Ma, B. G. Nickel.</span> “<a href="https://doi.org/10.1103/PhysRevLett.29.917" rel="noopener">Critical Exponents for Long-Range Interactions</a>.” <em>Physical Review Letters 29, 917–920</em> (1972). DOI: <a href="https://doi.org/10.1103/PhysRevLett.29.917">10.1103/PhysRevLett.29.917</a>.</li>
+        <li id="ref-3"><span>J. Sak.</span> “<a href="https://doi.org/10.1103/PhysRevB.8.281" rel="noopener">Recursion Relations and Fixed Points for Ferromagnets with Long-Range Interactions</a>.” <em>Physical Review B 8, 281–285</em> (1973). DOI: <a href="https://doi.org/10.1103/PhysRevB.8.281">10.1103/PhysRevB.8.281</a>.</li>
+        <li id="ref-4"><span>J. Honkonen, M. Yu. Nalimov.</span> “<a href="https://doi.org/10.1088/0305-4470/22/6/024" rel="noopener">Crossover between field theories with short-range and long-range exchange or correlations</a>.” <em>Journal of Physics A: Mathematical and General 22, 751–763</em> (1989). DOI: <a href="https://doi.org/10.1088/0305-4470/22/6/024">10.1088/0305-4470/22/6/024</a>.</li>
+        <li id="ref-5"><span>Nicolò Defenu, Andrea Trombettoni, Alessandro Codello.</span> “<a href="https://arxiv.org/abs/1409.8322" rel="noopener">Fixed-point structure and effective fractional dimensionality for \(O(N)\) models with long-range interactions</a>.” <em>Physical Review E 92, 052113</em> (2015). DOI: <a href="https://doi.org/10.1103/PhysRevE.92.052113">10.1103/PhysRevE.92.052113</a>.</li>
+        <li id="ref-6"><span>Andrea Solfanelli, Nicolò Defenu.</span> “<a href="https://arxiv.org/abs/2406.14651" rel="noopener">Universality in long-range interacting systems: The effective dimension approach</a>.” <em>Physical Review E 110, 044121</em> (2024). DOI: <a href="https://doi.org/10.1103/PhysRevE.110.044121">10.1103/PhysRevE.110.044121</a>.</li>
+        <li id="ref-7"><span>Miguel F. Paulos, Slava Rychkov, Balt C. van Rees, Bernardo Zan.</span> “<a href="https://arxiv.org/abs/1509.00008" rel="noopener">Conformal Invariance in the Long-Range Ising Model</a>.” <em>Nuclear Physics B 902, 246–291</em> (2016). DOI: <a href="https://doi.org/10.1016/j.nuclphysb.2015.10.018">10.1016/j.nuclphysb.2015.10.018</a>.</li>
+        <li id="ref-8"><span>Connor Behan, Leonardo Rastelli, Slava Rychkov, Bernardo Zan.</span> “<a href="https://arxiv.org/abs/1703.03430" rel="noopener">Long-Range Critical Exponents near the Short-Range Crossover</a>.” <em>Physical Review Letters 118, 241601</em> (2017). DOI: <a href="https://doi.org/10.1103/PhysRevLett.118.241601">10.1103/PhysRevLett.118.241601</a>.</li>
+        <li id="ref-9"><span>Connor Behan, Leonardo Rastelli, Slava Rychkov, Bernardo Zan.</span> “<a href="https://arxiv.org/abs/1703.05325" rel="noopener">A scaling theory for the long-range to short-range crossover and an infrared duality</a>.” <em>Journal of Physics A: Mathematical and Theoretical 50, 354002</em> (2017). DOI: <a href="https://doi.org/10.1088/1751-8121/aa8099">10.1088/1751-8121/aa8099</a>.</li>
+        <li id="ref-10"><span>Connor Behan, Edoardo Lauria, Maria Nocchi, Philine van Vliet.</span> “<a href="https://arxiv.org/abs/2311.02742" rel="noopener">Analytic and numerical bootstrap for the long-range Ising model</a>.” <em>Journal of High Energy Physics 03 (2024) 136</em> (2024). DOI: <a href="https://doi.org/10.1007/JHEP03(2024)136">10.1007/JHEP03(2024)136</a>.</li>
+        <li id="ref-11"><span>Martin Lohmann, Gordon Slade, Benjamin C. Wallace.</span> “<a href="https://arxiv.org/abs/1705.08540" rel="noopener">Critical Two-Point Function for Long-Range \(O(n)\) Models Below the Upper Critical Dimension</a>.” <em>Journal of Statistical Physics 169, 1132–1161</em> (2017). DOI: <a href="https://doi.org/10.1007/s10955-017-1904-x">10.1007/s10955-017-1904-x</a>.</li>
+        <li id="ref-12"><span>Dario Benedetti, Razvan Gurau, Sabine Harribey, Kenta Suzuki.</span> “<a href="https://arxiv.org/abs/2007.04603" rel="noopener">Long-range multi-scalar models at three loops</a>.” <em>Journal of Physics A: Mathematical and Theoretical 53, 445008</em> (2020). DOI: <a href="https://doi.org/10.1088/1751-8121/abb6ae">10.1088/1751-8121/abb6ae</a>.</li>
+        <li id="ref-13"><span>Dario Benedetti, Razvan Gurau, Sabine Harribey.</span> “<a href="https://arxiv.org/abs/2411.00805" rel="noopener">Addendum: Long-range multi-scalar models at three loops</a>.” <em>Journal of Physics A: Mathematical and Theoretical 58, 129401</em> (2025). DOI: <a href="https://doi.org/10.1088/1751-8121/adbfe4">10.1088/1751-8121/adbfe4</a>.</li>
+        <li id="ref-14"><span>Ivan Balog, Hugues Chaté, Bertrand Delamotte, Maroje Marohnić, Nicolás Wschebor.</span> “<a href="https://arxiv.org/abs/1907.01829" rel="noopener">Convergence of Nonperturbative Approximations to the Renormalization Group</a>.” <em>Physical Review Letters 123, 240604</em> (2019). DOI: <a href="https://doi.org/10.1103/PhysRevLett.123.240604">10.1103/PhysRevLett.123.240604</a>.</li>
+        <li id="ref-15"><span>Gonzalo De Polsi, Ivan Balog, Matthieu Tissier, Nicolás Wschebor.</span> “<a href="https://arxiv.org/abs/2001.07525" rel="noopener">Precision calculation of critical exponents in the \(O(N)\) universality classes with the nonperturbative renormalization group</a>.” <em>Physical Review E 101, 042113</em> (2020). DOI: <a href="https://doi.org/10.1103/PhysRevE.101.042113">10.1103/PhysRevE.101.042113</a>.</li>
+        <li id="ref-16"><span>Lorenzo Bianchi, Leonardo S. Cardinale, Elia de Sabbata.</span> “<a href="https://arxiv.org/abs/2412.08697" rel="noopener">Defects in the long-range \(O(N)\) model</a>.” <em>Journal of Physics A: Mathematical and Theoretical 58, 335401</em> (2025). DOI: <a href="https://doi.org/10.1088/1751-8121/adf788">10.1088/1751-8121/adf788</a>.</li>
+        <li id="ref-17"><span>Yoshitake Yamazaki.</span> “<a href="https://doi.org/10.1016/0375-9601(77)90139-6" rel="noopener">Critical exponent η of isotropic spin systems with long and short-range interactions</a>.” <em>Physics Letters A 61, 207–210</em> (1977). DOI: <a href="https://doi.org/10.1016/0375-9601(77)90139-6">10.1016/0375-9601(77)90139-6</a>.</li>
+        <li id="ref-18"><span>Erik Luijten, Henk W. J. Blöte.</span> “<a href="https://arxiv.org/abs/cond-mat/0112472" rel="noopener">The Boundary between Long-Range and Short-Range Critical Behavior</a>.” <em>Physical Review Letters 89, 025703</em> (2002). DOI: <a href="https://doi.org/10.1103/PhysRevLett.89.025703">10.1103/PhysRevLett.89.025703</a>.</li>
+        <li id="ref-19"><span>Marco Picco.</span> “<a href="https://arxiv.org/abs/1207.1018" rel="noopener">Critical behavior of the Ising model with long range interactions</a>.” <em>arXiv preprint</em> (2012). DOI: <a href="https://doi.org/10.48550/arXiv.1207.1018">10.48550/arXiv.1207.1018</a>. <strong>预印本，未同行评审。</strong></li>
+        <li id="ref-20"><span>Maria Chiara Angelini, Giorgio Parisi, Federico Ricci-Tersenghi.</span> “<a href="https://arxiv.org/abs/1401.6805" rel="noopener">Relations between Short Range and Long Range Ising models</a>.” <em>Physical Review E 89, 062120</em> (2014). DOI: <a href="https://doi.org/10.1103/PhysRevE.89.062120">10.1103/PhysRevE.89.062120</a>.</li>
+        <li id="ref-21"><span>Tianning Xiao, Ziyu Liu, Zhijie Fan, Youjin Deng.</span> “<a href="https://arxiv.org/abs/2512.04805" rel="noopener">On Sak's criterion for statistical models with long-range interaction</a>.” <em>arXiv preprint, version 2</em> (2026). DOI: <a href="https://doi.org/10.48550/arXiv.2512.04805">10.48550/arXiv.2512.04805</a>. <strong>预印本，未同行评审。</strong></li>
+        <li id="ref-22"><span>Dingyun Yao, Tianning Xiao, Chao Zhang, Youjin Deng, Zhijie Fan.</span> “<a href="https://arxiv.org/abs/2411.01811" rel="noopener">The Nonclassical Regime of the Two-dimensional Long-range XY Model: A Comprehensive Monte Carlo Study</a>.” <em>Physical Review B 112, 144429</em> (2025). DOI: <a href="https://doi.org/10.1103/yghs-p5mg">10.1103/yghs-p5mg</a>.</li>
+        <li id="ref-23"><span>Tianning Xiao, Dingyun Yao, Chao Zhang, Zhijie Fan, Youjin Deng.</span> “<a href="https://arxiv.org/abs/2404.08498" rel="noopener">Two-Dimensional XY Ferromagnet Induced by Long-Range Interaction</a>.” <em>Chinese Physics Letters 42, 070002</em> (2025). DOI: <a href="https://doi.org/10.1088/0256-307X/42/7/070002">10.1088/0256-307X/42/7/070002</a>.</li>
+        <li id="ref-24"><span>Tianning Xiao, Dingyun Yao, Lode Polle, Zhijie Fan, Youjin Deng.</span> “<a href="https://arxiv.org/abs/2512.01956" rel="noopener">Spontaneous Symmetry Breaking in Two-dimensional Long-range Heisenberg Model</a>.” <em>arXiv preprint, version 2 (revised 2026)</em> (2025). DOI: <a href="https://doi.org/10.48550/arXiv.2512.01956">10.48550/arXiv.2512.01956</a>. <strong>预印本，未同行评审。</strong></li>
+        <li id="ref-25"><span>Luis Walther, Josef Willsher, Johannes Knolle.</span> “<a href="https://arxiv.org/abs/2511.07305" rel="noopener">Persistence of the Berezinskii-Kosterlitz-Thouless Transition with Long-Range Couplings</a>.” <em>Physical Review Letters 136, 227102</em> (2026). DOI: <a href="https://doi.org/10.1103/9y2v-ybdb">10.1103/9y2v-ybdb</a>.</li>
+        <li id="ref-26"><span>Filip Kos, David Poland, David Simmons-Duffin.</span> “<a href="https://arxiv.org/abs/1406.4858" rel="noopener">Bootstrapping Mixed Correlators in the 3D Ising Model</a>.” <em>Journal of High Energy Physics 11 (2014) 109</em> (2014). DOI: <a href="https://doi.org/10.1007/JHEP11(2014)109">10.1007/JHEP11(2014)109</a>.</li>
+        <li id="ref-27"><span>Tai Tsun Wu, Barry M. McCoy, Craig A. Tracy, Eytan Barouch.</span> “<a href="https://doi.org/10.1103/PhysRevB.13.316" rel="noopener">Spin-spin correlation functions for the two-dimensional Ising model: Exact theory in the scaling region</a>.” <em>Physical Review B 13, 316–374</em> (1976). DOI: <a href="https://doi.org/10.1103/PhysRevB.13.316">10.1103/PhysRevB.13.316</a>.</li>
+      </ol>
+    </section>
+  </main>
+  <footer>本报告区分“本工作直接计算”“外部基准”和“目标论文公式”。外部数值从未用于调节 FRG 求解器。报告面向公开阅读，可直接链接到原始数据、代码和核验来源。</footer>
+</body>
+</html>
