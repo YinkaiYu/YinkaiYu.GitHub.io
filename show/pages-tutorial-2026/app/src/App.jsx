@@ -32,15 +32,14 @@ const REFERENCES = [
 ]
 
 const PROMPTS = {
-	environment: `我准备制作个人网站。请先检查这台 Windows 电脑上的开发环境，并在我选定的项目文件夹里开始工作。
-
-需要安装工具时，请告诉我它的用途，并使用官方来源。环境准备好以后，请创建一个最小页面、运行本地预览，再告诉我怎样打开它。`,
 	design: `我想做一个个人网站。请参考这些页面或截图：
 [粘贴链接，或者把截图发给 ChatGPT]
 
 我喜欢其中的：[排版、颜色、字体、动效或某个页面细节]
 
-请先和我确认页面结构与实现方式，再在当前项目文件夹里制作。可以选择合适的网站框架，也可以从零开始。视觉与结构可以借鉴，文字、图片和个人信息使用我自己的。完成后请运行本地预览。`,
+请先和我确认页面结构与实现方式，再在当前项目文件夹里制作。可以选择合适的网站框架，也可以从零开始。视觉与结构可以借鉴，文字、图片和个人信息使用我自己的。完成后请运行本地预览。
+
+有什么需要的依赖请自己安装，并使用 Git 做好版本跟踪。`,
 	content: `请帮我整理个人网站首页的内容。我会提供姓名、介绍、兴趣、经历、作品或联系方式。
 
 请把这些信息写进当前页面，语言保持自然。内容不足的部分可以暂时留空。保留当前风格，完成后打开本地预览，让我检查电脑和手机上的效果。`,
@@ -190,7 +189,7 @@ function App() {
 				<section id="prepare" className="lesson">
 					<div className="section-shell lesson-layout">
 						<SectionHeading number="01" title="准备好工具">
-							我会提供 API Key（每人 100 美元额度）、CC Switch 配置方法和 Clash Verge 节点。
+							我会提供 API Key、CC Switch 配置方法和 Clash Verge 节点。
 						</SectionHeading>
 						<div className="lesson-content">
 							<ol className="action-list reveal">
@@ -223,8 +222,6 @@ function App() {
 								<p>GitHub 是全世界最接近共产主义的地方。</p>
 								<span>无数人把代码、工具和知识公开出来，彼此使用、修改和继续创造，很值得认真逛一逛。</span>
 							</div>
-
-							<CopyBlock title="让 AI agent 配置环境" prompt={PROMPTS.environment} />
 						</div>
 					</div>
 				</section>
@@ -295,7 +292,9 @@ function App() {
 							<CopyBlock title="让 AI agent 完成发布" prompt={PROMPTS.publish} />
 							<div className="domain-note reveal">
 								<h3>可选：使用自己的域名</h3>
-								<p>网站发布以后，可以再购买喜欢的域名，让 AI agent 帮你连接到 GitHub Pages。</p>
+								<p>域名可以把默认网址换成更短、更容易记住的地址，例如 <code>yourname.com</code>。有需要时，可以去阿里云万网搜索喜欢的名字并自行购买；不同后缀的首年价格和续费价格可能不同，购买前记得看清。</p>
+								<p>购买以后，把域名和当前项目交给 AI agent，让它完成域名解析和 GitHub Pages 的自定义域名设置。</p>
+								<ExternalLink href="https://wanwang.aliyun.com/" className="domain-link">前往阿里云万网</ExternalLink>
 							</div>
 						</div>
 					</div>
@@ -303,7 +302,7 @@ function App() {
 			</main>
 
 			<footer>
-				<span>© 2026 Yinkai Yu</span>
+				<span>© 2026 Yin-Kai Yu</span>
 				<ExternalLink href="https://www.yykspace.com/">yyk space</ExternalLink>
 			</footer>
 		</>
