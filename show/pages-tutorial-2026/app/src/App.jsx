@@ -9,10 +9,10 @@ const NAV_ITEMS = [
 ]
 
 const THEME_SOURCES = [
-	{ name: 'Astro 主题', url: 'https://astro.build/themes/' },
-	{ name: 'Hugo 主题', url: 'https://themes.gohugo.io/' },
-	{ name: 'Hexo 主题', url: 'https://hexo.io/themes/' },
-	{ name: 'Jekyll 主题', url: 'https://jekyllthemes.io/' },
+	{ name: 'Astro', description: '适合个人主页、作品集和博客', url: 'https://astro.build/themes/' },
+	{ name: 'Hugo', description: '速度快，适合内容较多的网站', url: 'https://themes.gohugo.io/' },
+	{ name: 'Hexo', description: '主要面向博客，中文主题很多', url: 'https://hexo.io/themes/' },
+	{ name: 'Jekyll', description: '与 GitHub Pages 配合方便', url: 'https://jekyllthemes.io/' },
 ]
 
 const REFERENCES = [
@@ -193,26 +193,26 @@ function App() {
 						</SectionHeading>
 						<div className="lesson-content">
 							<ol className="action-list reveal">
-								<li>
-									<span className="action-number">1</span>
-									<div><h3>下载 ChatGPT</h3><p>安装 Windows 版，登录以后就可以和 AI agent 一起工作。</p></div>
-									<ExternalLink href="https://apps.microsoft.com/detail/9PLM9XGG6VKS" className="action-link">下载</ExternalLink>
-								</li>
-								<li>
-									<span className="action-number">2</span>
-									<div><h3>配置 CC Switch</h3><p>下载后，按我提供的方法填入 API Key。API Key 只放在配置工具里。</p></div>
-									<ExternalLink href="https://github.com/farion1231/cc-switch/releases" className="action-link">下载</ExternalLink>
-								</li>
-								<li>
-									<span className="action-number">3</span>
-									<div><h3>配置网络访问</h3><p>安装 Clash Verge Rev，导入我提供的节点。</p></div>
-									<ExternalLink href="https://github.com/Clash-Verge-rev/clash-verge-rev/releases" className="action-link">下载</ExternalLink>
+							<li>
+								<span className="action-number">1</span>
+								<div><h3>下载 ChatGPT</h3><p>先安装 Windows 版。没有网络代理时可能无法登录或注册，下载完成就算完成，继续下一项。</p></div>
+								<ExternalLink href="https://apps.microsoft.com/detail/9PLM9XGG6VKS" className="action-link">下载</ExternalLink>
+							</li>
+							<li>
+								<span className="action-number">2</span>
+								<div><h3>配置 CC Switch</h3><p>私聊我领取 API Key，再按我提供的方法配置中转 API。使用中转 API 不要求开启网络代理。</p></div>
+								<ExternalLink href="https://github.com/farion1231/cc-switch/releases" className="action-link">下载</ExternalLink>
+							</li>
+							<li>
+								<span className="action-number">3</span>
+								<div><h3>配置网络访问</h3><p>安装 Clash Verge Rev，再导入我提供的节点。下载很慢时，直接使用我发的安装包。以后访问海外资料、学习和科研都会用到；已经有可用网络代理可以跳过。</p></div>
+								<ExternalLink href="https://github.com/Clash-Verge-rev/clash-verge-rev/releases" className="action-link">下载</ExternalLink>
 								</li>
 								<li>
 									<span className="action-number">4</span>
 									<div>
 										<h3>注册 GitHub</h3>
-										<p>慎重考虑用户名，它会决定个人网站的默认域名：<code>用户名.github.io</code>。</p>
+										<p>GitHub 的连接速度会有波动；打不开或很慢时，先配置好网络代理再回来注册。慎重考虑用户名，它会决定个人网站的默认域名：<code>用户名.github.io</code>。</p>
 									</div>
 									<ExternalLink href="https://github.com/signup" className="action-link">注册</ExternalLink>
 								</li>
@@ -232,11 +232,17 @@ function App() {
 							先逛一圈。看到喜欢的页面，就保存链接或截图，再交给 ChatGPT 实现。
 						</SectionHeading>
 						<div className="lesson-content">
-							<p className="lead-copy reveal">你可以直接写 HTML 和 CSS，可以挑选 Astro、Hugo、Hexo、Jekyll 的主题，也可以让 ChatGPT 从零制作。</p>
+							<p className="lead-copy reveal">你可以直接写 HTML 和 CSS，可以挑选建站工具的主题，也可以让 ChatGPT 从零制作。</p>
+							<p className="theme-intro reveal">下面这些都是用来生成网站的工具。现在不用全部弄懂，想知道它们有什么区别，直接问 AI agent。</p>
 
 							<div className="theme-links reveal" aria-label="主题网站">
 								{THEME_SOURCES.map((source) => (
-									<ExternalLink key={source.name} href={source.url}>{source.name}</ExternalLink>
+									<ExternalLink key={source.name} href={source.url}>
+										<span className="theme-copy">
+											<strong>{source.name}</strong>
+											<small>{source.description}</small>
+										</span>
+									</ExternalLink>
 								))}
 							</div>
 
