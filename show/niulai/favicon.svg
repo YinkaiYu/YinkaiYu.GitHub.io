@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+	<rect width="64" height="64" rx="12" fill="#0a0a09"/>
+	<path d="M32 14c-10-8-23 0-21 15 2 18 12 25 21 25s19-7 21-25C55 14 42 6 32 14Z" fill="#a53a31" stroke="#f3ecd9" stroke-width="3"/>
+	<path d="M32 14c1-8 5-10 10-9" fill="none" stroke="#cbbb9c" stroke-width="4" stroke-linecap="round"/>
+	<path d="M38 8c7-4 11 0 10 5-5 1-8-1-10-5Z" fill="#6d7c4f"/>
+	<text x="31" y="43" fill="#f3ecd9" font-family="Georgia,serif" font-size="29" text-anchor="middle">∫</text>
+</svg>
