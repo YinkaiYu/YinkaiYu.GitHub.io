@@ -118,6 +118,16 @@ h1 {
   line-height: 1.7;
 }
 
+.author-note {
+  max-width: 920px;
+  margin: 18px 0 0;
+  padding-left: 16px;
+  border-left: 3px solid var(--accent);
+  color: #42515a;
+  font-size: 17px;
+  line-height: 1.85;
+}
+
 h2 {
   font-size: clamp(24px, 3vw, 32px);
   line-height: 1.2;
