@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#f6f7f5" />
+    <title>余荫铠 · 中大物院本科成绩总览</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="shell header-inner">
+        <a class="site-title" href="#top">余荫铠 · 中大物院本科成绩总览</a>
+        <nav aria-label="页面导航">
+          <a href="#overview">总览</a>
+          <a href="#charts">图表</a>
+          <a href="#details">明细</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="top" class="shell">
+      <section id="overview" class="section section-first" aria-labelledby="overview-title">
+        <h1 id="overview-title">中大物院本科成绩总览</h1>
+        <div class="table-frame overview-frame">
+          <table id="overview-table"></table>
+        </div>
+      </section>
+
+      <section id="charts" class="section" aria-labelledby="charts-title">
+        <h2 id="charts-title">数据图表</h2>
+        <div class="chart-grid">
+          <article class="chart-card chart-card-half">
+            <h3>学分构成</h3>
+            <div id="credit-composition" class="chart chart-donut"></div>
+          </article>
+          <article class="chart-card chart-card-half">
+            <h3>最终成绩分布</h3>
+            <div id="grade-distribution" class="chart chart-donut"></div>
+          </article>
+          <article class="chart-card chart-card-wide">
+            <h3>各学期绩点、排名与总绩点</h3>
+            <div id="gpa-trend" class="chart chart-line"></div>
+          </article>
+          <article class="chart-card chart-card-small">
+            <h3>各类别学分加权平均绩点</h3>
+            <div id="category-gpa" class="chart"></div>
+          </article>
+          <article id="score-rank-card" class="chart-card chart-card-full">
+            <div class="chart-card-heading">
+              <h3>课程成绩与教学班排名百分位</h3>
+              <div class="chart-card-actions">
+                <a id="scatter-download" class="fullscreen-button scatter-download" download="课程成绩与教学班排名百分位.png" aria-disabled="true">下载 PNG</a>
+                <button id="scatter-fullscreen" class="fullscreen-button" type="button" aria-label="全屏查看课程成绩与教学班排名百分位">全屏</button>
+              </div>
+            </div>
+            <div id="score-rank-scatter" class="chart chart-scatter"></div>
+            <div id="chart-tooltip" class="chart-tooltip" role="status" aria-hidden="true"></div>
+          </article>
+        </div>
+      </section>
+
+      <section id="details" class="section" aria-labelledby="details-title">
+        <div class="section-heading-row">
+          <h2 id="details-title">成绩明细</h2>
+          <span id="result-count" class="result-count"></span>
+        </div>
+
+        <div class="filters" aria-label="成绩筛选">
+          <label class="search-field">
+            <span class="sr-only">搜索课程或教师</span>
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path d="m21 21-4.35-4.35m2.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z" />
+            </svg>
+            <input id="search" type="search" placeholder="搜索课程或教师" autocomplete="off" />
+          </label>
+          <label>
+            <span class="sr-only">类别</span>
+            <select id="category-filter" aria-label="类别"><option value="">全部类别</option></select>
+          </label>
+          <label>
+            <span class="sr-only">学年</span>
+            <select id="year-filter" aria-label="学年"><option value="">全部学年</option></select>
+          </label>
+          <label>
+            <span class="sr-only">学期</span>
+            <select id="term-filter" aria-label="学期"><option value="">全部学期</option></select>
+          </label>
+          <label>
+            <span class="sr-only">学分</span>
+            <select id="credit-filter" aria-label="学分">
+              <option value="">全部学分</option>
+              <option value="0-1">0.5–1 学分</option>
+              <option value="1.5-2">1.5–2 学分</option>
+              <option value="3-plus">3 学分以上</option>
+            </select>
+          </label>
+          <button id="reset-filters" class="reset-button" type="button">重置</button>
+        </div>
+
+        <div class="credit-key" aria-label="学分颜色图例">
+          <span><i class="credit-dot credit-1"></i>0.5–1</span>
+          <span><i class="credit-dot credit-2"></i>1.5–2</span>
+          <span><i class="credit-dot credit-3"></i>3 学分以上</span>
+        </div>
+
+        <div class="table-frame detail-frame">
+          <table id="details-table">
+            <thead></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell">余荫铠</div>
+    </footer>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
