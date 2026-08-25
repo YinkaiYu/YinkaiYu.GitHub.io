@@ -533,6 +533,7 @@ body.chart-expanded {
   display: grid;
   place-content: center;
   text-align: center;
+  pointer-events: none;
 }
 
 .donut-total strong {
