@@ -38,6 +38,9 @@
             </div>
           </div>
           <div class="scatter-filters" aria-label="散点图筛选">
+            <details id="scatter-category" class="multi-filter"><summary>全部类别</summary><div class="multi-filter-options"></div></details>
+            <details id="scatter-year" class="multi-filter"><summary>全部学年</summary><div class="multi-filter-options"></div></details>
+            <details id="scatter-term" class="multi-filter"><summary>全部学期</summary><div class="multi-filter-options"></div></details>
             <label class="search-field scatter-search-field">
               <span class="sr-only">搜索课程或教师</span>
               <svg aria-hidden="true" viewBox="0 0 24 24">
@@ -45,9 +48,6 @@
               </svg>
               <input id="scatter-search" type="search" placeholder="搜索课程或教师" autocomplete="off" />
             </label>
-            <details id="scatter-category" class="multi-filter"><summary>全部类别</summary><div class="multi-filter-options"></div></details>
-            <details id="scatter-year" class="multi-filter"><summary>全部学年</summary><div class="multi-filter-options"></div></details>
-            <details id="scatter-term" class="multi-filter"><summary>全部学期</summary><div class="multi-filter-options"></div></details>
             <button id="scatter-reset" class="reset-button" type="button">重置</button>
           </div>
           <details class="scatter-course-picker">
@@ -74,6 +74,10 @@
         </div>
 
         <div class="filters" aria-label="成绩筛选">
+          <details id="category-filter" class="multi-filter"><summary>全部类别</summary><div class="multi-filter-options"></div></details>
+          <details id="year-filter" class="multi-filter"><summary>全部学年</summary><div class="multi-filter-options"></div></details>
+          <details id="term-filter" class="multi-filter"><summary>全部学期</summary><div class="multi-filter-options"></div></details>
+          <details id="credit-filter" class="multi-filter"><summary>全部学分</summary><div class="multi-filter-options"></div></details>
           <label class="search-field">
             <span class="sr-only">搜索课程或教师</span>
             <svg aria-hidden="true" viewBox="0 0 24 24">
@@ -81,10 +85,6 @@
             </svg>
             <input id="search" type="search" placeholder="搜索课程或教师" autocomplete="off" />
           </label>
-          <details id="category-filter" class="multi-filter"><summary>全部类别</summary><div class="multi-filter-options"></div></details>
-          <details id="year-filter" class="multi-filter"><summary>全部学年</summary><div class="multi-filter-options"></div></details>
-          <details id="term-filter" class="multi-filter"><summary>全部学期</summary><div class="multi-filter-options"></div></details>
-          <details id="credit-filter" class="multi-filter"><summary>全部学分</summary><div class="multi-filter-options"></div></details>
           <button id="reset-filters" class="reset-button" type="button">重置</button>
         </div>
 

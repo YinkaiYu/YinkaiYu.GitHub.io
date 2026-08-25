@@ -268,7 +268,7 @@ tr:last-child td {
 
 .scatter-filters {
   display: grid;
-  grid-template-columns: minmax(240px, 1fr) repeat(3, minmax(118px, auto)) auto;
+  grid-template-columns: repeat(3, minmax(118px, auto)) minmax(240px, 1fr) auto;
   gap: 9px;
   margin-top: 18px;
 }
@@ -853,7 +853,7 @@ body.chart-expanded {
 
 .filters {
   display: grid;
-  grid-template-columns: minmax(260px, 1fr) repeat(4, minmax(120px, auto)) auto;
+  grid-template-columns: repeat(4, minmax(120px, auto)) minmax(260px, 1fr) auto;
   gap: 10px;
   margin-top: 24px;
 }
