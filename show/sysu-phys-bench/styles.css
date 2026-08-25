@@ -753,17 +753,28 @@ body.chart-expanded {
   gap: 20px;
 }
 
-.yu-index-definition {
-  margin: 10px 0 0;
-  color: var(--muted);
-  font-family: var(--mono);
-  font-size: 12px;
-}
-
 .result-count {
   color: var(--muted);
   font-family: var(--mono);
   font-size: 13px;
+}
+
+.yu-index-formula {
+  display: flex;
+  min-height: 72px;
+  align-items: center;
+  justify-content: center;
+  margin: 0 0 14px;
+  padding: 12px 18px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  font-size: clamp(17px, 2.2vw, 22px);
+}
+
+.yu-index-formula math {
+  font-family: "Cambria Math", "STIX Two Math", serif;
 }
 
 .filters {

@@ -6,7 +6,7 @@
     <meta name="color-scheme" content="light" />
     <meta name="theme-color" content="#f6f7f5" />
     <title>SYSU-Phys-Bench</title>
-    <link rel="stylesheet" href="styles.css?v=20260825-7" />
+    <link rel="stylesheet" href="styles.css?v=20260825-8" />
   </head>
   <body>
     <header class="site-header">
@@ -69,10 +69,7 @@
 
       <section id="details" class="section" aria-labelledby="details-title">
         <div class="section-heading-row">
-          <div>
-            <h2 id="details-title">成绩明细</h2>
-            <p class="yu-index-definition">Yu Index = √((绩点 ÷ 5 × 100) × 教学班排名百分位)</p>
-          </div>
+          <h2 id="details-title">成绩明细</h2>
           <span id="result-count" class="result-count"></span>
         </div>
 
@@ -112,6 +109,21 @@
           <span><i class="credit-dot credit-1"></i>0.5–1</span>
           <span><i class="credit-dot credit-2"></i>1.5–2</span>
           <span><i class="credit-dot credit-3"></i>3 学分以上</span>
+        </div>
+
+        <div class="yu-index-formula" aria-label="Yu Index 等于一百乘以绩点除以五与教学班名次除以教学班人数之积的平方根">
+          <math display="block" data-latex="\mathrm{Yu\ Index}=100\sqrt{\frac{\mathrm{绩点}}{5}\cdot\frac{\mathrm{教学班名次}}{\mathrm{教学班人数}}}">
+            <mrow>
+              <mtext>Yu Index</mtext>
+              <mo>=</mo>
+              <mn>100</mn>
+              <msqrt>
+                <mfrac><mtext>绩点</mtext><mn>5</mn></mfrac>
+                <mo>·</mo>
+                <mfrac><mtext>教学班名次</mtext><mtext>教学班人数</mtext></mfrac>
+              </msqrt>
+            </mrow>
+          </math>
         </div>
 
         <div class="table-frame detail-frame">
@@ -157,6 +169,6 @@
     </footer>
 
     <script src="data.js"></script>
-    <script src="app.js?v=20260825-7"></script>
+    <script src="app.js?v=20260825-8"></script>
   </body>
 </html>
