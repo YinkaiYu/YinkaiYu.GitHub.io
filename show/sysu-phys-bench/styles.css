@@ -125,6 +125,7 @@ h1 {
   border-left: 3px solid var(--accent);
   color: #42515a;
   font-size: 17px;
+  font-style: italic;
   line-height: 1.85;
 }
 
