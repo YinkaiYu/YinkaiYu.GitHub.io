@@ -3,9 +3,7 @@
 
   const overviewRows = window.GRADE_DATA.overview;
   const detailRows = window.GRADE_DATA.details;
-  const overviewHeaders = overviewRows[0];
-  const detailHeaders = detailRows[0];
-  const detailDisplayHeaders = [...detailHeaders, "Yu Index"];
+  const detailDisplayHeaders = ["课程", "Yu Index", "教师", "学年", "学期", "学分", "最终成绩", "绩点", "教学班排名", "类别"];
   const rows = detailRows.slice(1).map((row, index) => ({
     index,
     类别: row[0],
@@ -92,21 +90,9 @@
     return weight ? valid.reduce((sum, item) => sum + valueAccessor(item) * weightAccessor(item), 0) / weight : 0;
   }
 
-  function renderOverviewTable() {
-    const table = $("#overview-table");
+  function renderOverviewBenchmarks() {
     const benchmarks = $("#overview-benchmarks");
     benchmarks.replaceChildren();
-    const thead = document.createElement("thead");
-    const headRow = document.createElement("tr");
-    overviewHeaders.forEach((header) => {
-      const th = document.createElement("th");
-      th.scope = "col";
-      th.textContent = header;
-      headRow.append(th);
-    });
-    thead.append(headRow);
-
-    const tbody = document.createElement("tbody");
     const totalRow = overviewRows.find((row) => row[0] === "合计");
     const specialRow = overviewRows.find((row) => typeof row[0] === "string" && row[0].includes("|"));
     [
@@ -122,37 +108,6 @@
       card.append(labelElement, valueElement);
       benchmarks.append(card);
     });
-
-    overviewRows.slice(1).forEach((row) => {
-      if (typeof row[0] === "string" && row[0].includes("|")) {
-        const labels = row[0].split("|");
-        const values = row.slice(1).filter((value) => value !== null && value !== "");
-        labels.forEach((label, index) => {
-          const tr = document.createElement("tr");
-          tr.className = "overview-summary-row";
-          const labelCell = document.createElement("td");
-          labelCell.textContent = label;
-          const valueCell = document.createElement("td");
-          valueCell.colSpan = overviewHeaders.length - 1;
-          valueCell.className = "numeric";
-          valueCell.textContent = values[index] ?? "";
-          tr.append(labelCell, valueCell);
-          tbody.append(tr);
-        });
-        return;
-      }
-
-      const tr = document.createElement("tr");
-      row.forEach((value, index) => {
-        const td = document.createElement("td");
-        if (typeof value === "number") td.className = "numeric";
-        td.textContent = value ?? "";
-        if (index > 0) td.dataset.label = overviewHeaders[index];
-        tr.append(td);
-      });
-      tbody.append(tr);
-    });
-    table.append(thead, tbody);
   }
 
   function setupMultiFilter(selector, items, allLabel, onChange) {
@@ -274,6 +229,7 @@
   function refreshScatterSelection() {
     updateScatterSelectionCount();
     renderScatter();
+    renderYuRankScatter();
     document.dispatchEvent(new CustomEvent("scatterfilterschange"));
   }
 
@@ -754,7 +710,7 @@
     return document.fullscreenElement === card || card.classList.contains("is-expanded");
   }
 
-  function appendScatterCourseLabels(svg, data, x, y, margin, width, height, compact = false) {
+  function appendScatterCourseLabels(svg, data, x, y, valueAccessor, margin, width, height, compact = false) {
     const bounds = {
       left: margin.left + 3,
       right: width - margin.right - 3,
@@ -764,7 +720,7 @@
     const labels = data.map((row) => ({
       row,
       pointX: x(row.rankPercentile),
-      pointY: y(row.绩点),
+      pointY: y(valueAccessor(row)),
       text: truncateText(row.课程, compact ? (width < 520 ? 5 : 9) : 18),
     }));
 
@@ -834,13 +790,17 @@
     });
   }
 
+  function selectedScatterRows() {
+    return scatterFilterRows()
+      .filter((row) => scatterSelected.has(row.index))
+      .map((row) => ({ ...row, rankPercentile: parseRank(row.教学班排名).percentile }));
+  }
+
   function renderScatter() {
     const container = $("#score-rank-scatter");
     container.replaceChildren();
     const expanded = isScatterExpanded();
-    const data = scatterFilterRows()
-      .filter((row) => scatterSelected.has(row.index))
-      .map((row) => ({ ...row, rankPercentile: parseRank(row.教学班排名).percentile }));
+    const data = selectedScatterRows();
     if (!data.length) {
       const empty = document.createElement("div");
       empty.className = "scatter-empty";
@@ -910,7 +870,7 @@
     });
     svg.append(legend);
 
-    appendScatterCourseLabels(svg, data, x, y, margin, width, height, !expanded);
+    appendScatterCourseLabels(svg, data, x, y, (row) => row.绩点, margin, width, height, !expanded);
     data.forEach((row) => {
       const marker = scatterSymbol(row.类别, x(row.rankPercentile), y(row.绩点), 3 + Math.sqrt(row.学分) * 1.15, {
         stroke: "#ffffff",
@@ -930,6 +890,76 @@
       bindChartTooltip(marker, row.课程, tooltipLines);
       marker.addEventListener("focus", () => marker.setAttribute("opacity", "1"));
       marker.addEventListener("blur", () => marker.setAttribute("opacity", "0.78"));
+      svg.append(marker);
+    });
+    container.append(svg);
+  }
+
+  function renderYuRankScatter() {
+    const container = $("#yu-rank-scatter");
+    container.replaceChildren();
+    const data = selectedScatterRows();
+    if (!data.length) {
+      const empty = document.createElement("div");
+      empty.className = "scatter-empty";
+      empty.textContent = "未选择课程";
+      container.append(empty);
+      return;
+    }
+
+    const width = Math.max(360, container.clientWidth || 720);
+    const height = width < 520 ? 330 : 390;
+    const margin = { top: 58, right: 20, bottom: 52, left: 64 };
+    const plotWidth = width - margin.left - margin.right;
+    const plotHeight = height - margin.top - margin.bottom;
+    const minRank = 0.5;
+    const maxRank = 100;
+    const logMin = Math.log10(minRank);
+    const logMax = Math.log10(maxRank);
+    const x = (rank) => margin.left + ((logMax - Math.log10(rank)) / (logMax - logMin)) * plotWidth;
+    const y = (value) => margin.top + ((100 - value) / 100) * plotHeight;
+    const svg = svgElement("svg", { viewBox: `0 0 ${width} ${height}`, role: "img", "aria-label": "横轴为对数刻度教学班排名百分位、纵轴为 Yu Index 的课程散点图" });
+
+    [1, 2, 5, 10, 20, 50, 100].forEach((value) => {
+      const xPos = x(value);
+      svg.append(svgElement("line", { x1: xPos, x2: xPos, y1: margin.top, y2: height - margin.bottom, class: "grid-line" }));
+      svg.append(svgElement("text", { x: xPos, y: height - 19, "text-anchor": "middle", class: "tick-label" }, `${value}%`));
+    });
+    [0, 20, 40, 60, 80, 100].forEach((value) => {
+      const yPos = y(value);
+      svg.append(svgElement("line", { x1: margin.left, x2: width - margin.right, y1: yPos, y2: yPos, class: "grid-line" }));
+      svg.append(svgElement("text", { x: margin.left - 8, y: yPos + 4, "text-anchor": "end", class: "tick-label" }, value));
+    });
+    svg.append(svgElement("text", { x: width - margin.right, y: height - 3, "text-anchor": "end", class: "tick-label" }, "教学班排名百分位（对数刻度）"));
+    const yAxisCenter = margin.top + plotHeight / 2;
+    svg.append(svgElement("text", { x: 16, y: yAxisCenter, transform: `rotate(-90 16 ${yAxisCenter})`, "text-anchor": "middle", class: "tick-label" }, "Yu Index"));
+
+    const legendStep = 70;
+    const legendWidth = legendStep * Object.keys(categoryColors).length;
+    const legend = svgElement("g", { transform: `translate(${Math.max(margin.left, width - margin.right - legendWidth)},24)` });
+    Object.entries(categoryColors).forEach(([label, color], index) => {
+      const offset = index * legendStep;
+      legend.append(scatterSymbol(label, offset + 5, 0, 4, { fill: color }));
+      legend.append(svgElement("text", { x: offset + 12, y: 4, class: "tick-label" }, label));
+    });
+    svg.append(legend);
+
+    appendScatterCourseLabels(svg, data, x, y, (row) => row["Yu Index"], margin, width, height, true);
+    data.forEach((row) => {
+      const marker = scatterSymbol(row.类别, x(row.rankPercentile), y(row["Yu Index"]), 3 + Math.sqrt(row.学分) * 1.15, {
+        stroke: "#ffffff",
+        "stroke-width": 1,
+        opacity: 0.8,
+        tabindex: 0,
+      });
+      bindChartTooltip(marker, row.课程, [
+        ...(row.教师 ? [`教师 ${truncateText(row.教师)}`] : []),
+        `Yu Index ${row["Yu Index"].toFixed(1)}`,
+        `绩点 ${row.绩点.toFixed(1)}`,
+        `教学班排名 ${row.教学班排名}`,
+        `排名百分位 ${row.rankPercentile.toFixed(2)}%`,
+        `${row.学分} 学分 · ${row.类别}`,
+      ]);
       svg.append(marker);
     });
     container.append(svg);
@@ -1055,9 +1085,10 @@
     renderTrendCharts();
     renderCategoryGpa();
     renderScatter();
+    renderYuRankScatter();
   }
 
-  renderOverviewTable();
+  renderOverviewBenchmarks();
   renderDetailsHead();
   setupFilters();
   setupScatterFilters();

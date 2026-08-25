@@ -106,6 +106,22 @@ nav a:focus-visible {
   padding-top: 18px;
 }
 
+.methodology-body {
+  max-width: 940px;
+  margin-top: 24px;
+  color: #35464e;
+  font-size: 16px;
+  line-height: 1.9;
+}
+
+.methodology-body p {
+  margin: 0;
+}
+
+.methodology-body .yu-index-formula {
+  margin: 22px 0;
+}
+
 h1,
 h2,
 h3 {
@@ -251,6 +267,19 @@ tr:last-child td {
   border-radius: var(--radius);
   background: var(--surface);
   box-shadow: var(--shadow);
+}
+
+.benchmark-filter-panel {
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.benchmark-filter-panel + .chart-card,
+.secondary-scatter-card {
+  margin-top: 18px;
 }
 
 .chart-card-heading {
