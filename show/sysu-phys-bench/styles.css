@@ -273,7 +273,7 @@ tr:last-child td {
   margin-top: 18px;
 }
 
-.scatter-filters input,
+.scatter-filters input[type="search"],
 .scatter-filters select,
 .scatter-filters .reset-button {
   width: 100%;
@@ -284,7 +284,7 @@ tr:last-child td {
   background: var(--surface);
 }
 
-.scatter-filters input {
+.scatter-filters input[type="search"] {
   padding: 0 12px 0 38px;
 }
 
@@ -294,6 +294,80 @@ tr:last-child td {
 
 .scatter-search-field svg {
   top: 11px;
+}
+
+.multi-filter {
+  position: relative;
+  min-width: 0;
+}
+
+.multi-filter summary {
+  display: flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 11px;
+  border: 1px solid var(--line-strong);
+  border-radius: 9px;
+  color: var(--ink);
+  background: var(--surface);
+  cursor: pointer;
+  font-size: 13px;
+  list-style: none;
+  white-space: nowrap;
+}
+
+.multi-filter summary::-webkit-details-marker {
+  display: none;
+}
+
+.multi-filter summary::after {
+  color: var(--muted);
+  content: "▾";
+  font-size: 10px;
+}
+
+.multi-filter[open] summary {
+  border-color: var(--blue);
+  outline: 3px solid rgba(56, 107, 129, 0.14);
+}
+
+.multi-filter-options {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 12;
+  display: grid;
+  min-width: max(100%, 150px);
+  gap: 2px;
+  padding: 7px;
+  border: 1px solid var(--line-strong);
+  border-radius: 10px;
+  background: var(--surface);
+  box-shadow: 0 14px 34px rgba(28, 38, 43, 0.14);
+}
+
+.multi-filter-options label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 8px;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.multi-filter-options label:hover {
+  background: #edf3f4;
+}
+
+.multi-filter-options input {
+  width: auto;
+  min-height: 0;
+  margin: 0;
+  accent-color: var(--blue-dark);
 }
 
 .scatter-course-picker {
@@ -784,7 +858,7 @@ body.chart-expanded {
   margin-top: 24px;
 }
 
-.filters input,
+.filters input[type="search"],
 .filters select,
 .reset-button {
   width: 100%;
@@ -795,7 +869,7 @@ body.chart-expanded {
   background: var(--surface);
 }
 
-.filters input {
+.filters input[type="search"] {
   padding: 0 12px 0 40px;
 }
 
@@ -803,7 +877,7 @@ body.chart-expanded {
   padding: 0 34px 0 12px;
 }
 
-.filters input:focus,
+.filters input[type="search"]:focus,
 .filters select:focus,
 .reset-button:focus-visible {
   border-color: var(--blue);

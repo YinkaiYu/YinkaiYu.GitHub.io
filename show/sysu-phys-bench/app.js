@@ -38,6 +38,8 @@
   let pinnedTooltipTarget = null;
   const scatterEligibleRows = rows.filter((row) => typeof row.最终成绩 === "number");
   const scatterSelected = new Set(scatterEligibleRows.map((row) => row.index));
+  const detailMultiFilters = {};
+  const scatterMultiFilters = {};
 
   const $ = (selector) => document.querySelector(selector);
   const svgNS = "http://www.w3.org/2000/svg";
@@ -153,30 +155,64 @@
     table.append(thead, tbody);
   }
 
-  function addOptions(select, values) {
-    values.forEach((value) => {
-      const option = document.createElement("option");
-      option.value = value;
-      option.textContent = value;
-      select.append(option);
+  function setupMultiFilter(selector, items, allLabel, onChange) {
+    const details = $(selector);
+    const summary = details.querySelector("summary");
+    const options = details.querySelector(".multi-filter-options");
+    const normalizedItems = items.map((item) => typeof item === "string" ? { value: item, label: item } : item);
+    const state = { details, summary, items: normalizedItems, selected: new Set(normalizedItems.map((item) => item.value)), allLabel };
+
+    normalizedItems.forEach((item) => {
+      const label = document.createElement("label");
+      const input = document.createElement("input");
+      input.type = "checkbox";
+      input.value = item.value;
+      input.checked = true;
+      input.addEventListener("change", () => {
+        if (input.checked) state.selected.add(item.value);
+        else state.selected.delete(item.value);
+        updateMultiFilterSummary(state);
+        onChange();
+      });
+      const text = document.createElement("span");
+      text.textContent = item.label;
+      label.append(input, text);
+      options.append(label);
     });
+    updateMultiFilterSummary(state);
+    return state;
+  }
+
+  function updateMultiFilterSummary(state) {
+    const selectedItems = state.items.filter((item) => state.selected.has(item.value));
+    if (selectedItems.length === state.items.length) state.summary.textContent = state.allLabel;
+    else if (!selectedItems.length) state.summary.textContent = "未选择";
+    else if (selectedItems.length === 1) state.summary.textContent = selectedItems[0].label;
+    else state.summary.textContent = `已选 ${selectedItems.length} 项`;
+  }
+
+  function resetMultiFilter(state) {
+    state.selected.clear();
+    state.items.forEach((item) => state.selected.add(item.value));
+    state.details.querySelectorAll('input[type="checkbox"]').forEach((input) => { input.checked = true; });
+    updateMultiFilterSummary(state);
+    state.details.open = false;
   }
 
   function setupFilters() {
-    addOptions($("#category-filter"), [...new Set(rows.map((row) => row.类别))]);
-    addOptions($("#year-filter"), yearOrder.filter((value) => rows.some((row) => row.学年 === value)));
-    addOptions($("#term-filter"), termOrder.filter((value) => rows.some((row) => row.学期 === value)));
-
-    ["#search", "#category-filter", "#year-filter", "#term-filter", "#credit-filter"].forEach((selector) => {
-      $(selector).addEventListener(selector === "#search" ? "input" : "change", renderDetailsBody);
-    });
+    detailMultiFilters.category = setupMultiFilter("#category-filter", [...new Set(rows.map((row) => row.类别))], "全部类别", renderDetailsBody);
+    detailMultiFilters.year = setupMultiFilter("#year-filter", yearOrder.filter((value) => rows.some((row) => row.学年 === value)), "全部学年", renderDetailsBody);
+    detailMultiFilters.term = setupMultiFilter("#term-filter", termOrder.filter((value) => rows.some((row) => row.学期 === value)), "全部学期", renderDetailsBody);
+    detailMultiFilters.credit = setupMultiFilter("#credit-filter", [
+      { value: "0-1", label: "0.5–1 学分" },
+      { value: "1.5-2", label: "1.5–2 学分" },
+      { value: "3-plus", label: "3 学分以上" },
+    ], "全部学分", renderDetailsBody);
+    $("#search").addEventListener("input", renderDetailsBody);
 
     $("#reset-filters").addEventListener("click", () => {
       $("#search").value = "";
-      $("#category-filter").value = "";
-      $("#year-filter").value = "";
-      $("#term-filter").value = "";
-      $("#credit-filter").value = "";
+      Object.values(detailMultiFilters).forEach(resetMultiFilter);
       sortState = { key: "index", direction: "asc" };
       updateSortIndicators();
       renderDetailsBody();
@@ -185,16 +221,13 @@
 
   function scatterFilterRows() {
     const query = $("#scatter-search").value.trim().toLocaleLowerCase("zh-CN");
-    const category = $("#scatter-category").value;
-    const year = $("#scatter-year").value;
-    const term = $("#scatter-term").value;
     return scatterEligibleRows.filter((row) => {
       const searchable = `${row.课程} ${row.教师}`.toLocaleLowerCase("zh-CN");
       return (
         (!query || searchable.includes(query)) &&
-        (!category || row.类别 === category) &&
-        (!year || row.学年 === year) &&
-        (!term || row.学期 === term)
+        scatterMultiFilters.category.selected.has(row.类别) &&
+        scatterMultiFilters.year.selected.has(row.学年) &&
+        scatterMultiFilters.term.selected.has(row.学期)
       );
     });
   }
@@ -245,16 +278,14 @@
   }
 
   function setupScatterFilters() {
-    addOptions($("#scatter-category"), [...new Set(scatterEligibleRows.map((row) => row.类别))]);
-    addOptions($("#scatter-year"), yearOrder.filter((value) => scatterEligibleRows.some((row) => row.学年 === value)));
-    addOptions($("#scatter-term"), termOrder.filter((value) => scatterEligibleRows.some((row) => row.学期 === value)));
-
-    ["#scatter-search", "#scatter-category", "#scatter-year", "#scatter-term"].forEach((selector) => {
-      $(selector).addEventListener(selector === "#scatter-search" ? "input" : "change", () => {
-        renderScatterCourseOptions();
-        refreshScatterSelection();
-      });
-    });
+    const onMultiFilterChange = () => {
+      renderScatterCourseOptions();
+      refreshScatterSelection();
+    };
+    scatterMultiFilters.category = setupMultiFilter("#scatter-category", [...new Set(scatterEligibleRows.map((row) => row.类别))], "全部类别", onMultiFilterChange);
+    scatterMultiFilters.year = setupMultiFilter("#scatter-year", yearOrder.filter((value) => scatterEligibleRows.some((row) => row.学年 === value)), "全部学年", onMultiFilterChange);
+    scatterMultiFilters.term = setupMultiFilter("#scatter-term", termOrder.filter((value) => scatterEligibleRows.some((row) => row.学期 === value)), "全部学期", onMultiFilterChange);
+    $("#scatter-search").addEventListener("input", onMultiFilterChange);
     $("#scatter-select-visible").addEventListener("click", () => {
       scatterFilterRows().forEach((row) => scatterSelected.add(row.index));
       renderScatterCourseOptions();
@@ -267,9 +298,7 @@
     });
     $("#scatter-reset").addEventListener("click", () => {
       $("#scatter-search").value = "";
-      $("#scatter-category").value = "";
-      $("#scatter-year").value = "";
-      $("#scatter-term").value = "";
+      Object.values(scatterMultiFilters).forEach(resetMultiFilter);
       scatterSelected.clear();
       scatterEligibleRows.forEach((row) => scatterSelected.add(row.index));
       renderScatterCourseOptions();
@@ -278,29 +307,22 @@
     renderScatterCourseOptions();
   }
 
-  function creditMatches(credit, filter) {
-    if (!filter) return true;
-    if (filter === "0-1") return credit <= 1;
-    if (filter === "1.5-2") return credit >= 1.5 && credit <= 2;
-    if (filter === "3-plus") return credit >= 3;
-    return true;
+  function creditBucket(credit) {
+    if (credit >= 3) return "3-plus";
+    if (credit >= 1.5) return "1.5-2";
+    return "0-1";
   }
 
   function filteredRows() {
     const query = $("#search").value.trim().toLocaleLowerCase("zh-CN");
-    const category = $("#category-filter").value;
-    const year = $("#year-filter").value;
-    const term = $("#term-filter").value;
-    const credit = $("#credit-filter").value;
-
     const filtered = rows.filter((row) => {
       const searchable = `${row.课程} ${row.教师}`.toLocaleLowerCase("zh-CN");
       return (
         (!query || searchable.includes(query)) &&
-        (!category || row.类别 === category) &&
-        (!year || row.学年 === year) &&
-        (!term || row.学期 === term) &&
-        creditMatches(row.学分, credit)
+        detailMultiFilters.category.selected.has(row.类别) &&
+        detailMultiFilters.year.selected.has(row.学年) &&
+        detailMultiFilters.term.selected.has(row.学期) &&
+        detailMultiFilters.credit.selected.has(creditBucket(row.学分))
       );
     });
 
