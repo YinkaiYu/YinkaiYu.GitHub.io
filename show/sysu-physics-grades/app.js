@@ -70,6 +70,8 @@
 
   function renderOverviewTable() {
     const table = $("#overview-table");
+    const benchmarks = $("#overview-benchmarks");
+    benchmarks.replaceChildren();
     const thead = document.createElement("thead");
     const headRow = document.createElement("tr");
     overviewHeaders.forEach((header) => {
@@ -82,18 +84,27 @@
 
     const tbody = document.createElement("tbody");
     overviewRows.slice(1).forEach((row) => {
+      if (typeof row[0] === "string" && row[0].includes("|")) {
+        const labels = row[0].split("|");
+        const values = row.slice(1).filter((value) => value !== null && value !== "");
+        labels.forEach((label, index) => {
+          const card = document.createElement("div");
+          card.className = "overview-benchmark";
+          const labelElement = document.createElement("span");
+          labelElement.textContent = label;
+          const valueElement = document.createElement("strong");
+          valueElement.textContent = values[index] ?? "";
+          card.append(labelElement, valueElement);
+          benchmarks.append(card);
+        });
+        return;
+      }
+
       const tr = document.createElement("tr");
       row.forEach((value, index) => {
         const td = document.createElement("td");
         if (typeof value === "number") td.className = "numeric";
-        if (index === 0 && typeof value === "string" && value.includes("|")) {
-          value.split("|").forEach((line, lineIndex) => {
-            if (lineIndex) td.append(document.createElement("br"));
-            td.append(document.createTextNode(line));
-          });
-        } else {
-          td.textContent = value ?? "";
-        }
+        td.textContent = value ?? "";
         if (index > 0) td.dataset.label = overviewHeaders[index];
         tr.append(td);
       });
@@ -304,22 +315,38 @@
     const container = $(containerSelector);
     container.replaceChildren();
     const total = sourceRows.reduce((sum, item) => sum + item.value, 0);
-    let cursor = 0;
-    const stops = sourceRows.map((item) => {
-      const start = cursor;
-      cursor += (item.value / total) * 100;
-      return `${item.color} ${start}% ${cursor}%`;
-    });
 
     const layout = document.createElement("div");
     layout.className = "donut-layout";
     const wrap = document.createElement("div");
     wrap.className = "donut-wrap";
-    const donut = document.createElement("div");
-    donut.className = "donut";
-    donut.style.background = `conic-gradient(${stops.join(",")})`;
+    const donut = svgElement("svg", { viewBox: "0 0 100 100" });
+    donut.setAttribute("class", "donut");
     donut.setAttribute("role", "img");
     donut.setAttribute("aria-label", ariaLabel || sourceRows.map((item) => `${item.label} ${item.value}${unit}`).join("，"));
+    let cursor = 0;
+    sourceRows.forEach((item) => {
+      const percent = (item.value / total) * 100;
+      const tooltipLines = [`${formatValue(item.value, 1)}${unit}`, `占比 ${percent.toFixed(1)}%`];
+      const segment = svgElement("circle", {
+        cx: 50,
+        cy: 50,
+        r: 38,
+        fill: "none",
+        stroke: item.color,
+        "stroke-width": 24,
+        "stroke-dasharray": `${percent} ${100 - percent}`,
+        "stroke-dashoffset": -cursor,
+        "pathLength": 100,
+        transform: "rotate(-90 50 50)",
+        class: "donut-segment",
+        tabindex: 0,
+        "aria-label": `${item.label}，${tooltipLines.join("，")}`,
+      });
+      bindChartTooltip(segment, item.label, tooltipLines);
+      donut.append(segment);
+      cursor += percent;
+    });
     const totalElement = document.createElement("div");
     totalElement.className = "donut-total";
     totalElement.innerHTML = `<strong>${formatValue(total, 1)}</strong><span>${centerLabel}</span>`;
@@ -330,7 +357,10 @@
     sourceRows.forEach((item) => {
       const row = document.createElement("div");
       row.className = "legend-item";
+      row.tabIndex = 0;
       row.innerHTML = `<i class="legend-swatch" style="background:${item.color}"></i><span>${item.label}</span><span class="legend-value">${formatValue(item.value, 1)}${unit}</span>`;
+      const percent = (item.value / total) * 100;
+      bindChartTooltip(row, item.label, [`${formatValue(item.value, 1)}${unit}`, `占比 ${percent.toFixed(1)}%`]);
       legend.append(row);
     });
     layout.append(wrap, legend);

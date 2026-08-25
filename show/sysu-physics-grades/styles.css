@@ -111,6 +111,13 @@ h1 {
   line-height: 1.12;
 }
 
+.benchmark-source {
+  margin: 18px 0 0;
+  color: var(--ink);
+  font-size: 17px;
+  line-height: 1.7;
+}
+
 h2 {
   font-size: clamp(24px, 3vw, 32px);
   line-height: 1.2;
@@ -168,9 +175,42 @@ tr:last-child td {
   border-bottom: 0;
 }
 
-.overview-frame tbody tr:nth-last-child(-n + 2) td {
+.overview-frame tbody tr:last-child td {
   background: #f2f6f6;
   font-weight: 650;
+}
+
+.overview-benchmarks {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.overview-benchmark {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  min-height: 76px;
+  padding: 14px 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #f2f6f6;
+  box-shadow: var(--shadow);
+}
+
+.overview-benchmark span {
+  color: #42515a;
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.overview-benchmark strong {
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: clamp(22px, 3vw, 30px);
+  font-variant-numeric: tabular-nums;
 }
 
 .chart-grid {
@@ -473,16 +513,17 @@ body.chart-expanded {
 .donut {
   width: 100%;
   height: 100%;
-  border-radius: 50%;
 }
 
-.donut::after {
-  position: absolute;
-  inset: 23%;
-  border: 1px solid var(--line);
-  border-radius: 50%;
-  background: var(--surface);
-  content: "";
+.donut-segment {
+  cursor: pointer;
+  transition: opacity 120ms ease, stroke-width 120ms ease;
+}
+
+.donut-segment:hover,
+.donut-segment:focus-visible {
+  stroke-width: 26;
+  opacity: 0.86;
 }
 
 .donut-total {
@@ -516,6 +557,15 @@ body.chart-expanded {
   align-items: center;
   gap: 9px;
   font-size: 13px;
+}
+
+.legend-item[data-chart-tooltip] {
+  cursor: pointer;
+}
+
+.legend-item[data-chart-tooltip]:hover,
+.legend-item[data-chart-tooltip]:focus-visible {
+  color: var(--accent);
 }
 
 .legend-swatch {
@@ -875,6 +925,10 @@ body.chart-expanded {
 
   h1 {
     font-size: 34px;
+  }
+
+  .overview-benchmarks {
+    grid-template-columns: 1fr;
   }
 
   .filters {
