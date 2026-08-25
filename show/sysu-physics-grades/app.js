@@ -18,7 +18,7 @@
     教学班排名: row[8],
   }));
 
-  const palette = ["#386b81", "#b48a3a", "#c87542", "#748061", "#a96e78"];
+  const gradePalette = ["#244e61", "#386b81", "#5f8798", "#8da8b3", "#c5d2d7"];
   const categoryColors = {
     公必: "#386b81",
     专必: "#244e61",
@@ -30,6 +30,7 @@
   const semesterOrder = yearOrder.flatMap((year) => termOrder.map((term) => `${year}${term}`));
 
   let sortState = { key: "index", direction: "asc" };
+  let pinnedTooltipTarget = null;
 
   const $ = (selector) => document.querySelector(selector);
   const svgNS = "http://www.w3.org/2000/svg";
@@ -85,7 +86,14 @@
       row.forEach((value, index) => {
         const td = document.createElement("td");
         if (typeof value === "number") td.className = "numeric";
-        td.textContent = value ?? "";
+        if (index === 0 && typeof value === "string" && value.includes("|")) {
+          value.split("|").forEach((line, lineIndex) => {
+            if (lineIndex) td.append(document.createElement("br"));
+            td.append(document.createTextNode(line));
+          });
+        } else {
+          td.textContent = value ?? "";
+        }
         if (index > 0) td.dataset.label = overviewHeaders[index];
         tr.append(td);
       });
@@ -154,7 +162,11 @@
       const aValue = a[sortState.key];
       const bValue = b[sortState.key];
       let result;
-      if (sortState.key === "教学班排名") {
+      if (sortState.key === "学年") {
+        result = yearOrder.indexOf(aValue) - yearOrder.indexOf(bValue);
+      } else if (sortState.key === "学期") {
+        result = termOrder.indexOf(aValue) - termOrder.indexOf(bValue);
+      } else if (sortState.key === "教学班排名") {
         result = parseRank(aValue).percentile - parseRank(bValue).percentile;
       } else if (typeof aValue === "number" && typeof bValue === "number") {
         result = aValue - bValue;
@@ -266,6 +278,28 @@
     tooltip.setAttribute("aria-hidden", "true");
   }
 
+  function bindChartTooltip(target, title, lines) {
+    const show = (event) => showTooltip(event, title, lines);
+    target.setAttribute("data-chart-tooltip", "");
+
+    target.addEventListener("pointermove", (event) => {
+      if (event.pointerType !== "touch" && !pinnedTooltipTarget) show(event);
+    });
+    target.addEventListener("pointerleave", (event) => {
+      if (event.pointerType !== "touch" && pinnedTooltipTarget !== target) hideTooltip();
+    });
+    target.addEventListener("click", (event) => {
+      event.stopPropagation();
+      if (pinnedTooltipTarget === target) {
+        pinnedTooltipTarget = null;
+        hideTooltip();
+        return;
+      }
+      pinnedTooltipTarget = target;
+      show(event);
+    });
+  }
+
   function renderDonutChart(containerSelector, sourceRows, centerLabel, unit, ariaLabel) {
     const container = $(containerSelector);
     container.replaceChildren();
@@ -304,10 +338,10 @@
   }
 
   function renderCreditDonut() {
-    const sourceRows = overviewRows.slice(1, 5).map((row, index) => ({
+    const sourceRows = overviewRows.slice(1, 5).map((row) => ({
       label: row[0],
       value: Number(row[2]),
-      color: palette[index],
+      color: categoryColors[row[0]],
     }));
     renderDonutChart("#credit-composition", sourceRows, "学分", "", "各类别学分构成");
   }
@@ -346,8 +380,7 @@
         tabindex: 0,
       });
       const tooltipLines = item.tooltip || [`${formatValue(item.value, options.valueDigits ?? 2)}${options.suffix || ""}`];
-      rect.addEventListener("pointermove", (event) => showTooltip(event, item.label, tooltipLines));
-      rect.addEventListener("pointerleave", hideTooltip);
+      bindChartTooltip(rect, item.label, tooltipLines);
       rect.addEventListener("focus", () => rect.setAttribute("opacity", "0.78"));
       rect.addEventListener("blur", () => rect.setAttribute("opacity", "1"));
       svg.append(rect);
@@ -376,7 +409,7 @@
     });
     renderDonutChart(
       "#grade-distribution",
-      bins.map((bin, index) => ({ label: bin.label, value: bin.count, color: palette[index] })),
+      bins.map((bin, index) => ({ label: bin.label, value: bin.count, color: gradePalette[index] })),
       "数值成绩课程",
       "",
       bins.map((bin) => `${bin.label} ${bin.count} 门课程`).join("，"),
@@ -488,8 +521,7 @@
       const rankPoint = svgElement("circle", { cx: xPos, cy: rankYPos, r: 4.5, class: "rank-point", tabindex: 0 });
       const cumulativePoint = svgElement("circle", { cx: xPos, cy: cumulativeYPos, r: 4.5, class: "cumulative-point", tabindex: 0 });
       [semesterPoint, rankPoint, cumulativePoint].forEach((point) => {
-        point.addEventListener("pointermove", (event) => showTooltip(event, item.fullLabel, tooltipLines));
-        point.addEventListener("pointerleave", hideTooltip);
+        bindChartTooltip(point, item.fullLabel, tooltipLines);
       });
       svg.append(semesterPoint, rankPoint, cumulativePoint);
     });
@@ -657,8 +689,7 @@
         `排名百分位 ${row.rankPercentile.toFixed(2)}%`,
         `${row.学分} 学分 · ${row.类别}`,
       ];
-      circle.addEventListener("pointermove", (event) => showTooltip(event, row.课程, tooltipLines));
-      circle.addEventListener("pointerleave", hideTooltip);
+      bindChartTooltip(circle, row.课程, tooltipLines);
       circle.addEventListener("focus", () => circle.setAttribute("opacity", "1"));
       circle.addEventListener("blur", () => circle.setAttribute("opacity", "0.78"));
       svg.append(circle);
@@ -758,6 +789,8 @@
   }
 
   function renderCharts() {
+    pinnedTooltipTarget = null;
+    hideTooltip();
     renderCreditDonut();
     renderGradeDistribution();
     renderTrendCharts();
@@ -773,8 +806,18 @@
   setupScatterFullscreen();
   renderCharts();
 
+  document.addEventListener("pointerdown", (event) => {
+    if (pinnedTooltipTarget && !event.target.closest("[data-chart-tooltip]")) {
+      pinnedTooltipTarget = null;
+      hideTooltip();
+    }
+  });
+
   let resizeTimer;
+  let chartViewportWidth = window.innerWidth;
   window.addEventListener("resize", () => {
+    if (Math.abs(window.innerWidth - chartViewportWidth) < 2) return;
+    chartViewportWidth = window.innerWidth;
     window.clearTimeout(resizeTimer);
     resizeTimer = window.setTimeout(renderCharts, 140);
   });
