@@ -15,7 +15,7 @@
     最终成绩: row[6],
     绩点: Number(row[7]),
     教学班排名: row[8],
-    "Yu Index": Math.sqrt((Number(row[7]) / 5) * 100 * parseRank(row[8]).percentile),
+    "Yu Index": computeYuIndex(Number(row[7]), row[8]),
   }));
 
   const gradePalette = ["#244e61", "#386b81", "#5f8798", "#8da8b3", "#c5d2d7"];
@@ -28,13 +28,16 @@
   const categorySymbols = { 公必: "circle", 专必: "square", 公选: "diamond", 专选: "triangle" };
   const scatterDefaultTitle = "课程绩点与排名分布图";
   const scatterExpandedTitle = "SYSU-Phys-Bench: 课程绩点与排名分布图";
+  const yuScatterDefaultTitle = "Yu Index 与排名分布图";
+  const yuScatterExpandedTitle = "SYSU-Phys-Bench: Yu Index 与排名分布图";
   const yearOrder = ["大一", "大二", "大三", "大四"];
   const termOrder = ["第一学期", "第二学期"];
   const semesterOrder = yearOrder.flatMap((year) => termOrder.map((term) => `${year}${term}`));
 
   let sortState = { key: "index", direction: "asc" };
   let pinnedTooltipTarget = null;
-  const scatterEligibleRows = rows.filter((row) => Number.isFinite(row.绩点));
+  const scatterEligibleRows = rows.filter((row) => Number.isFinite(row.绩点) && Number.isFinite(row["Yu Index"]));
+  const yuIndexBenchmark = medianValue(scatterEligibleRows.map((row) => row["Yu Index"]));
   const scatterSelected = new Set(scatterEligibleRows.map((row) => row.index));
   const detailMultiFilters = {};
   const scatterMultiFilters = {};
@@ -82,6 +85,93 @@
     const rank = Number(match[1]);
     const total = Number(match[2]);
     return { rank, total, percentile: (rank / total) * 100 };
+  }
+
+  function inverseStandardNormal(probability) {
+    if (!(probability > 0 && probability < 1)) return NaN;
+    const a = [-39.69683028665376, 220.9460984245205, -275.9285104469687, 138.357751867269, -30.66479806614716, 2.506628277459239];
+    const b = [-54.47609879822406, 161.5858368580409, -155.6989798598866, 66.80131188771972, -13.28068155288572];
+    const c = [-0.007784894002430293, -0.3223964580411365, -2.400758277161838, -2.549732539343734, 4.374664141464968, 2.938163982698783];
+    const d = [0.007784695709041462, 0.3224671290700398, 2.445134137142996, 3.754408661907416];
+    const lower = 0.02425;
+    const upper = 1 - lower;
+    let q;
+    let r;
+
+    if (probability < lower) {
+      q = Math.sqrt(-2 * Math.log(probability));
+      return (((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5])
+        / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1);
+    }
+    if (probability > upper) {
+      q = Math.sqrt(-2 * Math.log(1 - probability));
+      return -(((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5])
+        / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1);
+    }
+    q = probability - 0.5;
+    r = q * q;
+    return (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * q
+      / (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1);
+  }
+
+  function computeYuIndex(gpa, rankValue) {
+    const { rank, total } = parseRank(rankValue);
+    if (!Number.isFinite(gpa) || !Number.isFinite(rank) || !Number.isFinite(total) || rank < 1 || rank > total) return NaN;
+    const plottingPosition = (total - rank + 5 / 8) / (total + 1 / 4);
+    return gpa - inverseStandardNormal(plottingPosition) / 3;
+  }
+
+  function medianValue(values) {
+    const sorted = values.filter(Number.isFinite).sort((a, b) => a - b);
+    if (!sorted.length) return NaN;
+    const middle = Math.floor(sorted.length / 2);
+    return sorted.length % 2 ? sorted[middle] : (sorted[middle - 1] + sorted[middle]) / 2;
+  }
+
+  function setupYuCalculator() {
+    const form = $("#yu-calculator-form");
+    const gpaInput = $("#yu-calculator-gpa");
+    const rankInput = $("#yu-calculator-rank");
+    const totalInput = $("#yu-calculator-total");
+    const output = $("#yu-calculator-result");
+    const inputs = [gpaInput, rankInput, totalInput];
+    const resetOutput = () => {
+      const label = document.createElement("span");
+      label.textContent = "Yu Index";
+      const placeholder = document.createElement("strong");
+      placeholder.textContent = "—";
+      output.replaceChildren(label, placeholder);
+    };
+
+    inputs.forEach((input) => input.addEventListener("input", resetOutput));
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const gpa = Number(gpaInput.value);
+      const rank = Number(rankInput.value);
+      const total = Number(totalInput.value);
+      const valid = gpaInput.value !== "" && rankInput.value !== "" && totalInput.value !== ""
+        && gpa >= 0 && gpa <= 5 && Number.isInteger(rank) && Number.isInteger(total)
+        && total >= 2 && rank >= 1 && rank <= total;
+
+      output.replaceChildren();
+      if (!valid) {
+        const message = document.createElement("span");
+        message.className = "yu-calculator-error";
+        message.textContent = "请输入有效的绩点、名次和人数";
+        output.append(message);
+        return;
+      }
+
+      const value = computeYuIndex(gpa, `${rank}/${total}`);
+      const label = document.createElement("span");
+      label.textContent = "Yu Index";
+      const result = document.createElement("strong");
+      result.textContent = value.toFixed(2);
+      const interpretation = document.createElement("small");
+      interpretation.textContent = value >= yuIndexBenchmark ? "给分较友好" : "给分较严格";
+      output.append(label, result, interpretation);
+    });
   }
 
   function weightedAverage(items, valueAccessor, weightAccessor = (item) => item.学分) {
@@ -374,8 +464,8 @@
           td.className = "numeric yu-index-cell";
           const score = document.createElement("div");
           score.className = "yu-index-score";
-          score.style.setProperty("--yu-score", `${Math.max(0, Math.min(100, value))}%`);
-          score.innerHTML = `<strong>${value.toFixed(1)}</strong><i aria-hidden="true"></i>`;
+          score.style.setProperty("--yu-score", `${Math.max(0, Math.min(100, (value / 5) * 100))}%`);
+          score.innerHTML = `<strong>${value.toFixed(2)}</strong><i aria-hidden="true"></i>`;
           td.append(score);
         } else {
           td.textContent = value ?? "";
@@ -389,8 +479,8 @@
     });
   }
 
-  function showTooltip(event, title, lines) {
-    const tooltip = $("#chart-tooltip");
+  function showTooltip(event, title, lines, tooltipSelector = "#chart-tooltip") {
+    const tooltip = $(tooltipSelector);
     tooltip.replaceChildren();
     const strong = document.createElement("strong");
     strong.textContent = title;
@@ -406,29 +496,37 @@
     tooltip.setAttribute("aria-hidden", "false");
   }
 
-  function hideTooltip() {
-    const tooltip = $("#chart-tooltip");
+  function hideTooltip(tooltipSelector = "#chart-tooltip") {
+    const tooltip = $(tooltipSelector);
     tooltip.classList.remove("is-visible");
     tooltip.setAttribute("aria-hidden", "true");
   }
 
-  function bindChartTooltip(target, title, lines) {
-    const show = (event) => showTooltip(event, title, lines);
+  function hideAllTooltips() {
+    document.querySelectorAll(".chart-tooltip").forEach((tooltip) => {
+      tooltip.classList.remove("is-visible");
+      tooltip.setAttribute("aria-hidden", "true");
+    });
+  }
+
+  function bindChartTooltip(target, title, lines, tooltipSelector = "#chart-tooltip") {
+    const show = (event) => showTooltip(event, title, lines, tooltipSelector);
     target.setAttribute("data-chart-tooltip", "");
 
     target.addEventListener("pointermove", (event) => {
       if (event.pointerType !== "touch" && !pinnedTooltipTarget) show(event);
     });
     target.addEventListener("pointerleave", (event) => {
-      if (event.pointerType !== "touch" && pinnedTooltipTarget !== target) hideTooltip();
+      if (event.pointerType !== "touch" && pinnedTooltipTarget !== target) hideTooltip(tooltipSelector);
     });
     target.addEventListener("click", (event) => {
       event.stopPropagation();
       if (pinnedTooltipTarget === target) {
         pinnedTooltipTarget = null;
-        hideTooltip();
+        hideTooltip(tooltipSelector);
         return;
       }
+      hideAllTooltips();
       pinnedTooltipTarget = target;
       show(event);
     });
@@ -710,6 +808,11 @@
     return document.fullscreenElement === card || card.classList.contains("is-expanded");
   }
 
+  function isYuScatterExpanded() {
+    const card = $("#yu-rank-card");
+    return document.fullscreenElement === card || card.classList.contains("is-expanded");
+  }
+
   function appendScatterCourseLabels(svg, data, x, y, valueAccessor, margin, width, height, compact = false) {
     const bounds = {
       left: margin.left + 3,
@@ -724,8 +827,9 @@
       text: truncateText(row.课程, compact ? (width < 520 ? 5 : 9) : 18),
     }));
 
+    const densityRadius = compact ? 42 : 58;
     labels.forEach((item) => {
-      item.density = labels.filter((other) => other !== item && Math.hypot(other.pointX - item.pointX, other.pointY - item.pointY) < 42).length;
+      item.density = labels.filter((other) => other !== item && Math.hypot(other.pointX - item.pointX, other.pointY - item.pointY) < densityRadius).length;
     });
     labels.sort((a, b) => b.density - a.density || b.row.学分 - a.row.学分);
 
@@ -733,13 +837,13 @@
     const directions = [
       [1, 0], [-1, 0], [0.72, -0.72], [0.72, 0.72], [-0.72, -0.72], [-0.72, 0.72], [0, -1], [0, 1],
     ];
-    const radii = compact ? [9, 14, 21, 30, 42] : [12, 19, 28, 40, 54, 70, 88];
+    const radii = compact ? [9, 14, 21, 30, 42] : [16, 24, 34, 48, 64, 84, 106];
     const overlapArea = (a, b) => Math.max(0, Math.min(a.right, b.right) - Math.max(a.left, b.left)) * Math.max(0, Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top));
     const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 
     labels.forEach((item) => {
-      const textWidth = Array.from(item.text).reduce((sum, character) => sum + (/^[\x20-\x7e]$/.test(character) ? (compact ? 4.6 : 5.8) : (compact ? 8 : 10)), 4);
-      const textHeight = compact ? 10 : 12;
+      const textWidth = Array.from(item.text).reduce((sum, character) => sum + (/^[\x20-\x7e]$/.test(character) ? (compact ? 4.6 : 8) : (compact ? 8 : 14)), 4);
+      const textHeight = compact ? 10 : 17;
       let bestCandidate = null;
 
       radii.forEach((radius) => {
@@ -748,7 +852,7 @@
           const offsetY = directionY * radius;
           const anchor = offsetX > 3 ? "start" : offsetX < -3 ? "end" : "middle";
           const labelX = item.pointX + offsetX;
-          const labelY = item.pointY + offsetY + (compact ? 3 : 4);
+          const labelY = item.pointY + offsetY + (compact ? 3 : 5);
           const left = anchor === "start" ? labelX : anchor === "end" ? labelX - textWidth : labelX - textWidth / 2;
           const box = { left, right: left + textWidth, top: labelY - textHeight + 2, bottom: labelY + 2 };
           if (box.left < bounds.left || box.right > bounds.right || box.top < bounds.top || box.bottom > bounds.bottom) return;
@@ -762,7 +866,7 @@
 
       if (!bestCandidate) {
         const labelX = clamp(item.pointX + 12, bounds.left, bounds.right - textWidth);
-        const labelY = clamp(item.pointY + (compact ? 3 : 4), bounds.top + textHeight, bounds.bottom - 2);
+        const labelY = clamp(item.pointY + (compact ? 3 : 5), bounds.top + textHeight, bounds.bottom - 2);
         bestCandidate = {
           anchor: "start",
           box: { left: labelX, right: labelX + textWidth, top: labelY - textHeight + 2, bottom: labelY + 2 },
@@ -810,7 +914,7 @@
     }
     const width = Math.max(360, container.clientWidth || 720);
     const height = expanded ? Math.max(560, container.clientHeight || window.innerHeight - 84) : width < 520 ? 320 : 350;
-    const margin = { top: 58, right: 20, bottom: 52, left: 64 };
+    const margin = expanded ? { top: 76, right: 32, bottom: 72, left: 84 } : { top: 58, right: 20, bottom: 52, left: 64 };
     const plotWidth = width - margin.left - margin.right;
     const plotHeight = height - margin.top - margin.bottom;
     const minScore = 2.5;
@@ -823,9 +927,8 @@
     const y = (score) => margin.top + ((maxScore - score) / (maxScore - minScore)) * plotHeight;
     const sortedRanks = data.map((row) => row.rankPercentile).sort((a, b) => a - b);
     const sortedScores = data.map((row) => row.绩点).sort((a, b) => a - b);
-    const median = (values) => values.length % 2 ? values[(values.length - 1) / 2] : (values[values.length / 2 - 1] + values[values.length / 2]) / 2;
-    const rankMedian = median(sortedRanks);
-    const scoreMedian = median(sortedScores);
+    const rankMedian = medianValue(sortedRanks);
+    const scoreMedian = medianValue(sortedScores);
     const medianX = x(rankMedian);
     const medianY = y(scoreMedian);
     const svg = svgElement("svg", { viewBox: `0 0 ${width} ${height}`, role: "img", "aria-label": "横轴为对数刻度教学班排名百分位、纵轴为课程绩点的四象限散点图" });
@@ -842,7 +945,7 @@
     [1, 2, 5, 10, 20, 50, 100].forEach((value) => {
       const xPos = x(value);
       svg.append(svgElement("line", { x1: xPos, x2: xPos, y1: margin.top, y2: height - margin.bottom, class: "grid-line" }));
-      svg.append(svgElement("text", { x: xPos, y: height - 19, "text-anchor": "middle", class: "tick-label" }, `${value}%`));
+      svg.append(svgElement("text", { x: xPos, y: height - (expanded ? 29 : 19), "text-anchor": "middle", class: "tick-label" }, `${value}%`));
     });
     [2.5, 3, 3.5, 4, 4.5, 5].forEach((value) => {
       const yPos = y(value);
@@ -851,30 +954,32 @@
     });
     svg.append(svgElement("line", { x1: medianX, x2: medianX, y1: margin.top, y2: height - margin.bottom, class: "quadrant-line" }));
     svg.append(svgElement("line", { x1: margin.left, x2: width - margin.right, y1: medianY, y2: medianY, class: "quadrant-line" }));
-    svg.append(svgElement("text", { x: width - margin.right, y: height - 3, "text-anchor": "end", class: "tick-label" }, "教学班排名百分位（对数刻度）"));
+    svg.append(svgElement("text", { x: margin.left + plotWidth / 2, y: height - (expanded ? 5 : 3), "text-anchor": "middle", class: "tick-label" }, "教学班排名百分位（对数刻度）"));
     const yAxisCenter = margin.top + plotHeight / 2;
-    svg.append(svgElement("text", { x: 16, y: yAxisCenter, transform: `rotate(-90 16 ${yAxisCenter})`, "text-anchor": "middle", class: "tick-label" }, "绩点"));
+    const yAxisLabelX = expanded ? 22 : 16;
+    svg.append(svgElement("text", { x: yAxisLabelX, y: yAxisCenter, transform: `rotate(-90 ${yAxisLabelX} ${yAxisCenter})`, "text-anchor": "middle", class: "tick-label" }, "绩点"));
 
     if (width >= 620) {
-      svg.append(svgElement("text", { x: margin.left + 8, y: margin.top + 16, class: "quadrant-label" }, "排名较低 · 绩点较高（课程给分高）"));
-      svg.append(svgElement("text", { x: width - margin.right - 8, y: height - margin.bottom - 9, "text-anchor": "end", class: "quadrant-label" }, "排名较高 · 绩点较低（课程给分低）"));
+      svg.append(svgElement("text", { x: margin.left + 8, y: margin.top + (expanded ? 22 : 16), class: "quadrant-label" }, "排名较低 · 绩点较高（课程给分高）"));
+      svg.append(svgElement("text", { x: width - margin.right - 8, y: height - margin.bottom - (expanded ? 12 : 9), "text-anchor": "end", class: "quadrant-label" }, "排名较高 · 绩点较低（课程给分低）"));
     }
 
-    const legendStep = 70;
+    const legendStep = expanded ? 92 : 70;
     const legendWidth = legendStep * Object.keys(categoryColors).length;
-    const legend = svgElement("g", { transform: `translate(${Math.max(margin.left, width - margin.right - legendWidth)},24)` });
+    const legend = svgElement("g", { transform: `translate(${Math.max(margin.left, width - margin.right - legendWidth)},${expanded ? 32 : 24})` });
     Object.entries(categoryColors).forEach(([label, color], index) => {
       const offset = index * legendStep;
-      legend.append(scatterSymbol(label, offset + 5, 0, 4, { fill: color }));
-      legend.append(svgElement("text", { x: offset + 12, y: 4, class: "tick-label" }, label));
+      legend.append(scatterSymbol(label, offset + (expanded ? 7 : 5), 0, expanded ? 5.5 : 4, { fill: color }));
+      legend.append(svgElement("text", { x: offset + (expanded ? 17 : 12), y: expanded ? 5 : 4, class: "tick-label" }, label));
     });
     svg.append(legend);
 
     appendScatterCourseLabels(svg, data, x, y, (row) => row.绩点, margin, width, height, !expanded);
     data.forEach((row) => {
-      const marker = scatterSymbol(row.类别, x(row.rankPercentile), y(row.绩点), 3 + Math.sqrt(row.学分) * 1.15, {
+      const marker = scatterSymbol(row.类别, x(row.rankPercentile), y(row.绩点), (3 + Math.sqrt(row.学分) * 1.15) * (expanded ? 1.8 : 1), {
+        class: "scatter-point",
         stroke: "#ffffff",
-        "stroke-width": 1,
+        "stroke-width": expanded ? 1.5 : 1,
         opacity: 0.78,
         tabindex: 0,
       });
@@ -884,7 +989,7 @@
         `绩点 ${row.绩点.toFixed(1)}`,
         `教学班排名 ${row.教学班排名}`,
         `排名百分位 ${row.rankPercentile.toFixed(2)}%`,
-        `Yu Index ${row["Yu Index"].toFixed(1)}`,
+        `Yu Index ${row["Yu Index"].toFixed(2)}`,
         `${row.学分} 学分 · ${row.类别}`,
       ];
       bindChartTooltip(marker, row.课程, tooltipLines);
@@ -907,9 +1012,10 @@
       return;
     }
 
+    const expanded = isYuScatterExpanded();
     const width = Math.max(360, container.clientWidth || 720);
-    const height = width < 520 ? 330 : 390;
-    const margin = { top: 58, right: 20, bottom: 52, left: 64 };
+    const height = expanded ? Math.max(560, container.clientHeight || window.innerHeight - 84) : width < 520 ? 330 : 390;
+    const margin = expanded ? { top: 76, right: 32, bottom: 72, left: 84 } : { top: 58, right: 20, bottom: 52, left: 64 };
     const plotWidth = width - margin.left - margin.right;
     const plotHeight = height - margin.top - margin.bottom;
     const minRank = 0.5;
@@ -917,65 +1023,75 @@
     const logMin = Math.log10(minRank);
     const logMax = Math.log10(maxRank);
     const x = (rank) => margin.left + ((logMax - Math.log10(rank)) / (logMax - logMin)) * plotWidth;
-    const y = (value) => margin.top + ((100 - value) / 100) * plotHeight;
-    const svg = svgElement("svg", { viewBox: `0 0 ${width} ${height}`, role: "img", "aria-label": "横轴为对数刻度教学班排名百分位、纵轴为 Yu Index 的课程散点图" });
+    const minYuIndex = 2.5;
+    const maxYuIndex = 5;
+    const y = (value) => margin.top + ((maxYuIndex - value) / (maxYuIndex - minYuIndex)) * plotHeight;
+    const svg = svgElement("svg", { viewBox: `0 0 ${width} ${height}`, role: "img", "aria-label": "横轴为对数刻度教学班排名百分位、纵轴为 Yu Index 估计平均绩点的课程散点图" });
 
     [1, 2, 5, 10, 20, 50, 100].forEach((value) => {
       const xPos = x(value);
       svg.append(svgElement("line", { x1: xPos, x2: xPos, y1: margin.top, y2: height - margin.bottom, class: "grid-line" }));
-      svg.append(svgElement("text", { x: xPos, y: height - 19, "text-anchor": "middle", class: "tick-label" }, `${value}%`));
+      svg.append(svgElement("text", { x: xPos, y: height - (expanded ? 29 : 19), "text-anchor": "middle", class: "tick-label" }, `${value}%`));
     });
-    [0, 20, 40, 60, 80, 100].forEach((value) => {
+    [2.5, 3, 3.5, 4, 4.5, 5].forEach((value) => {
       const yPos = y(value);
       svg.append(svgElement("line", { x1: margin.left, x2: width - margin.right, y1: yPos, y2: yPos, class: "grid-line" }));
-      svg.append(svgElement("text", { x: margin.left - 8, y: yPos + 4, "text-anchor": "end", class: "tick-label" }, value));
+      svg.append(svgElement("text", { x: margin.left - 8, y: yPos + 4, "text-anchor": "end", class: "tick-label" }, value.toFixed(1)));
     });
-    svg.append(svgElement("text", { x: width - margin.right, y: height - 3, "text-anchor": "end", class: "tick-label" }, "教学班排名百分位（对数刻度）"));
+    svg.append(svgElement("text", { x: margin.left + plotWidth / 2, y: height - (expanded ? 5 : 3), "text-anchor": "middle", class: "tick-label" }, "教学班排名百分位（对数刻度）"));
     const yAxisCenter = margin.top + plotHeight / 2;
-    svg.append(svgElement("text", { x: 16, y: yAxisCenter, transform: `rotate(-90 16 ${yAxisCenter})`, "text-anchor": "middle", class: "tick-label" }, "Yu Index"));
+    const yAxisLabelX = expanded ? 22 : 16;
+    svg.append(svgElement("text", { x: yAxisLabelX, y: yAxisCenter, transform: `rotate(-90 ${yAxisLabelX} ${yAxisCenter})`, "text-anchor": "middle", class: "tick-label" }, "Yu Index"));
 
-    const legendStep = 70;
+    const benchmarkY = y(yuIndexBenchmark);
+    svg.append(svgElement("line", { x1: margin.left, x2: width - margin.right, y1: benchmarkY, y2: benchmarkY, class: "yu-benchmark-line" }));
+    svg.append(svgElement("text", { x: width - margin.right - 8, y: benchmarkY - (expanded ? 10 : 7), "text-anchor": "end", class: "yu-benchmark-label" }, "给分较友好"));
+    svg.append(svgElement("text", { x: width - margin.right - 8, y: benchmarkY + (expanded ? 20 : 15), "text-anchor": "end", class: "yu-benchmark-label" }, "给分较严格"));
+    svg.append(svgElement("text", { x: margin.left + 7, y: benchmarkY - (expanded ? 10 : 7), class: "yu-benchmark-value" }, `数据集中位数 ${yuIndexBenchmark.toFixed(2)}`));
+
+    const legendStep = expanded ? 92 : 70;
     const legendWidth = legendStep * Object.keys(categoryColors).length;
-    const legend = svgElement("g", { transform: `translate(${Math.max(margin.left, width - margin.right - legendWidth)},24)` });
+    const legend = svgElement("g", { transform: `translate(${Math.max(margin.left, width - margin.right - legendWidth)},${expanded ? 32 : 24})` });
     Object.entries(categoryColors).forEach(([label, color], index) => {
       const offset = index * legendStep;
-      legend.append(scatterSymbol(label, offset + 5, 0, 4, { fill: color }));
-      legend.append(svgElement("text", { x: offset + 12, y: 4, class: "tick-label" }, label));
+      legend.append(scatterSymbol(label, offset + (expanded ? 7 : 5), 0, expanded ? 5.5 : 4, { fill: color }));
+      legend.append(svgElement("text", { x: offset + (expanded ? 17 : 12), y: expanded ? 5 : 4, class: "tick-label" }, label));
     });
     svg.append(legend);
 
-    appendScatterCourseLabels(svg, data, x, y, (row) => row["Yu Index"], margin, width, height, true);
+    appendScatterCourseLabels(svg, data, x, y, (row) => row["Yu Index"], margin, width, height, !expanded);
     data.forEach((row) => {
-      const marker = scatterSymbol(row.类别, x(row.rankPercentile), y(row["Yu Index"]), 3 + Math.sqrt(row.学分) * 1.15, {
+      const marker = scatterSymbol(row.类别, x(row.rankPercentile), y(row["Yu Index"]), (3 + Math.sqrt(row.学分) * 1.15) * (expanded ? 1.8 : 1), {
+        class: "scatter-point",
         stroke: "#ffffff",
-        "stroke-width": 1,
+        "stroke-width": expanded ? 1.5 : 1,
         opacity: 0.8,
         tabindex: 0,
       });
       bindChartTooltip(marker, row.课程, [
         ...(row.教师 ? [`教师 ${truncateText(row.教师)}`] : []),
-        `Yu Index ${row["Yu Index"].toFixed(1)}`,
+        `Yu Index ${row["Yu Index"].toFixed(2)}`,
         `绩点 ${row.绩点.toFixed(1)}`,
         `教学班排名 ${row.教学班排名}`,
         `排名百分位 ${row.rankPercentile.toFixed(2)}%`,
         `${row.学分} 学分 · ${row.类别}`,
-      ]);
+      ], "#yu-chart-tooltip");
       svg.append(marker);
     });
     container.append(svg);
   }
 
-  function setupScatterFullscreen() {
-    const card = $("#score-rank-card");
-    const title = $("#score-rank-title");
-    const button = $("#scatter-fullscreen");
-    const downloadButton = $("#scatter-download");
+  function setupChartFullscreen({ cardSelector, titleSelector, buttonSelector, downloadSelector, chartSelector, defaultTitle, expandedTitle, ariaTitle, renderChart, isExpanded }) {
+    const card = $(cardSelector);
+    const title = $(titleSelector);
+    const button = $(buttonSelector);
+    const downloadButton = $(downloadSelector);
     let preparedPngUrl = "";
 
     const preparePng = async () => {
       downloadButton.setAttribute("aria-disabled", "true");
       downloadButton.textContent = "生成中";
-      const source = $("#score-rank-scatter svg");
+      const source = $(`${chartSelector} svg`);
       if (!source) {
         preparedPngUrl = "";
         downloadButton.removeAttribute("href");
@@ -984,7 +1100,7 @@
       }
       const clone = source.cloneNode(true);
       const viewBox = source.viewBox.baseVal;
-      const titleHeight = 58;
+      const titleHeight = 82;
       const exportHeight = viewBox.height + titleHeight;
       const exportScale = Math.max(2, Math.min(3, 3600 / viewBox.width));
       clone.setAttribute("width", viewBox.width);
@@ -998,16 +1114,20 @@
 
       const style = svgElement("style", {}, `
         svg { font-family: "Microsoft YaHei", "Noto Sans CJK SC", sans-serif; }
-        .tick-label { fill: #737c82; font-family: Consolas, monospace; font-size: 11px; }
-        .grid-line { stroke: #e8ebe9; stroke-width: 1; }
-        .quadrant-line { stroke: #7d878c; stroke-dasharray: 4 4; stroke-width: 1; }
-        .quadrant-label { fill: #7b858a; font-size: 10px; letter-spacing: 0.02em; }
-        .scatter-label-line { stroke: rgba(75, 87, 93, 0.34); stroke-width: 0.8; }
-        .scatter-course-label { fill: #34434a; stroke: #ffffff; stroke-width: 3px; paint-order: stroke; font-size: 10px; }
-        .export-title { fill: #1f3139; font-size: 22px; font-weight: 700; letter-spacing: -0.01em; }
+        .tick-label { fill: #737c82; font-family: Consolas, monospace; font-size: 16px; }
+        .grid-line { stroke: #e8ebe9; stroke-width: 1.2; }
+        .quadrant-line { stroke: #7d878c; stroke-dasharray: 5 5; stroke-width: 1.3; }
+        .quadrant-label { fill: #7b858a; stroke: #ffffff; stroke-width: 4px; paint-order: stroke; font-size: 14px; letter-spacing: 0.02em; }
+        .yu-benchmark-line { stroke: #667278; stroke-dasharray: 7 5; stroke-width: 1.4; }
+        .yu-benchmark-label, .yu-benchmark-value { fill: #59666c; stroke: #ffffff; stroke-width: 4px; paint-order: stroke; font-size: 14px; }
+        .yu-benchmark-label { font-weight: 650; }
+        .scatter-label-line { stroke: rgba(75, 87, 93, 0.42); stroke-width: 1.15; }
+        .scatter-course-label { fill: #34434a; stroke: #ffffff; stroke-width: 5px; paint-order: stroke; font-size: 15px; }
+        .scatter-point { stroke-width: 1.6px; }
+        .export-title { fill: #1f3139; font-size: 30px; font-weight: 700; letter-spacing: -0.01em; }
       `);
       clone.append(style);
-      clone.append(svgElement("text", { x: viewBox.width / 2, y: 36, "text-anchor": "middle", class: "export-title" }, scatterExpandedTitle));
+      clone.append(svgElement("text", { x: viewBox.width / 2, y: 52, "text-anchor": "middle", class: "export-title" }, expandedTitle));
       clone.append(chartGroup);
 
       const svgBlob = new Blob([new XMLSerializer().serializeToString(clone)], { type: "image/svg+xml;charset=utf-8" });
@@ -1032,11 +1152,11 @@
     };
 
     const update = () => {
-      const expanded = isScatterExpanded();
-      title.textContent = expanded ? scatterExpandedTitle : scatterDefaultTitle;
+      const expanded = isExpanded();
+      title.textContent = expanded ? expandedTitle : defaultTitle;
       button.textContent = expanded ? "退出全屏" : "全屏";
-      button.setAttribute("aria-label", expanded ? "退出课程绩点与排名分布图全屏" : "全屏查看课程绩点与排名分布图");
-      renderScatter();
+      button.setAttribute("aria-label", expanded ? `退出${ariaTitle}全屏` : `全屏查看${ariaTitle}`);
+      renderChart();
       if (expanded) {
         preparePng();
       } else {
@@ -1073,13 +1193,40 @@
 
     document.addEventListener("fullscreenchange", update);
     document.addEventListener("scatterfilterschange", () => {
-      if (isScatterExpanded()) preparePng();
+      if (isExpanded()) preparePng();
+    });
+  }
+
+  function setupScatterFullscreen() {
+    setupChartFullscreen({
+      cardSelector: "#score-rank-card",
+      titleSelector: "#score-rank-title",
+      buttonSelector: "#scatter-fullscreen",
+      downloadSelector: "#scatter-download",
+      chartSelector: "#score-rank-scatter",
+      defaultTitle: scatterDefaultTitle,
+      expandedTitle: scatterExpandedTitle,
+      ariaTitle: "课程绩点与排名分布图",
+      renderChart: renderScatter,
+      isExpanded: isScatterExpanded,
+    });
+    setupChartFullscreen({
+      cardSelector: "#yu-rank-card",
+      titleSelector: "#yu-rank-title",
+      buttonSelector: "#yu-scatter-fullscreen",
+      downloadSelector: "#yu-scatter-download",
+      chartSelector: "#yu-rank-scatter",
+      defaultTitle: yuScatterDefaultTitle,
+      expandedTitle: yuScatterExpandedTitle,
+      ariaTitle: "Yu Index 与排名分布图",
+      renderChart: renderYuRankScatter,
+      isExpanded: isYuScatterExpanded,
     });
   }
 
   function renderCharts() {
     pinnedTooltipTarget = null;
-    hideTooltip();
+    hideAllTooltips();
     renderCreditDonut();
     renderGradeDistribution();
     renderTrendCharts();
@@ -1089,6 +1236,7 @@
   }
 
   renderOverviewBenchmarks();
+  setupYuCalculator();
   renderDetailsHead();
   setupFilters();
   setupScatterFilters();
@@ -1100,7 +1248,7 @@
   document.addEventListener("pointerdown", (event) => {
     if (pinnedTooltipTarget && !event.target.closest("[data-chart-tooltip]")) {
       pinnedTooltipTarget = null;
-      hideTooltip();
+      hideAllTooltips();
     }
   });
 

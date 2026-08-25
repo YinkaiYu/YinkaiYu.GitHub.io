@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#f6f7f5" />
+    <title>Yu Index 技术报告 · SYSU-Phys-Bench</title>
+    <link rel="stylesheet" href="styles.css?v=20260826-17" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="shell header-inner">
+        <a class="site-title" href="index.html">SYSU-Phys-Bench</a>
+        <nav aria-label="页面导航">
+          <a href="index.html#yu-index">返回基准测试</a>
+          <a class="personal-home-link" href="https://www.yykspace.com/">个人主页 <span aria-hidden="true">↗</span></a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="shell">
+      <article class="report-article section section-first">
+        <header class="report-title-block">
+          <h1>Yu Index：基于绩点与教学班排名的课程给分水平指标</h1>
+          <p class="report-byline">余荫铠 · SYSU-Phys-Bench</p>
+        </header>
+
+        <h2>1. 定义</h2>
+        <p>不同课程的原始绩点同时混合了个人表现与课程评分尺度，直接比较 GPA 难以单独刻画课程给分水平<a class="citation" href="#ref-2" aria-label="参考文献 2">[2]</a><a class="citation" href="#ref-3" aria-label="参考文献 3">[3]</a><a class="citation" href="#ref-5" aria-label="参考文献 5">[5]</a>。Yu Index 使用个人绩点和教学班排名分离这两个部分。</p>
+        <div class="yu-index-formula" aria-label="Yu Index 等于个人绩点减去三分之一乘以教学班排名所对应的标准正态分位数">
+          <math display="block">
+            <mrow>
+              <mi>Y</mi><mo>=</mo><mi>G</mi><mo>−</mo><mfrac><mn>1</mn><mn>3</mn></mfrac>
+              <msup><mi>Φ</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup>
+              <mo>(</mo>
+              <mfrac>
+                <mrow><mi>n</mi><mo>−</mo><mi>r</mi><mo>+</mo><mfrac><mn>5</mn><mn>8</mn></mfrac></mrow>
+                <mrow><mi>n</mi><mo>+</mo><mfrac><mn>1</mn><mn>4</mn></mfrac></mrow>
+              </mfrac>
+              <mo>)</mo>
+            </mrow>
+          </math>
+        </div>
+        <p>其中，<i>Y</i> 为 Yu Index，<i>G</i> 为个人绩点，<i>r</i> 为教学班名次（第 1 名为最高），<i>n</i> 为教学班人数，Φ<sup>−1</sup> 为标准正态分布的逆累积分布函数。</p>
+        <p>Yu Index 与 GPA 使用相同的数值尺度。例如，<i>Y</i> = 4.20 表示根据该学生的绩点与名次推测，这门课程的教学班平均绩点约为 4.20。Yu Index 越高，课程整体给分越高；Yu Index 越低，课程整体给分越低。</p>
+
+        <h2>2. 从个人绩点反推课程均值</h2>
+        <p>设一门课程的教学班绩点近似服从均值为 <i>μ</i>、标准差为 <i>σ</i> 的正态分布：</p>
+        <div class="yu-index-formula">
+          <math display="block">
+            <mrow><msub><mi>G</mi><mtext>class</mtext></msub><mo>∼</mo><mi>N</mi><mo>(</mo><mi>μ</mi><mo>,</mo><msup><mi>σ</mi><mn>2</mn></msup><mo>)</mo></mrow>
+          </math>
+        </div>
+        <p>一个学生的绩点可以写成：</p>
+        <div class="yu-index-formula">
+          <math display="block">
+            <mrow><mi>G</mi><mo>=</mo><mi>μ</mi><mo>+</mo><mi>σ</mi><mi>z</mi></mrow>
+          </math>
+        </div>
+        <p><i>z</i> 表示该学生在教学班成绩分布中的相对位置。由此可直接反解课程平均绩点：</p>
+        <div class="yu-index-formula">
+          <math display="block">
+            <mrow><mover><mi>μ</mi><mo>^</mo></mover><mo>=</mo><mi>G</mi><mo>−</mo><mi>σ</mi><mi>z</mi></mrow>
+          </math>
+        </div>
+        <p>因此，Yu Index 不是把绩点与排名任意加权，而是在估计一个与 GPA 同尺度的量：课程的教学班平均绩点。</p>
+
+        <h2>3. 将教学班排名转换为正态位置</h2>
+        <p>教学班共有 <i>n</i> 人时，第 <i>r</i> 名从低到高对应第 <i>n</i> − <i>r</i> + 1 个观测。采用 Blom 正态顺序统计量位置，将名次转换为累积概率<a class="citation" href="#ref-1" aria-label="参考文献 1">[1]</a>：</p>
+        <div class="yu-index-formula">
+          <math display="block">
+            <mrow>
+              <mi>p</mi><mo>=</mo>
+              <mfrac>
+                <mrow><mi>n</mi><mo>−</mo><mi>r</mi><mo>+</mo><mfrac><mn>5</mn><mn>8</mn></mfrac></mrow>
+                <mrow><mi>n</mi><mo>+</mo><mfrac><mn>1</mn><mn>4</mn></mfrac></mrow>
+              </mfrac>
+            </mrow>
+          </math>
+        </div>
+        <p>再用 <i>z</i> = Φ<sup>−1</sup>(<i>p</i>) 得到该名次通常对应的标准差位置。该转换体现了排名的非线性：班级中部的若干名次差异较小，而第一名、第二名等极端名次对应更明显的相对表现差异；不同规模教学班中的相同名次也会得到不同的 <i>z</i> 值。</p>
+
+        <h2>4. 典型班内绩点标准差</h2>
+        <p>每门课程只有一个人的绩点与排名，不能同时估计该课程的均值和标准差。SYSU-Phys-Bench 因此为所有课程使用统一的典型班内绩点标准差 <i>σ</i><sub>0</sub>。</p>
+        <p>对成绩单中 63 门同时具有绩点与教学班排名的课程，先由排名计算正态位置 <i>z</i><sub>j</sub>，再拟合：</p>
+        <div class="yu-index-formula">
+          <math display="block">
+            <mrow><msub><mi>G</mi><mi>j</mi></msub><mo>=</mo><mi>a</mi><mo>+</mo><msub><mi>σ</mi><mn>0</mn></msub><msub><mi>z</mi><mi>j</mi></msub><mo>+</mo><msub><mi>ε</mi><mi>j</mi></msub></mrow>
+          </math>
+        </div>
+        <p>拟合得到 <i>σ</i><sub>0</sub> ≈ 0.341。公开定义取与该估计接近且形式简洁的 <i>σ</i><sub>0</sub> = 1/3，从而得到最终公式。</p>
+
+        <h2>5. 数据校验</h2>
+        <p>在 63 门课程的数据中，Yu Index 与教学班名次占比的皮尔逊相关系数约为 −0.0004，与个人绩点的相关系数约为 0.840。前者表明 Yu Index 并不是教学班排名的线性复述，后者表明该指标仍然保留了绝对成绩信息。</p>
+        <div class="table-frame report-table">
+          <table aria-label="Yu Index 相关性检验">
+            <thead>
+              <tr><th>变量关系</th><th>皮尔逊相关系数</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Yu Index 与教学班名次占比</td><td>−0.0004</td></tr>
+              <tr><td>Yu Index 与个人绩点</td><td>0.840</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Yu Index 使用排名估计个人相对表现，再从绩点中扣除这一部分，以获得课程给分水平的估计值。</p>
+
+        <h2>6. 计算示例</h2>
+        <p>“热力学与统计物理”的个人绩点为 3.8，教学班排名为 2/43。由 Blom 位置得到 <i>p</i> ≈ 0.9624，进而得到 <i>z</i> ≈ 1.7796：</p>
+        <div class="yu-index-formula">
+          <math display="block">
+            <mrow><mi>Y</mi><mo>=</mo><mn>3.8</mn><mo>−</mo><mfrac><mn>1</mn><mn>3</mn></mfrac><mo>×</mo><mn>1.7796</mn><mo>≈</mo><mn>3.21</mn></mrow>
+          </math>
+        </div>
+        <p>个人绩点为 3.8，但该成绩已经对应教学班第 2 名；模型将其中一部分解释为个人相对表现，估计课程平均绩点约为 3.21。</p>
+
+        <div class="table-frame report-table">
+          <table aria-label="Yu Index 示例">
+            <thead>
+              <tr><th>课程</th><th>个人绩点</th><th>教学班排名</th><th>Yu Index</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>热力学与统计物理</td><td>3.8</td><td>2/43</td><td>3.21</td></tr>
+              <tr><td>体育</td><td>4.8</td><td>9/35</td><td>4.57</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>7. 指标意义</h2>
+        <p>Yu Index 将“绝对绩点”和“班内相对表现”分开：排名越靠前，个人绩点中被解释为相对表现的部分越多；排名越靠后却仍取得较高绩点，模型反推出的课程平均绩点越高。</p>
+        <p>它回答的问题是“根据这份个人成绩与教学班名次，这门课程的整体给分大约处于什么水平”。不同课程的 Yu Index 可以直接按 GPA 尺度比较，也更适合比较明显的给分区间差异。</p>
+
+        <h2>8. 方法关系</h2>
+        <p>教育测量研究长期关注原始 GPA 混合学生表现、课程选择与评分尺度的问题。Adjusted GPA<a class="citation" href="#ref-2" aria-label="参考文献 2">[2]</a>、Achievement Index<a class="citation" href="#ref-3" aria-label="参考文献 3">[3]</a>、Grade Lift<a class="citation" href="#ref-4" aria-label="参考文献 4">[4]</a> 与 calibrated GPA<a class="citation" href="#ref-5" aria-label="参考文献 5">[5]</a> 等方法都试图分离学生水平和课程给分差异。Yu Index 面向只有“一个人的绩点与教学班排名”的数据条件，以正态顺序统计量提供的相对位置信息完成课程平均绩点估计。</p>
+
+        <h2>参考文献</h2>
+        <ol class="report-reference-list">
+          <li id="ref-1">Blom, G. (1958). <a href="https://books.google.com/books/about/Statistical_Estimates_and_Transformed_Be.html?id=rWoGAQAAIAAJ"><i>Statistical Estimates and Transformed Beta-Variables</i></a>. New York: Wiley.</li>
+          <li id="ref-2">Caulkins, J. P., Larkey, P. D., &amp; Wei, J. (1996). <a href="https://doi.org/10.1184/R1/6470981.v1"><i>Adjusting GPA to Reflect Course Difficulty</i></a>. Pittsburgh: Carnegie Mellon University.</li>
+          <li id="ref-3">Johnson, V. E. (1997). <a href="https://projecteuclid.org/journals/statistical-science/volume-12/issue-4/An-alternative-to-traditional-GPA-for-evaluating-student-performance/10.1214/ss/1030037959.pdf">An alternative to traditional GPA for evaluating student performance</a>. <i>Statistical Science</i>, 12(4), 251–278. <a href="https://doi.org/10.1214/ss/1030037959">https://doi.org/10.1214/ss/1030037959</a>.</li>
+          <li id="ref-4">Millet, I. (2010). <a href="https://openpublishing.library.umass.edu/pare/article/1556/galley/1507/view/">Improving grading consistency through Grade Lift reporting</a>. <i>Practical Assessment, Research &amp; Evaluation</i>, 15(4).</li>
+          <li id="ref-5">Tomkin, J. H., &amp; West, M. (2022). <a href="https://link.springer.com/article/10.1186/s40594-022-00343-1">STEM courses are harder: evaluating inter-course grading disparities with a calibrated GPA model</a>. <i>International Journal of STEM Education</i>, 9, 27. <a href="https://doi.org/10.1186/s40594-022-00343-1">https://doi.org/10.1186/s40594-022-00343-1</a>.</li>
+        </ol>
+
+        <p><a class="report-back-link" href="index.html#yu-index">返回 SYSU-Phys-Bench</a></p>
+      </article>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell">&copy; 余荫铠 2026</div>
+    </footer>
+  </body>
+</html>

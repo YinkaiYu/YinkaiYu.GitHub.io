@@ -6,17 +6,18 @@
     <meta name="color-scheme" content="light" />
     <meta name="theme-color" content="#f6f7f5" />
     <title>SYSU-Phys-Bench</title>
-    <link rel="stylesheet" href="styles.css?v=20260826-2" />
+    <link rel="stylesheet" href="styles.css?v=20260826-17" />
   </head>
   <body>
     <header class="site-header">
       <div class="shell header-inner">
         <a class="site-title" href="#top">SYSU-Phys-Bench</a>
-        <nav aria-label="页面导航">
+        <nav class="main-navigation" aria-label="页面导航">
           <a href="#yu-index">Yu Index</a>
-          <a href="#benchmark">基准图</a>
+          <a href="#benchmark">课程总览</a>
           <a href="#details">明细</a>
           <a href="#statistics">统计</a>
+          <a class="personal-home-link" href="https://www.yykspace.com/">个人主页 <span aria-hidden="true">↗</span></a>
         </nav>
       </div>
     </header>
@@ -25,33 +26,49 @@
       <section class="section section-first intro-section" aria-labelledby="page-title">
         <h1 id="page-title">SYSU-Phys-Bench: 中山大学物理学院本科课程给分基准测试</h1>
         <p class="benchmark-source">实验数据为余荫铠 2020—2024 年实测数据</p>
-        <p class="author-note">我整理了我大学四年的成绩单，我想提供给我的学弟学妹们，方便他们参考选课，尤其是根据我的成绩和排名，可以看出这门课给分高还是低。不过，给分高低不是唯一的选课依据哈，该上的课还得上。</p>
+        <p class="author-note">我整理了我大学四年的成绩单，我想提供给我的学弟学妹们，方便他们参考选课，尤其是根据我的成绩和排名，可以看出这门课给分是否友好。不过，这绝对不是唯一的选课依据哈，该上的课还得上。</p>
       </section>
 
       <section id="yu-index" class="section methodology-section" aria-labelledby="yu-index-title">
         <h2 id="yu-index-title">Yu Index</h2>
         <div class="methodology-body">
-          <p>Yu Index 是 SYSU-Phys-Bench 的课程级综合指标，用于同时表示课程绩点与教学班相对名次。</p>
-          <div class="yu-index-formula" aria-label="Yu Index 等于一百乘以绩点除以五与教学班名次除以教学班人数之积的平方根">
-            <math display="block" data-latex="\mathrm{Yu\ Index}=100\sqrt{\frac{\mathrm{绩点}}{5}\cdot\frac{\mathrm{教学班名次}}{\mathrm{教学班人数}}}">
+          <p>Yu Index 是 SYSU-Phys-Bench 的课程给分友好度指标。</p>
+          <div class="yu-index-formula" aria-label="Yu Index 等于个人绩点减去三分之一乘以教学班排名所对应的标准正态分位数">
+            <math display="block" data-latex="Y=G-\frac{1}{3}\Phi^{-1}\!\left(\frac{n-r+\frac{5}{8}}{n+\frac{1}{4}}\right)">
               <mrow>
-                <mtext>Yu Index</mtext>
+                <mi>Y</mi>
                 <mo>=</mo>
-                <mn>100</mn>
-                <msqrt>
-                  <mfrac><mtext>绩点</mtext><mn>5</mn></mfrac>
-                  <mo>·</mo>
-                  <mfrac><mtext>教学班名次</mtext><mtext>教学班人数</mtext></mfrac>
-                </msqrt>
+                <mi>G</mi>
+                <mo>−</mo>
+                <mfrac><mn>1</mn><mn>3</mn></mfrac>
+                <msup><mi>Φ</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup>
+                <mo>(</mo>
+                <mfrac>
+                  <mrow><mi>n</mi><mo>−</mo><mi>r</mi><mo>+</mo><mfrac><mn>5</mn><mn>8</mn></mfrac></mrow>
+                  <mrow><mi>n</mi><mo>+</mo><mfrac><mn>1</mn><mn>4</mn></mfrac></mrow>
+                </mfrac>
+                <mo>)</mo>
               </mrow>
             </math>
           </div>
-          <p>该指标等于“绩点得分率”与“教学班名次占比”的几何平均数乘以 100，取值范围为 0—100。绩点相同时，教学班名次越靠后，Yu Index 越高；教学班名次占比相同时，绩点越高，Yu Index 越高。因此，较高的 Yu Index 对应“排名较低、绩点较高”的组合，较低的 Yu Index 对应“排名较高、绩点较低”的组合。</p>
+          <p>其中，<i>G</i> 为个人绩点，<i>r</i> 为教学班名次，<i>n</i> 为教学班人数，Φ<sup>−1</sup> 为标准正态分布的逆累积分布函数。Yu Index 越高，说明这门课程给分越友好。</p>
+          <p class="methodology-report-entry"><a href="yu-index.html">阅读 Yu Index 技术报告</a></p>
+          <div class="yu-calculator">
+            <h3>Yu Index 计算器：根据你自己的成绩来判断这门课给分是否友好</h3>
+            <form id="yu-calculator-form" class="yu-calculator-form">
+              <label><span>绩点 <i>G</i></span><input id="yu-calculator-gpa" type="number" min="0" max="5" step="0.1" inputmode="decimal" placeholder="4.0" required /></label>
+              <label><span>教学班名次 <i>r</i></span><input id="yu-calculator-rank" type="number" min="1" step="1" inputmode="numeric" placeholder="10" required /></label>
+              <label><span>教学班人数 <i>n</i></span><input id="yu-calculator-total" type="number" min="2" step="1" inputmode="numeric" placeholder="50" required /></label>
+              <button type="submit">计算</button>
+              <output id="yu-calculator-result" aria-live="polite"><span>Yu Index</span><strong>—</strong></output>
+            </form>
+          </div>
         </div>
       </section>
 
-      <section id="benchmark" class="section benchmark-section" aria-labelledby="score-rank-title">
-        <div class="benchmark-filter-panel" aria-label="两张散点图筛选">
+      <section id="benchmark" class="section benchmark-section" aria-labelledby="benchmark-title">
+        <h2 id="benchmark-title">课程总览</h2>
+        <div class="benchmark-controls" aria-label="两张散点图筛选">
           <div class="scatter-filters">
             <details id="scatter-category" class="multi-filter"><summary>全部类别</summary><div class="multi-filter-options"></div></details>
             <details id="scatter-year" class="multi-filter"><summary>全部学年</summary><div class="multi-filter-options"></div></details>
@@ -76,7 +93,7 @@
         </div>
         <article id="score-rank-card" class="chart-card chart-card-full">
           <div class="chart-card-heading">
-            <h2 id="score-rank-title">课程绩点与排名分布图</h2>
+            <h3 id="score-rank-title">课程绩点与排名分布图</h3>
             <div class="chart-card-actions">
               <a id="scatter-download" class="fullscreen-button scatter-download" download="SYSU-Phys-Bench-课程绩点与排名分布图.png" aria-disabled="true">下载 PNG</a>
               <button id="scatter-fullscreen" class="fullscreen-button" type="button" aria-label="全屏查看课程绩点与排名分布图">全屏</button>
@@ -85,14 +102,17 @@
           <div id="score-rank-scatter" class="chart chart-scatter"></div>
           <div id="chart-tooltip" class="chart-tooltip" role="status" aria-hidden="true"></div>
         </article>
-        <article class="chart-card chart-card-full secondary-scatter-card">
-          <h2>Yu Index 与排名分布图</h2>
+        <article id="yu-rank-card" class="chart-card chart-card-full secondary-scatter-card">
+          <div class="chart-card-heading">
+            <h3 id="yu-rank-title">Yu Index 与排名分布图</h3>
+            <div class="chart-card-actions">
+              <a id="yu-scatter-download" class="fullscreen-button scatter-download" download="SYSU-Phys-Bench-Yu-Index与排名分布图.png" aria-disabled="true">下载 PNG</a>
+              <button id="yu-scatter-fullscreen" class="fullscreen-button" type="button" aria-label="全屏查看 Yu Index 与排名分布图">全屏</button>
+            </div>
+          </div>
           <div id="yu-rank-scatter" class="chart chart-scatter"></div>
+          <div id="yu-chart-tooltip" class="chart-tooltip" role="status" aria-hidden="true"></div>
         </article>
-      </section>
-
-      <section class="section scorecards-section" aria-label="总绩点与总排名">
-        <div id="overview-benchmarks" class="overview-benchmarks"></div>
       </section>
 
       <section id="details" class="section" aria-labelledby="details-title">
@@ -131,7 +151,8 @@
       </section>
 
       <section id="statistics" class="section" aria-labelledby="statistics-title">
-        <h2 id="statistics-title">统计图表</h2>
+        <h2 id="statistics-title">数据集统计</h2>
+        <div id="overview-benchmarks" class="overview-benchmarks dataset-benchmarks" aria-label="总绩点与总排名"></div>
         <div class="chart-grid">
           <article class="chart-card chart-card-half">
             <h3>学分构成</h3>
@@ -155,10 +176,10 @@
     </main>
 
     <footer class="site-footer">
-      <div class="shell">余荫铠</div>
+      <div class="shell">&copy; 余荫铠 2026</div>
     </footer>
 
     <script src="data.js"></script>
-    <script src="app.js?v=20260826-3"></script>
+    <script src="app.js?v=20260826-8"></script>
   </body>
 </html>
