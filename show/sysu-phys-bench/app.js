@@ -28,15 +28,15 @@
     专选: "#74813f",
   };
   const categorySymbols = { 公必: "circle", 专必: "square", 公选: "diamond", 专选: "triangle" };
-  const scatterDefaultTitle = "课程成绩与排名分布图";
-  const scatterExpandedTitle = "SYSU-Phys-Bench: 课程成绩与排名分布图";
+  const scatterDefaultTitle = "课程绩点与排名分布图";
+  const scatterExpandedTitle = "SYSU-Phys-Bench: 课程绩点与排名分布图";
   const yearOrder = ["大一", "大二", "大三", "大四"];
   const termOrder = ["第一学期", "第二学期"];
   const semesterOrder = yearOrder.flatMap((year) => termOrder.map((term) => `${year}${term}`));
 
   let sortState = { key: "index", direction: "asc" };
   let pinnedTooltipTarget = null;
-  const scatterEligibleRows = rows.filter((row) => typeof row.最终成绩 === "number");
+  const scatterEligibleRows = rows.filter((row) => Number.isFinite(row.绩点));
   const scatterSelected = new Set(scatterEligibleRows.map((row) => row.index));
   const detailMultiFilters = {};
   const scatterMultiFilters = {};
@@ -764,7 +764,7 @@
     const labels = data.map((row) => ({
       row,
       pointX: x(row.rankPercentile),
-      pointY: y(row.最终成绩),
+      pointY: y(row.绩点),
       text: truncateText(row.课程, compact ? (width < 520 ? 5 : 9) : 18),
     }));
 
@@ -853,8 +853,8 @@
     const margin = { top: 58, right: 20, bottom: 52, left: 64 };
     const plotWidth = width - margin.left - margin.right;
     const plotHeight = height - margin.top - margin.bottom;
-    const minScore = 75;
-    const maxScore = 100;
+    const minScore = 2.5;
+    const maxScore = 5;
     const minRank = 0.5;
     const maxRank = 100;
     const logMin = Math.log10(minRank);
@@ -862,13 +862,13 @@
     const x = (rank) => margin.left + ((logMax - Math.log10(rank)) / (logMax - logMin)) * plotWidth;
     const y = (score) => margin.top + ((maxScore - score) / (maxScore - minScore)) * plotHeight;
     const sortedRanks = data.map((row) => row.rankPercentile).sort((a, b) => a - b);
-    const sortedScores = data.map((row) => row.最终成绩).sort((a, b) => a - b);
+    const sortedScores = data.map((row) => row.绩点).sort((a, b) => a - b);
     const median = (values) => values.length % 2 ? values[(values.length - 1) / 2] : (values[values.length / 2 - 1] + values[values.length / 2]) / 2;
     const rankMedian = median(sortedRanks);
     const scoreMedian = median(sortedScores);
     const medianX = x(rankMedian);
     const medianY = y(scoreMedian);
-    const svg = svgElement("svg", { viewBox: `0 0 ${width} ${height}`, role: "img", "aria-label": "横轴为对数刻度教学班排名百分位、纵轴为课程最终成绩的四象限散点图" });
+    const svg = svgElement("svg", { viewBox: `0 0 ${width} ${height}`, role: "img", "aria-label": "横轴为对数刻度教学班排名百分位、纵轴为课程绩点的四象限散点图" });
 
     [
       [margin.left, margin.top, medianX - margin.left, medianY - margin.top, "rgba(56,107,129,0.045)"],
@@ -884,20 +884,20 @@
       svg.append(svgElement("line", { x1: xPos, x2: xPos, y1: margin.top, y2: height - margin.bottom, class: "grid-line" }));
       svg.append(svgElement("text", { x: xPos, y: height - 19, "text-anchor": "middle", class: "tick-label" }, `${value}%`));
     });
-    [75, 80, 85, 90, 95, 100].forEach((value) => {
+    [2.5, 3, 3.5, 4, 4.5, 5].forEach((value) => {
       const yPos = y(value);
       svg.append(svgElement("line", { x1: margin.left, x2: width - margin.right, y1: yPos, y2: yPos, class: "grid-line" }));
-      svg.append(svgElement("text", { x: margin.left - 8, y: yPos + 4, "text-anchor": "end", class: "tick-label" }, value));
+      svg.append(svgElement("text", { x: margin.left - 8, y: yPos + 4, "text-anchor": "end", class: "tick-label" }, value.toFixed(1)));
     });
     svg.append(svgElement("line", { x1: medianX, x2: medianX, y1: margin.top, y2: height - margin.bottom, class: "quadrant-line" }));
     svg.append(svgElement("line", { x1: margin.left, x2: width - margin.right, y1: medianY, y2: medianY, class: "quadrant-line" }));
     svg.append(svgElement("text", { x: width - margin.right, y: height - 3, "text-anchor": "end", class: "tick-label" }, "教学班排名百分位（对数刻度）"));
     const yAxisCenter = margin.top + plotHeight / 2;
-    svg.append(svgElement("text", { x: 16, y: yAxisCenter, transform: `rotate(-90 16 ${yAxisCenter})`, "text-anchor": "middle", class: "tick-label" }, "最终成绩"));
+    svg.append(svgElement("text", { x: 16, y: yAxisCenter, transform: `rotate(-90 16 ${yAxisCenter})`, "text-anchor": "middle", class: "tick-label" }, "绩点"));
 
     if (width >= 620) {
-      svg.append(svgElement("text", { x: margin.left + 8, y: margin.top + 16, class: "quadrant-label" }, "排名较低 · 成绩较高（课程给分高）"));
-      svg.append(svgElement("text", { x: width - margin.right - 8, y: height - margin.bottom - 9, "text-anchor": "end", class: "quadrant-label" }, "排名较高 · 成绩较低（课程给分低）"));
+      svg.append(svgElement("text", { x: margin.left + 8, y: margin.top + 16, class: "quadrant-label" }, "排名较低 · 绩点较高（课程给分高）"));
+      svg.append(svgElement("text", { x: width - margin.right - 8, y: height - margin.bottom - 9, "text-anchor": "end", class: "quadrant-label" }, "排名较高 · 绩点较低（课程给分低）"));
     }
 
     const legendStep = 70;
@@ -912,7 +912,7 @@
 
     appendScatterCourseLabels(svg, data, x, y, margin, width, height, !expanded);
     data.forEach((row) => {
-      const marker = scatterSymbol(row.类别, x(row.rankPercentile), y(row.最终成绩), 3 + Math.sqrt(row.学分) * 1.15, {
+      const marker = scatterSymbol(row.类别, x(row.rankPercentile), y(row.绩点), 3 + Math.sqrt(row.学分) * 1.15, {
         stroke: "#ffffff",
         "stroke-width": 1,
         opacity: 0.78,
@@ -920,7 +920,8 @@
       });
       const tooltipLines = [
         ...(row.教师 ? [`教师 ${truncateText(row.教师)}`] : []),
-        `成绩 ${row.最终成绩}`,
+        `最终成绩 ${row.最终成绩}`,
+        `绩点 ${row.绩点.toFixed(1)}`,
         `教学班排名 ${row.教学班排名}`,
         `排名百分位 ${row.rankPercentile.toFixed(2)}%`,
         `Yu Index ${row["Yu Index"].toFixed(1)}`,
@@ -1004,7 +1005,7 @@
       const expanded = isScatterExpanded();
       title.textContent = expanded ? scatterExpandedTitle : scatterDefaultTitle;
       button.textContent = expanded ? "退出全屏" : "全屏";
-      button.setAttribute("aria-label", expanded ? "退出课程成绩与排名分布图全屏" : "全屏查看课程成绩与排名分布图");
+      button.setAttribute("aria-label", expanded ? "退出课程绩点与排名分布图全屏" : "全屏查看课程绩点与排名分布图");
       renderScatter();
       if (expanded) {
         preparePng();
