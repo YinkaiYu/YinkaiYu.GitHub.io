@@ -590,47 +590,82 @@
   }
 
   function appendScatterCourseLabels(svg, data, x, y, margin, width, height) {
-    const midpoint = margin.left + (width - margin.left - margin.right) / 2;
-    const top = margin.top + 12;
-    const bottom = height - margin.bottom - 4;
-    const gap = 13;
+    const bounds = {
+      left: margin.left + 3,
+      right: width - margin.right - 3,
+      top: margin.top + 3,
+      bottom: height - margin.bottom - 3,
+    };
     const labels = data.map((row) => ({
       row,
       pointX: x(row.rankPercentile),
       pointY: y(row.最终成绩),
-      side: x(row.rankPercentile) < midpoint ? "right" : "left",
+      text: truncateText(row.课程, 18),
     }));
 
-    ["left", "right"].forEach((side) => {
-      const sideLabels = labels.filter((item) => item.side === side).sort((a, b) => a.pointY - b.pointY);
-      let cursor = top;
-      sideLabels.forEach((item) => {
-        item.labelY = Math.max(item.pointY + 3, cursor);
-        cursor = item.labelY + gap;
-      });
-      const overflow = sideLabels.length ? sideLabels[sideLabels.length - 1].labelY - bottom : 0;
-      if (overflow > 0) sideLabels.forEach((item) => { item.labelY -= overflow; });
-      for (let index = sideLabels.length - 2; index >= 0; index -= 1) {
-        sideLabels[index].labelY = Math.min(sideLabels[index].labelY, sideLabels[index + 1].labelY - gap);
-      }
+    labels.forEach((item) => {
+      item.density = labels.filter((other) => other !== item && Math.hypot(other.pointX - item.pointX, other.pointY - item.pointY) < 42).length;
     });
+    labels.sort((a, b) => b.density - a.density || b.row.学分 - a.row.学分);
+
+    const placed = [];
+    const directions = [
+      [1, 0], [-1, 0], [0.72, -0.72], [0.72, 0.72], [-0.72, -0.72], [-0.72, 0.72], [0, -1], [0, 1],
+    ];
+    const radii = [12, 19, 28, 40, 54, 70, 88];
+    const overlapArea = (a, b) => Math.max(0, Math.min(a.right, b.right) - Math.max(a.left, b.left)) * Math.max(0, Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top));
+    const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 
     labels.forEach((item) => {
-      const labelX = item.side === "right" ? item.pointX + 10 : item.pointX - 10;
-      const lineEndX = item.side === "right" ? labelX - 2 : labelX + 2;
+      const textWidth = Array.from(item.text).reduce((sum, character) => sum + (/^[\x20-\x7e]$/.test(character) ? 5.8 : 10), 4);
+      const textHeight = 12;
+      let bestCandidate = null;
+
+      radii.forEach((radius) => {
+        directions.forEach(([directionX, directionY]) => {
+          const offsetX = directionX * radius;
+          const offsetY = directionY * radius;
+          const anchor = offsetX > 3 ? "start" : offsetX < -3 ? "end" : "middle";
+          const labelX = item.pointX + offsetX;
+          const labelY = item.pointY + offsetY + 4;
+          const left = anchor === "start" ? labelX : anchor === "end" ? labelX - textWidth : labelX - textWidth / 2;
+          const box = { left, right: left + textWidth, top: labelY - 10, bottom: labelY + 2 };
+          if (box.left < bounds.left || box.right > bounds.right || box.top < bounds.top || box.bottom > bounds.bottom) return;
+
+          const labelOverlap = placed.reduce((sum, placedBox) => sum + overlapArea(box, placedBox), 0);
+          const coveredPoints = labels.filter((other) => other !== item && other.pointX >= box.left - 2 && other.pointX <= box.right + 2 && other.pointY >= box.top - 2 && other.pointY <= box.bottom + 2).length;
+          const score = radius + labelOverlap * 180 + coveredPoints * 90;
+          if (!bestCandidate || score < bestCandidate.score) bestCandidate = { anchor, box, labelX, labelY, score };
+        });
+      });
+
+      if (!bestCandidate) {
+        const labelX = clamp(item.pointX + 12, bounds.left, bounds.right - textWidth);
+        const labelY = clamp(item.pointY + 4, bounds.top + 10, bounds.bottom - 2);
+        bestCandidate = {
+          anchor: "start",
+          box: { left: labelX, right: labelX + textWidth, top: labelY - 10, bottom: labelY + 2 },
+          labelX,
+          labelY,
+        };
+      }
+
+      placed.push(bestCandidate.box);
+      const lineEndX = clamp(item.pointX, bestCandidate.box.left, bestCandidate.box.right);
+      const lineEndY = clamp(item.pointY, bestCandidate.box.top, bestCandidate.box.bottom);
       svg.append(svgElement("line", {
         x1: item.pointX,
         y1: item.pointY,
         x2: lineEndX,
-        y2: item.labelY - 3,
+        y2: lineEndY,
         class: "scatter-label-line",
       }));
       svg.append(svgElement("text", {
-        x: labelX,
-        y: item.labelY,
-        "text-anchor": item.side === "right" ? "start" : "end",
+        x: bestCandidate.labelX,
+        y: bestCandidate.labelY,
+        "text-anchor": bestCandidate.anchor,
         class: "scatter-course-label",
-      }, truncateText(item.row.课程, 18)));
+      }, item.text));
     });
   }
 
