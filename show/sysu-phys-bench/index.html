@@ -6,67 +6,73 @@
     <meta name="color-scheme" content="light" />
     <meta name="theme-color" content="#f6f7f5" />
     <title>SYSU-Phys-Bench</title>
-    <link rel="stylesheet" href="styles.css?v=20260825-6" />
+    <link rel="stylesheet" href="styles.css?v=20260825-7" />
   </head>
   <body>
     <header class="site-header">
       <div class="shell header-inner">
         <a class="site-title" href="#top">SYSU-Phys-Bench</a>
         <nav aria-label="页面导航">
-          <a href="#overview">总览</a>
-          <a href="#charts">图表</a>
+          <a href="#benchmark">基准图</a>
           <a href="#details">明细</a>
+          <a href="#statistics">统计</a>
+          <a href="#overview">总览</a>
         </nav>
       </div>
     </header>
 
     <main id="top" class="shell">
-      <section id="overview" class="section section-first" aria-labelledby="overview-title">
-        <h1 id="overview-title">SYSU-Phys-Bench: 中山大学物理学院本科课程给分基准测试</h1>
+      <section class="section section-first intro-section" aria-labelledby="page-title">
+        <h1 id="page-title">SYSU-Phys-Bench: 中山大学物理学院本科课程给分基准测试</h1>
         <p class="benchmark-source">实验数据为余荫铠 2020—2024 年实测数据</p>
         <p class="author-note">我整理了我大学四年的成绩单，我想提供给我的学弟学妹们，方便他们参考选课，尤其是根据我的成绩和排名，可以看出这门课给分高还是低。不过，给分高低不是唯一的选课依据哈，该上的课还得上。</p>
-        <div class="table-frame overview-frame">
-          <table id="overview-table"></table>
-        </div>
-        <div id="overview-benchmarks" class="overview-benchmarks" aria-label="综合指标"></div>
       </section>
 
-      <section id="charts" class="section" aria-labelledby="charts-title">
-        <h2 id="charts-title">数据图表</h2>
-        <div class="chart-grid">
-          <article class="chart-card chart-card-half">
-            <h3>学分构成</h3>
-            <div id="credit-composition" class="chart chart-donut"></div>
-          </article>
-          <article class="chart-card chart-card-half">
-            <h3>最终成绩分布</h3>
-            <div id="grade-distribution" class="chart chart-donut"></div>
-          </article>
-          <article class="chart-card chart-card-wide">
-            <h3>各学期绩点、排名与总绩点</h3>
-            <div id="gpa-trend" class="chart chart-line"></div>
-          </article>
-          <article class="chart-card chart-card-small">
-            <h3>各类别学分加权平均绩点</h3>
-            <div id="category-gpa" class="chart"></div>
-          </article>
-          <article id="score-rank-card" class="chart-card chart-card-full">
-            <div class="chart-card-heading">
-              <h3 id="score-rank-title">课程成绩与教学班排名百分位</h3>
-              <div class="chart-card-actions">
-                <a id="scatter-download" class="fullscreen-button scatter-download" download="SYSU-Phys-Bench-课程成绩与排名分布图.png" aria-disabled="true">下载 PNG</a>
-                <button id="scatter-fullscreen" class="fullscreen-button" type="button" aria-label="全屏查看课程成绩与教学班排名百分位">全屏</button>
-              </div>
+      <section id="benchmark" class="section benchmark-section" aria-labelledby="score-rank-title">
+        <article id="score-rank-card" class="chart-card chart-card-full">
+          <div class="chart-card-heading">
+            <h2 id="score-rank-title">课程成绩与排名分布图</h2>
+            <div class="chart-card-actions">
+              <a id="scatter-download" class="fullscreen-button scatter-download" download="SYSU-Phys-Bench-课程成绩与排名分布图.png" aria-disabled="true">下载 PNG</a>
+              <button id="scatter-fullscreen" class="fullscreen-button" type="button" aria-label="全屏查看课程成绩与排名分布图">全屏</button>
             </div>
-            <div id="score-rank-scatter" class="chart chart-scatter"></div>
-            <div id="chart-tooltip" class="chart-tooltip" role="status" aria-hidden="true"></div>
-          </article>
-        </div>
+          </div>
+          <div class="scatter-filters" aria-label="散点图筛选">
+            <label class="search-field scatter-search-field">
+              <span class="sr-only">搜索课程或教师</span>
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="m21 21-4.35-4.35m2.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z" />
+              </svg>
+              <input id="scatter-search" type="search" placeholder="搜索课程或教师" autocomplete="off" />
+            </label>
+            <label><span class="sr-only">类别</span><select id="scatter-category" aria-label="类别"><option value="">全部类别</option></select></label>
+            <label><span class="sr-only">学年</span><select id="scatter-year" aria-label="学年"><option value="">全部学年</option></select></label>
+            <label><span class="sr-only">学期</span><select id="scatter-term" aria-label="学期"><option value="">全部学期</option></select></label>
+            <button id="scatter-reset" class="reset-button" type="button">重置</button>
+          </div>
+          <details class="scatter-course-picker">
+            <summary><span>选择课程</span><span id="scatter-selection-count"></span></summary>
+            <div class="scatter-course-toolbar">
+              <button id="scatter-select-visible" type="button">全选当前</button>
+              <button id="scatter-clear-visible" type="button">清空当前</button>
+            </div>
+            <div id="scatter-course-options" class="scatter-course-options"></div>
+          </details>
+          <div id="score-rank-scatter" class="chart chart-scatter"></div>
+          <div id="chart-tooltip" class="chart-tooltip" role="status" aria-hidden="true"></div>
+        </article>
+      </section>
+
+      <section class="section scorecards-section" aria-label="总绩点与总排名">
+        <div id="overview-benchmarks" class="overview-benchmarks"></div>
       </section>
 
       <section id="details" class="section" aria-labelledby="details-title">
         <div class="section-heading-row">
-          <h2 id="details-title">成绩明细</h2>
+          <div>
+            <h2 id="details-title">成绩明细</h2>
+            <p class="yu-index-definition">Yu Index = √((绩点 ÷ 5 × 100) × 教学班排名百分位)</p>
+          </div>
           <span id="result-count" class="result-count"></span>
         </div>
 
@@ -115,6 +121,35 @@
           </table>
         </div>
       </section>
+
+      <section id="statistics" class="section" aria-labelledby="statistics-title">
+        <h2 id="statistics-title">统计图表</h2>
+        <div class="chart-grid">
+          <article class="chart-card chart-card-half">
+            <h3>学分构成</h3>
+            <div id="credit-composition" class="chart chart-donut"></div>
+          </article>
+          <article class="chart-card chart-card-half">
+            <h3>绩点分布</h3>
+            <div id="grade-distribution" class="chart chart-donut"></div>
+          </article>
+          <article class="chart-card chart-card-wide">
+            <h3>各学期绩点、排名与总绩点</h3>
+            <div id="gpa-trend" class="chart chart-line"></div>
+          </article>
+          <article class="chart-card chart-card-small">
+            <h3>各类别学分加权平均绩点</h3>
+            <div id="category-gpa" class="chart"></div>
+          </article>
+        </div>
+      </section>
+
+      <section id="overview" class="section" aria-labelledby="overview-title">
+        <h2 id="overview-title">成绩总览</h2>
+        <div class="table-frame overview-frame">
+          <table id="overview-table"></table>
+        </div>
+      </section>
     </main>
 
     <footer class="site-footer">
@@ -122,6 +157,6 @@
     </footer>
 
     <script src="data.js"></script>
-    <script src="app.js?v=20260825-6"></script>
+    <script src="app.js?v=20260825-7"></script>
   </body>
 </html>

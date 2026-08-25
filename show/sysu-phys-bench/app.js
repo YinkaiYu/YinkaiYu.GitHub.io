@@ -5,6 +5,7 @@
   const detailRows = window.GRADE_DATA.details;
   const overviewHeaders = overviewRows[0];
   const detailHeaders = detailRows[0];
+  const detailDisplayHeaders = [...detailHeaders, "Yu Index"];
   const rows = detailRows.slice(1).map((row, index) => ({
     index,
     类别: row[0],
@@ -16,6 +17,7 @@
     最终成绩: row[6],
     绩点: Number(row[7]),
     教学班排名: row[8],
+    "Yu Index": Math.sqrt((Number(row[7]) / 5) * 100 * parseRank(row[8]).percentile),
   }));
 
   const gradePalette = ["#244e61", "#386b81", "#5f8798", "#8da8b3", "#c5d2d7"];
@@ -26,7 +28,7 @@
     专选: "#74813f",
   };
   const categorySymbols = { 公必: "circle", 专必: "square", 公选: "diamond", 专选: "triangle" };
-  const scatterDefaultTitle = "课程成绩与教学班排名百分位";
+  const scatterDefaultTitle = "课程成绩与排名分布图";
   const scatterExpandedTitle = "SYSU-Phys-Bench: 课程成绩与排名分布图";
   const yearOrder = ["大一", "大二", "大三", "大四"];
   const termOrder = ["第一学期", "第二学期"];
@@ -34,6 +36,8 @@
 
   let sortState = { key: "index", direction: "asc" };
   let pinnedTooltipTarget = null;
+  const scatterEligibleRows = rows.filter((row) => typeof row.最终成绩 === "number");
+  const scatterSelected = new Set(scatterEligibleRows.map((row) => row.index));
 
   const $ = (selector) => document.querySelector(selector);
   const svgNS = "http://www.w3.org/2000/svg";
@@ -101,19 +105,37 @@
     thead.append(headRow);
 
     const tbody = document.createElement("tbody");
+    const totalRow = overviewRows.find((row) => row[0] === "合计");
+    const specialRow = overviewRows.find((row) => typeof row[0] === "string" && row[0].includes("|"));
+    [
+      ["总绩点", totalRow?.[3]],
+      ["总排名", specialRow?.[3]],
+    ].forEach(([label, value]) => {
+      const card = document.createElement("div");
+      card.className = "overview-benchmark";
+      const labelElement = document.createElement("span");
+      labelElement.textContent = label;
+      const valueElement = document.createElement("strong");
+      valueElement.textContent = value ?? "";
+      card.append(labelElement, valueElement);
+      benchmarks.append(card);
+    });
+
     overviewRows.slice(1).forEach((row) => {
       if (typeof row[0] === "string" && row[0].includes("|")) {
         const labels = row[0].split("|");
         const values = row.slice(1).filter((value) => value !== null && value !== "");
         labels.forEach((label, index) => {
-          const card = document.createElement("div");
-          card.className = "overview-benchmark";
-          const labelElement = document.createElement("span");
-          labelElement.textContent = label;
-          const valueElement = document.createElement("strong");
-          valueElement.textContent = values[index] ?? "";
-          card.append(labelElement, valueElement);
-          benchmarks.append(card);
+          const tr = document.createElement("tr");
+          tr.className = "overview-summary-row";
+          const labelCell = document.createElement("td");
+          labelCell.textContent = label;
+          const valueCell = document.createElement("td");
+          valueCell.colSpan = overviewHeaders.length - 1;
+          valueCell.className = "numeric";
+          valueCell.textContent = values[index] ?? "";
+          tr.append(labelCell, valueCell);
+          tbody.append(tr);
         });
         return;
       }
@@ -159,6 +181,101 @@
       updateSortIndicators();
       renderDetailsBody();
     });
+  }
+
+  function scatterFilterRows() {
+    const query = $("#scatter-search").value.trim().toLocaleLowerCase("zh-CN");
+    const category = $("#scatter-category").value;
+    const year = $("#scatter-year").value;
+    const term = $("#scatter-term").value;
+    return scatterEligibleRows.filter((row) => {
+      const searchable = `${row.课程} ${row.教师}`.toLocaleLowerCase("zh-CN");
+      return (
+        (!query || searchable.includes(query)) &&
+        (!category || row.类别 === category) &&
+        (!year || row.学年 === year) &&
+        (!term || row.学期 === term)
+      );
+    });
+  }
+
+  function renderScatterCourseOptions() {
+    const visibleRows = scatterFilterRows();
+    const options = $("#scatter-course-options");
+    options.replaceChildren();
+    visibleRows.forEach((row) => {
+      const label = document.createElement("label");
+      const input = document.createElement("input");
+      input.type = "checkbox";
+      input.value = row.index;
+      input.checked = scatterSelected.has(row.index);
+      input.addEventListener("change", () => {
+        if (input.checked) scatterSelected.add(row.index);
+        else scatterSelected.delete(row.index);
+        refreshScatterSelection();
+      });
+      const text = document.createElement("span");
+      text.textContent = row.课程;
+      if (row.教师) {
+        const teacher = document.createElement("small");
+        teacher.textContent = truncateText(row.教师, 18);
+        text.append(teacher);
+      }
+      label.append(input, text);
+      options.append(label);
+    });
+    if (!visibleRows.length) {
+      const empty = document.createElement("p");
+      empty.className = "scatter-options-empty";
+      empty.textContent = "无匹配课程";
+      options.append(empty);
+    }
+    updateScatterSelectionCount();
+  }
+
+  function updateScatterSelectionCount() {
+    const active = scatterFilterRows().filter((row) => scatterSelected.has(row.index)).length;
+    $("#scatter-selection-count").textContent = `显示 ${active} / ${scatterFilterRows().length}`;
+  }
+
+  function refreshScatterSelection() {
+    updateScatterSelectionCount();
+    renderScatter();
+    document.dispatchEvent(new CustomEvent("scatterfilterschange"));
+  }
+
+  function setupScatterFilters() {
+    addOptions($("#scatter-category"), [...new Set(scatterEligibleRows.map((row) => row.类别))]);
+    addOptions($("#scatter-year"), yearOrder.filter((value) => scatterEligibleRows.some((row) => row.学年 === value)));
+    addOptions($("#scatter-term"), termOrder.filter((value) => scatterEligibleRows.some((row) => row.学期 === value)));
+
+    ["#scatter-search", "#scatter-category", "#scatter-year", "#scatter-term"].forEach((selector) => {
+      $(selector).addEventListener(selector === "#scatter-search" ? "input" : "change", () => {
+        renderScatterCourseOptions();
+        refreshScatterSelection();
+      });
+    });
+    $("#scatter-select-visible").addEventListener("click", () => {
+      scatterFilterRows().forEach((row) => scatterSelected.add(row.index));
+      renderScatterCourseOptions();
+      refreshScatterSelection();
+    });
+    $("#scatter-clear-visible").addEventListener("click", () => {
+      scatterFilterRows().forEach((row) => scatterSelected.delete(row.index));
+      renderScatterCourseOptions();
+      refreshScatterSelection();
+    });
+    $("#scatter-reset").addEventListener("click", () => {
+      $("#scatter-search").value = "";
+      $("#scatter-category").value = "";
+      $("#scatter-year").value = "";
+      $("#scatter-term").value = "";
+      scatterSelected.clear();
+      scatterEligibleRows.forEach((row) => scatterSelected.add(row.index));
+      renderScatterCourseOptions();
+      refreshScatterSelection();
+    });
+    renderScatterCourseOptions();
   }
 
   function creditMatches(credit, filter) {
@@ -219,9 +336,10 @@
 
   function renderDetailsHead() {
     const tr = document.createElement("tr");
-    detailHeaders.forEach((header) => {
+    detailDisplayHeaders.forEach((header) => {
       const th = document.createElement("th");
       th.scope = "col";
+      if (header === "Yu Index") th.className = "yu-index-header";
       const button = document.createElement("button");
       button.className = "sort-button";
       button.type = "button";
@@ -261,7 +379,7 @@
       const tr = document.createElement("tr");
       tr.className = "empty-row";
       const td = document.createElement("td");
-      td.colSpan = detailHeaders.length;
+      td.colSpan = detailDisplayHeaders.length;
       td.textContent = "无匹配课程";
       tr.append(td);
       tbody.append(tr);
@@ -271,10 +389,19 @@
     data.forEach((row) => {
       const tr = document.createElement("tr");
       tr.dataset.creditLevel = creditLevel(row.学分);
-      detailHeaders.forEach((header) => {
+      detailDisplayHeaders.forEach((header) => {
         const td = document.createElement("td");
         const value = row[header];
-        td.textContent = value ?? "";
+        if (header === "Yu Index") {
+          td.className = "numeric yu-index-cell";
+          const score = document.createElement("div");
+          score.className = "yu-index-score";
+          score.style.setProperty("--yu-score", `${Math.max(0, Math.min(100, value))}%`);
+          score.innerHTML = `<strong>${value.toFixed(1)}</strong><i aria-hidden="true"></i>`;
+          td.append(score);
+        } else {
+          td.textContent = value ?? "";
+        }
         if (["学分", "绩点"].includes(header) || typeof value === "number") td.classList.add("numeric");
         if (header === "课程") td.classList.add("course-cell");
         if (header === "教师") td.classList.add("teacher-cell");
@@ -439,26 +566,24 @@
 
   function renderGradeDistribution() {
     const bins = [
-      { label: "95–100", count: 0 },
-      { label: "90–94.9", count: 0 },
-      { label: "85–89.9", count: 0 },
-      { label: "80–84.9", count: 0 },
-      { label: "<80", count: 0 },
+      { label: "4.5–5.0", count: 0 },
+      { label: "4.0–4.4", count: 0 },
+      { label: "3.5–3.9", count: 0 },
+      { label: "3.0–3.4", count: 0 },
+      { label: "<3.0", count: 0 },
     ];
     rows.forEach((row) => {
-      const score = row.最终成绩;
-      if (typeof score === "number") {
-        if (score >= 95) bins[0].count += 1;
-        else if (score >= 90) bins[1].count += 1;
-        else if (score >= 85) bins[2].count += 1;
-        else if (score >= 80) bins[3].count += 1;
-        else bins[4].count += 1;
-      }
+      const gpa = row.绩点;
+      if (gpa >= 4.5) bins[0].count += 1;
+      else if (gpa >= 4) bins[1].count += 1;
+      else if (gpa >= 3.5) bins[2].count += 1;
+      else if (gpa >= 3) bins[3].count += 1;
+      else bins[4].count += 1;
     });
     renderDonutChart(
       "#grade-distribution",
       bins.map((bin, index) => ({ label: bin.label, value: bin.count, color: gradePalette[index] })),
-      "数值成绩课程",
+      "课程",
       "",
       bins.map((bin) => `${bin.label} ${bin.count} 门课程`).join("，"),
     );
@@ -607,7 +732,7 @@
     return document.fullscreenElement === card || card.classList.contains("is-expanded");
   }
 
-  function appendScatterCourseLabels(svg, data, x, y, margin, width, height) {
+  function appendScatterCourseLabels(svg, data, x, y, margin, width, height, compact = false) {
     const bounds = {
       left: margin.left + 3,
       right: width - margin.right - 3,
@@ -618,7 +743,7 @@
       row,
       pointX: x(row.rankPercentile),
       pointY: y(row.最终成绩),
-      text: truncateText(row.课程, 18),
+      text: truncateText(row.课程, compact ? (width < 520 ? 5 : 9) : 18),
     }));
 
     labels.forEach((item) => {
@@ -630,13 +755,13 @@
     const directions = [
       [1, 0], [-1, 0], [0.72, -0.72], [0.72, 0.72], [-0.72, -0.72], [-0.72, 0.72], [0, -1], [0, 1],
     ];
-    const radii = [12, 19, 28, 40, 54, 70, 88];
+    const radii = compact ? [9, 14, 21, 30, 42] : [12, 19, 28, 40, 54, 70, 88];
     const overlapArea = (a, b) => Math.max(0, Math.min(a.right, b.right) - Math.max(a.left, b.left)) * Math.max(0, Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top));
     const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 
     labels.forEach((item) => {
-      const textWidth = Array.from(item.text).reduce((sum, character) => sum + (/^[\x20-\x7e]$/.test(character) ? 5.8 : 10), 4);
-      const textHeight = 12;
+      const textWidth = Array.from(item.text).reduce((sum, character) => sum + (/^[\x20-\x7e]$/.test(character) ? (compact ? 4.6 : 5.8) : (compact ? 8 : 10)), 4);
+      const textHeight = compact ? 10 : 12;
       let bestCandidate = null;
 
       radii.forEach((radius) => {
@@ -645,9 +770,9 @@
           const offsetY = directionY * radius;
           const anchor = offsetX > 3 ? "start" : offsetX < -3 ? "end" : "middle";
           const labelX = item.pointX + offsetX;
-          const labelY = item.pointY + offsetY + 4;
+          const labelY = item.pointY + offsetY + (compact ? 3 : 4);
           const left = anchor === "start" ? labelX : anchor === "end" ? labelX - textWidth : labelX - textWidth / 2;
-          const box = { left, right: left + textWidth, top: labelY - 10, bottom: labelY + 2 };
+          const box = { left, right: left + textWidth, top: labelY - textHeight + 2, bottom: labelY + 2 };
           if (box.left < bounds.left || box.right > bounds.right || box.top < bounds.top || box.bottom > bounds.bottom) return;
 
           const labelOverlap = placed.reduce((sum, placedBox) => sum + overlapArea(box, placedBox), 0);
@@ -659,10 +784,10 @@
 
       if (!bestCandidate) {
         const labelX = clamp(item.pointX + 12, bounds.left, bounds.right - textWidth);
-        const labelY = clamp(item.pointY + 4, bounds.top + 10, bounds.bottom - 2);
+        const labelY = clamp(item.pointY + (compact ? 3 : 4), bounds.top + textHeight, bounds.bottom - 2);
         bestCandidate = {
           anchor: "start",
-          box: { left: labelX, right: labelX + textWidth, top: labelY - 10, bottom: labelY + 2 },
+          box: { left: labelX, right: labelX + textWidth, top: labelY - textHeight + 2, bottom: labelY + 2 },
           labelX,
           labelY,
         };
@@ -682,7 +807,7 @@
         x: bestCandidate.labelX,
         y: bestCandidate.labelY,
         "text-anchor": bestCandidate.anchor,
-        class: "scatter-course-label",
+        class: `scatter-course-label${compact ? " scatter-course-label-compact" : ""}`,
       }, item.text));
     });
   }
@@ -691,9 +816,16 @@
     const container = $("#score-rank-scatter");
     container.replaceChildren();
     const expanded = isScatterExpanded();
-    const data = rows
-      .filter((row) => typeof row.最终成绩 === "number")
+    const data = scatterFilterRows()
+      .filter((row) => scatterSelected.has(row.index))
       .map((row) => ({ ...row, rankPercentile: parseRank(row.教学班排名).percentile }));
+    if (!data.length) {
+      const empty = document.createElement("div");
+      empty.className = "scatter-empty";
+      empty.textContent = "未选择课程";
+      container.append(empty);
+      return;
+    }
     const width = Math.max(360, container.clientWidth || 720);
     const height = expanded ? Math.max(560, container.clientHeight || window.innerHeight - 84) : width < 520 ? 320 : 350;
     const margin = { top: 58, right: 20, bottom: 52, left: 64 };
@@ -756,7 +888,7 @@
     });
     svg.append(legend);
 
-    if (expanded) appendScatterCourseLabels(svg, data, x, y, margin, width, height);
+    appendScatterCourseLabels(svg, data, x, y, margin, width, height, !expanded);
     data.forEach((row) => {
       const marker = scatterSymbol(row.类别, x(row.rankPercentile), y(row.最终成绩), 3 + Math.sqrt(row.学分) * 1.15, {
         stroke: "#ffffff",
@@ -769,6 +901,7 @@
         `成绩 ${row.最终成绩}`,
         `教学班排名 ${row.教学班排名}`,
         `排名百分位 ${row.rankPercentile.toFixed(2)}%`,
+        `Yu Index ${row["Yu Index"].toFixed(1)}`,
         `${row.学分} 学分 · ${row.类别}`,
       ];
       bindChartTooltip(marker, row.课程, tooltipLines);
@@ -790,6 +923,12 @@
       downloadButton.setAttribute("aria-disabled", "true");
       downloadButton.textContent = "生成中";
       const source = $("#score-rank-scatter svg");
+      if (!source) {
+        preparedPngUrl = "";
+        downloadButton.removeAttribute("href");
+        downloadButton.textContent = "无可下载课程";
+        return;
+      }
       const clone = source.cloneNode(true);
       const viewBox = source.viewBox.baseVal;
       const titleHeight = 58;
@@ -843,7 +982,7 @@
       const expanded = isScatterExpanded();
       title.textContent = expanded ? scatterExpandedTitle : scatterDefaultTitle;
       button.textContent = expanded ? "退出全屏" : "全屏";
-      button.setAttribute("aria-label", expanded ? "退出课程成绩与教学班排名百分位全屏" : "全屏查看课程成绩与教学班排名百分位");
+      button.setAttribute("aria-label", expanded ? "退出课程成绩与排名分布图全屏" : "全屏查看课程成绩与排名分布图");
       renderScatter();
       if (expanded) {
         preparePng();
@@ -880,6 +1019,9 @@
     });
 
     document.addEventListener("fullscreenchange", update);
+    document.addEventListener("scatterfilterschange", () => {
+      if (isScatterExpanded()) preparePng();
+    });
   }
 
   function renderCharts() {
@@ -895,6 +1037,7 @@
   renderOverviewTable();
   renderDetailsHead();
   setupFilters();
+  setupScatterFilters();
   updateSortIndicators();
   renderDetailsBody();
   setupScatterFullscreen();
