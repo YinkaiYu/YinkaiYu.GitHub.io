@@ -20,11 +20,14 @@
 
   const gradePalette = ["#244e61", "#386b81", "#5f8798", "#8da8b3", "#c5d2d7"];
   const categoryColors = {
-    公必: "#386b81",
-    专必: "#244e61",
-    公选: "#b48a3a",
-    专选: "#748061",
+    公必: "#2f6f8f",
+    专必: "#c45d32",
+    公选: "#a55f7a",
+    专选: "#74813f",
   };
+  const categorySymbols = { 公必: "circle", 专必: "square", 公选: "diamond", 专选: "triangle" };
+  const scatterDefaultTitle = "课程成绩与教学班排名百分位";
+  const scatterExpandedTitle = "SYSU-Phys-Bench: 课程成绩与排名分布图";
   const yearOrder = ["大一", "大二", "大三", "大四"];
   const termOrder = ["第一学期", "第二学期"];
   const semesterOrder = yearOrder.flatMap((year) => termOrder.map((term) => `${year}${term}`));
@@ -40,6 +43,21 @@
     Object.entries(attributes).forEach(([key, value]) => node.setAttribute(key, value));
     if (text !== "") node.textContent = text;
     return node;
+  }
+
+  function scatterSymbol(category, centerX, centerY, size, attributes = {}) {
+    const common = { fill: categoryColors[category], ...attributes };
+    if (categorySymbols[category] === "square") {
+      const side = size * 1.7;
+      return svgElement("rect", { x: centerX - side / 2, y: centerY - side / 2, width: side, height: side, rx: 1, ...common });
+    }
+    if (categorySymbols[category] === "diamond") {
+      return svgElement("polygon", { points: `${centerX},${centerY - size} ${centerX + size},${centerY} ${centerX},${centerY + size} ${centerX - size},${centerY}`, ...common });
+    }
+    if (categorySymbols[category] === "triangle") {
+      return svgElement("polygon", { points: `${centerX},${centerY - size} ${centerX + size * 0.92},${centerY + size * 0.72} ${centerX - size * 0.92},${centerY + size * 0.72}`, ...common });
+    }
+    return svgElement("circle", { cx: centerX, cy: centerY, r: size, ...common });
   }
 
   function formatValue(value, digits = 2) {
@@ -678,7 +696,7 @@
       .map((row) => ({ ...row, rankPercentile: parseRank(row.教学班排名).percentile }));
     const width = Math.max(360, container.clientWidth || 720);
     const height = expanded ? Math.max(560, container.clientHeight || window.innerHeight - 84) : width < 520 ? 320 : 350;
-    const margin = { top: 48, right: 20, bottom: 52, left: 52 };
+    const margin = { top: 58, right: 20, bottom: 52, left: 64 };
     const plotWidth = width - margin.left - margin.right;
     const plotHeight = height - margin.top - margin.bottom;
     const minScore = 75;
@@ -720,28 +738,27 @@
     svg.append(svgElement("line", { x1: medianX, x2: medianX, y1: margin.top, y2: height - margin.bottom, class: "quadrant-line" }));
     svg.append(svgElement("line", { x1: margin.left, x2: width - margin.right, y1: medianY, y2: medianY, class: "quadrant-line" }));
     svg.append(svgElement("text", { x: width - margin.right, y: height - 3, "text-anchor": "end", class: "tick-label" }, "教学班排名百分位（对数刻度）"));
-    svg.append(svgElement("text", { x: margin.left, y: margin.top - 10, class: "tick-label" }, "最终成绩"));
+    const yAxisCenter = margin.top + plotHeight / 2;
+    svg.append(svgElement("text", { x: 16, y: yAxisCenter, transform: `rotate(-90 16 ${yAxisCenter})`, "text-anchor": "middle", class: "tick-label" }, "最终成绩"));
 
     if (width >= 620) {
       svg.append(svgElement("text", { x: margin.left + 8, y: margin.top + 16, class: "quadrant-label" }, "排名较低 · 成绩较高（课程给分高）"));
       svg.append(svgElement("text", { x: width - margin.right - 8, y: height - margin.bottom - 9, "text-anchor": "end", class: "quadrant-label" }, "排名较高 · 成绩较低（课程给分低）"));
     }
 
-    const legend = svgElement("g", { transform: `translate(${margin.left},20)` });
+    const legendStep = 70;
+    const legendWidth = legendStep * Object.keys(categoryColors).length;
+    const legend = svgElement("g", { transform: `translate(${Math.max(margin.left, width - margin.right - legendWidth)},24)` });
     Object.entries(categoryColors).forEach(([label, color], index) => {
-      const offset = index * 64;
-      legend.append(svgElement("circle", { cx: offset + 4, cy: 0, r: 4, fill: color }));
+      const offset = index * legendStep;
+      legend.append(scatterSymbol(label, offset + 5, 0, 4, { fill: color }));
       legend.append(svgElement("text", { x: offset + 12, y: 4, class: "tick-label" }, label));
     });
     svg.append(legend);
 
     if (expanded) appendScatterCourseLabels(svg, data, x, y, margin, width, height);
     data.forEach((row) => {
-      const circle = svgElement("circle", {
-        cx: x(row.rankPercentile),
-        cy: y(row.最终成绩),
-        r: 3 + Math.sqrt(row.学分) * 1.15,
-        fill: categoryColors[row.类别],
+      const marker = scatterSymbol(row.类别, x(row.rankPercentile), y(row.最终成绩), 3 + Math.sqrt(row.学分) * 1.15, {
         stroke: "#ffffff",
         "stroke-width": 1,
         opacity: 0.78,
@@ -754,16 +771,17 @@
         `排名百分位 ${row.rankPercentile.toFixed(2)}%`,
         `${row.学分} 学分 · ${row.类别}`,
       ];
-      bindChartTooltip(circle, row.课程, tooltipLines);
-      circle.addEventListener("focus", () => circle.setAttribute("opacity", "1"));
-      circle.addEventListener("blur", () => circle.setAttribute("opacity", "0.78"));
-      svg.append(circle);
+      bindChartTooltip(marker, row.课程, tooltipLines);
+      marker.addEventListener("focus", () => marker.setAttribute("opacity", "1"));
+      marker.addEventListener("blur", () => marker.setAttribute("opacity", "0.78"));
+      svg.append(marker);
     });
     container.append(svg);
   }
 
   function setupScatterFullscreen() {
     const card = $("#score-rank-card");
+    const title = $("#score-rank-title");
     const button = $("#scatter-fullscreen");
     const downloadButton = $("#scatter-download");
     let preparedPngUrl = "";
@@ -774,10 +792,17 @@
       const source = $("#score-rank-scatter svg");
       const clone = source.cloneNode(true);
       const viewBox = source.viewBox.baseVal;
+      const titleHeight = 58;
+      const exportHeight = viewBox.height + titleHeight;
       const exportScale = Math.max(2, Math.min(3, 3600 / viewBox.width));
       clone.setAttribute("width", viewBox.width);
-      clone.setAttribute("height", viewBox.height);
+      clone.setAttribute("height", exportHeight);
+      clone.setAttribute("viewBox", `0 0 ${viewBox.width} ${exportHeight}`);
       clone.setAttribute("xmlns", svgNS);
+
+      const chartGroup = svgElement("g", { transform: `translate(0 ${titleHeight})` });
+      Array.from(clone.childNodes).forEach((child) => chartGroup.append(child));
+      clone.replaceChildren();
 
       const style = svgElement("style", {}, `
         svg { font-family: "Microsoft YaHei", "Noto Sans CJK SC", sans-serif; }
@@ -787,8 +812,11 @@
         .quadrant-label { fill: #7b858a; font-size: 10px; letter-spacing: 0.02em; }
         .scatter-label-line { stroke: rgba(75, 87, 93, 0.34); stroke-width: 0.8; }
         .scatter-course-label { fill: #34434a; stroke: #ffffff; stroke-width: 3px; paint-order: stroke; font-size: 10px; }
+        .export-title { fill: #1f3139; font-size: 22px; font-weight: 700; letter-spacing: -0.01em; }
       `);
-      clone.prepend(style);
+      clone.append(style);
+      clone.append(svgElement("text", { x: viewBox.width / 2, y: 36, "text-anchor": "middle", class: "export-title" }, scatterExpandedTitle));
+      clone.append(chartGroup);
 
       const svgBlob = new Blob([new XMLSerializer().serializeToString(clone)], { type: "image/svg+xml;charset=utf-8" });
       const svgUrl = URL.createObjectURL(svgBlob);
@@ -798,7 +826,7 @@
 
       const canvas = document.createElement("canvas");
       canvas.width = Math.round(viewBox.width * exportScale);
-      canvas.height = Math.round(viewBox.height * exportScale);
+      canvas.height = Math.round(exportHeight * exportScale);
       const context = canvas.getContext("2d");
       context.fillStyle = "#ffffff";
       context.fillRect(0, 0, canvas.width, canvas.height);
@@ -813,6 +841,7 @@
 
     const update = () => {
       const expanded = isScatterExpanded();
+      title.textContent = expanded ? scatterExpandedTitle : scatterDefaultTitle;
       button.textContent = expanded ? "退出全屏" : "全屏";
       button.setAttribute("aria-label", expanded ? "退出课程成绩与教学班排名百分位全屏" : "全屏查看课程成绩与教学班排名百分位");
       renderScatter();
