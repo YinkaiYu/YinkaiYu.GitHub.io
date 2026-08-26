@@ -175,12 +175,12 @@ th { color: #596375; background: #f1f4f9; }
 #yu-rank-card:fullscreen .scatter-course-label,
 #yu-rank-card.is-expanded .scatter-course-label { stroke-width: 5.5px; font-size: 17px; }
 
-.motion-ready .section:not(.intro-section) { opacity: 0; filter: blur(7px); transform: translateY(34px) scale(.992); transition: opacity 820ms var(--ease), filter 820ms var(--ease), transform 820ms var(--ease); }
-.motion-ready .section.is-visible { opacity: 1; filter: blur(0); transform: translateY(0) scale(1); }
+.motion-ready .section:not(.intro-section) { opacity: 0; filter: blur(7px); transform: translateY(34px); transition: opacity 820ms var(--ease), filter 820ms var(--ease), transform 820ms var(--ease); }
+.motion-ready .section.is-visible { opacity: 1; filter: blur(0); transform: translateY(0); }
 .motion-ready .intro-copy > * { opacity: 0; animation: enter-up 860ms var(--ease) forwards; transform: translateY(26px); }
 .motion-ready .intro-copy > :nth-child(2) { animation-delay: 110ms; }
 .motion-ready .intro-copy > :nth-child(3) { animation-delay: 210ms; }
-.motion-ready .hero-orbit-layer { opacity: 0; animation: field-arrive 1150ms var(--ease) 120ms forwards; transform: translateX(36px) scale(.98); }
+.motion-ready .hero-orbit-layer { opacity: 0; filter: blur(10px); animation: field-arrive 1150ms var(--ease) 120ms forwards; transform: translateY(18px); }
 .motion-ready .section:not(.is-visible) .chart-card, .motion-ready .section:not(.is-visible) .overview-benchmark, .motion-ready .section:not(.is-visible) .table-frame, .motion-ready .section:not(.is-visible) .contribution-layout { opacity: 0; transform: translateY(22px); }
 .motion-ready .section.is-visible .chart-card, .motion-ready .section.is-visible .overview-benchmark, .motion-ready .section.is-visible .table-frame, .motion-ready .section.is-visible .contribution-layout { opacity: 1; transform: translateY(0); transition: opacity 720ms var(--ease), transform 720ms var(--ease), border-color 300ms var(--ease), box-shadow 300ms var(--ease); }
 .motion-ready .section.is-visible .chart-card:nth-child(2), .motion-ready .section.is-visible .overview-benchmark:nth-child(2) { transition-delay: 80ms; }
@@ -189,7 +189,7 @@ th { color: #596375; background: #f1f4f9; }
 .motion-ready .section.is-visible .scatter-point, .motion-ready .section.is-visible .data-point, .motion-ready .section.is-visible .rank-point, .motion-ready .section.is-visible .cumulative-point { animation: plot-pop 620ms var(--ease) backwards; }
 .motion-ready .section.is-visible .donut-segment { animation: donut-reveal 900ms var(--ease) backwards; transform-box: fill-box; transform-origin: center; }
 @keyframes enter-up { to { opacity: 1; transform: translateY(0); } }
-@keyframes field-arrive { to { opacity: 1; transform: translateX(0) scale(1); } }
+@keyframes field-arrive { to { opacity: 1; filter: blur(0); transform: translateY(0); } }
 @keyframes plot-pop { from { opacity: 0; transform: scale(.25); } }
 @keyframes donut-reveal { from { opacity: 0; transform: scale(.86) rotate(-7deg); } }
 
