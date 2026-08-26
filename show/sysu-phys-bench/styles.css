@@ -236,7 +236,7 @@ nav .personal-home-link:focus-visible {
 
 .contribution-steps li {
   display: grid;
-  grid-template-columns: 38px 54px 1fr;
+  grid-template-columns: 10px 54px minmax(0, 1fr);
   gap: 10px;
   padding: 17px 0;
   border-bottom: 1px solid var(--line);
@@ -244,11 +244,18 @@ nav .personal-home-link:focus-visible {
   line-height: 1.65;
 }
 
+.contribution-steps li::before {
+  width: 6px;
+  height: 6px;
+  align-self: center;
+  justify-self: center;
+  border-radius: 50%;
+  background: var(--blue);
+  content: "";
+}
+
 .contribution-steps span {
-  color: var(--blue);
-  font-family: var(--mono);
-  font-size: 12px;
-  font-weight: 700;
+  color: var(--muted);
 }
 
 .contribution-steps strong {

@@ -14,19 +14,14 @@
     <meta name="twitter:card" content="summary_large_image" />
     <title>SYSU-Phys-Bench</title>
     <link rel="icon" href="assets/brand/logo-mark-v2.png?v=20260826-1" type="image/png" />
-    <link rel="stylesheet" href="styles.css?v=20260826-20" />
-    <link rel="stylesheet" href="bench.css?v=20260826-3" />
+    <link rel="stylesheet" href="styles.css?v=20260826-21" />
+    <link rel="stylesheet" href="bench.css?v=20260826-5" />
   </head>
   <body>
     <header class="site-header">
       <div class="shell header-inner">
         <a class="site-title" href="#top"><img src="assets/brand/logo-mark-v2.png?v=20260826-1" alt="" /> <span>SYSU-Phys-Bench</span></a>
         <nav class="main-navigation" aria-label="页面导航">
-          <a href="#yu-index">Yu Index</a>
-          <a href="#benchmark">课程总览</a>
-          <a href="#details">明细</a>
-          <a href="#contribute">贡献数据</a>
-          <a href="#statistics">统计</a>
           <a class="project-repo-link" href="https://github.com/YinkaiYu/SYSU-Phys-Bench">GitHub <span aria-hidden="true">↗</span></a>
           <a class="personal-home-link" href="https://www.yykspace.com/">个人主页 <span aria-hidden="true">↗</span></a>
         </nav>
@@ -187,11 +182,11 @@
               <a href="https://github.com/YinkaiYu/SYSU-Phys-Bench/raw/refs/heads/main/data/submissions/template.csv">下载 CSV 模板</a>
             </div>
           </div>
-          <ol class="contribution-steps">
-            <li><span>01</span><strong>整理</strong>使用匿名贡献者 ID 填写课程记录</li>
-            <li><span>02</span><strong>校验</strong>运行仓库提供的数据校验与构建脚本</li>
-            <li><span>03</span><strong>提交</strong>创建 Pull Request，自动检查通过后进入数据集</li>
-          </ol>
+          <ul class="contribution-steps">
+            <li><strong>整理</strong><span>使用匿名贡献者 ID 填写课程记录</span></li>
+            <li><strong>校验</strong><span>运行仓库提供的数据校验与构建脚本</span></li>
+            <li><strong>提交</strong><span>创建 Pull Request，自动检查通过后进入数据集</span></li>
+          </ul>
         </div>
       </section>
 
@@ -228,8 +223,10 @@
       </div>
     </footer>
 
+    <div id="global-chart-tooltip" class="chart-tooltip" role="status" aria-hidden="true"></div>
+
     <script src="data.js"></script>
     <script src="community-data.js?v=20260826-1"></script>
-    <script src="app.js?v=20260826-14"></script>
+    <script src="app.js?v=20260826-18"></script>
   </body>
 </html>

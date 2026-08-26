@@ -587,7 +587,7 @@
     });
   }
 
-  function showTooltip(event, title, lines, tooltipSelector = "#chart-tooltip") {
+  function showTooltip(event, title, lines, tooltipSelector = "#chart-tooltip", target = event.currentTarget) {
     const tooltip = $(tooltipSelector);
     tooltip.replaceChildren();
     const strong = document.createElement("strong");
@@ -598,8 +598,15 @@
       span.textContent = line;
       tooltip.append(span);
     });
-    tooltip.style.left = `${Math.min(event.clientX, window.innerWidth - 320)}px`;
-    tooltip.style.top = `${Math.min(event.clientY, window.innerHeight - 120)}px`;
+    const targetBounds = target?.getBoundingClientRect?.();
+    const pointerX = Number.isFinite(event.clientX) && event.clientX > 0
+      ? event.clientX
+      : (targetBounds?.left || 0) + (targetBounds?.width || 0) / 2;
+    const pointerY = Number.isFinite(event.clientY) && event.clientY > 0
+      ? event.clientY
+      : (targetBounds?.top || 0) + (targetBounds?.height || 0) / 2;
+    tooltip.style.left = `${Math.max(8, Math.min(pointerX, window.innerWidth - 320))}px`;
+    tooltip.style.top = `${Math.max(8, Math.min(pointerY, window.innerHeight - 120))}px`;
     tooltip.classList.add("is-visible");
     tooltip.setAttribute("aria-hidden", "false");
   }
@@ -618,14 +625,23 @@
   }
 
   function bindChartTooltip(target, title, lines, tooltipSelector = "#chart-tooltip") {
-    const show = (event) => showTooltip(event, title, lines, tooltipSelector);
+    const show = (event) => showTooltip(event, title, lines, tooltipSelector, target);
     target.setAttribute("data-chart-tooltip", "");
 
+    target.addEventListener("pointerenter", (event) => {
+      if (event.pointerType !== "touch" && !pinnedTooltipTarget) show(event);
+    });
     target.addEventListener("pointermove", (event) => {
       if (event.pointerType !== "touch" && !pinnedTooltipTarget) show(event);
     });
     target.addEventListener("pointerleave", (event) => {
       if (event.pointerType !== "touch" && pinnedTooltipTarget !== target) hideTooltip(tooltipSelector);
+    });
+    target.addEventListener("focus", (event) => {
+      if (!pinnedTooltipTarget) show(event);
+    });
+    target.addEventListener("blur", () => {
+      if (pinnedTooltipTarget !== target) hideTooltip(tooltipSelector);
     });
     target.addEventListener("click", (event) => {
       event.stopPropagation();
@@ -667,19 +683,19 @@
         "stroke-dasharray": `${percent} ${100 - percent}`,
         "stroke-dashoffset": -cursor,
         "pathLength": 100,
-        transform: "rotate(-90 50 50)",
         class: "donut-segment",
         tabindex: 0,
         "aria-label": `${item.label}，${tooltipLines.join("，")}`,
       });
-      bindChartTooltip(segment, item.label, tooltipLines);
+      bindChartTooltip(segment, item.label, tooltipLines, "#global-chart-tooltip");
       donut.append(segment);
       cursor += percent;
     });
-    const totalElement = document.createElement("div");
-    totalElement.className = "donut-total";
-    totalElement.innerHTML = `<strong>${formatValue(total, 1)}</strong><span>${centerLabel}</span>`;
-    wrap.append(donut, totalElement);
+    donut.append(
+      svgElement("text", { x: 50, y: 48, "text-anchor": "middle", class: "donut-center-value" }, formatValue(total, 1)),
+      svgElement("text", { x: 50, y: 59, "text-anchor": "middle", class: "donut-center-label" }, centerLabel),
+    );
+    wrap.append(donut);
 
     const legend = document.createElement("div");
     legend.className = "legend";
@@ -689,7 +705,7 @@
       row.tabIndex = 0;
       row.innerHTML = `<i class="legend-swatch" style="background:${item.color}"></i><span>${item.label}</span><span class="legend-value">${formatValue(item.value, 1)}${unit}</span>`;
       const percent = (item.value / total) * 100;
-      bindChartTooltip(row, item.label, [`${formatValue(item.value, 1)}${unit}`, `占比 ${percent.toFixed(1)}%`]);
+      bindChartTooltip(row, item.label, [`${formatValue(item.value, 1)}${unit}`, `占比 ${percent.toFixed(1)}%`], "#global-chart-tooltip");
       legend.append(row);
     });
     layout.append(wrap, legend);
@@ -741,7 +757,7 @@
         tabindex: 0,
       });
       const tooltipLines = item.tooltip || [`${formatValue(item.value, options.valueDigits ?? 2)}${options.suffix || ""}`];
-      bindChartTooltip(rect, item.label, tooltipLines);
+      bindChartTooltip(rect, item.label, tooltipLines, "#global-chart-tooltip");
       rect.addEventListener("focus", () => rect.setAttribute("opacity", "0.78"));
       rect.addEventListener("blur", () => rect.setAttribute("opacity", "1"));
       svg.append(rect);
@@ -881,7 +897,7 @@
       const rankPoint = svgElement("circle", { cx: xPos, cy: rankYPos, r: 4.5, class: "rank-point", tabindex: 0 });
       const cumulativePoint = svgElement("circle", { cx: xPos, cy: cumulativeYPos, r: 4.5, class: "cumulative-point", tabindex: 0 });
       [semesterPoint, rankPoint, cumulativePoint].forEach((point) => {
-        bindChartTooltip(point, item.fullLabel, tooltipLines);
+        bindChartTooltip(point, item.fullLabel, tooltipLines, "#global-chart-tooltip");
       });
       svg.append(semesterPoint, rankPoint, cumulativePoint);
     });
@@ -924,7 +940,7 @@
     return document.fullscreenElement === card || card.classList.contains("is-expanded");
   }
 
-  function appendScatterCourseLabels(svg, data, x, y, valueAccessor, margin, width, height, compact = false) {
+  function appendScatterCourseLabels(svg, data, x, y, valueAccessor, margin, width, height, compact = false, exportReady = false) {
     const bounds = {
       left: margin.left + 3,
       right: width - margin.right - 3,
@@ -938,7 +954,7 @@
       text: truncateText(row.课程, compact ? (width < 520 ? 5 : 9) : 18),
     }));
 
-    const densityRadius = compact ? 42 : 58;
+    const densityRadius = compact ? 42 : exportReady ? 76 : 58;
     labels.forEach((item) => {
       item.density = labels.filter((other) => other !== item && Math.hypot(other.pointX - item.pointX, other.pointY - item.pointY) < densityRadius).length;
     });
@@ -947,14 +963,17 @@
     const placed = [];
     const directions = [
       [1, 0], [-1, 0], [0.72, -0.72], [0.72, 0.72], [-0.72, -0.72], [-0.72, 0.72], [0, -1], [0, 1],
+      [0.92, -0.38], [0.92, 0.38], [-0.92, -0.38], [-0.92, 0.38], [0.38, -0.92], [0.38, 0.92], [-0.38, -0.92], [-0.38, 0.92],
     ];
-    const radii = compact ? [9, 14, 21, 30, 42] : [16, 24, 34, 48, 64, 84, 106];
+    const radii = compact ? [9, 14, 21, 30, 42] : exportReady ? [18, 28, 40, 54, 72, 94, 120, 148] : [16, 24, 34, 48, 64, 84, 106];
     const overlapArea = (a, b) => Math.max(0, Math.min(a.right, b.right) - Math.max(a.left, b.left)) * Math.max(0, Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top));
     const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 
     labels.forEach((item) => {
-      const textWidth = Array.from(item.text).reduce((sum, character) => sum + (/^[\x20-\x7e]$/.test(character) ? (compact ? 4.6 : 8) : (compact ? 8 : 14)), 4);
-      const textHeight = compact ? 10 : 17;
+      const asciiWidth = compact ? 4.6 : exportReady ? 12.6 : 8;
+      const fullWidth = compact ? 8 : exportReady ? 23 : 14;
+      const textWidth = Array.from(item.text).reduce((sum, character) => sum + (/^[\x20-\x7e]$/.test(character) ? asciiWidth : fullWidth), exportReady ? 7 : 4);
+      const textHeight = compact ? 10 : exportReady ? 25 : 17;
       let bestCandidate = null;
 
       radii.forEach((radius) => {
@@ -1030,13 +1049,18 @@
       return;
     }
     const compact = window.innerWidth < 680;
-    const width = Math.max(compact ? 820 : 600, container.clientWidth || 720);
+    const availableWidth = Math.max(280, Math.floor(container.clientWidth || window.innerWidth - 58));
+    const width = expanded ? Math.max(600, availableWidth) : compact ? availableWidth : Math.max(600, availableWidth);
     const height = expanded
       ? Math.max(560, container.clientHeight || window.innerHeight - 84)
       : compact
-        ? 470
+        ? Math.round(Math.max(590, Math.min(720, width * 1.92)))
         : Math.max(430, Math.min(560, width * 0.42));
-    const margin = expanded ? { top: 76, right: 32, bottom: 72, left: 84 } : { top: 58, right: 20, bottom: 52, left: 64 };
+    const margin = expanded
+      ? { top: 76, right: 32, bottom: 72, left: 84 }
+      : compact
+        ? { top: 56, right: 8, bottom: 58, left: 44 }
+        : { top: 58, right: 20, bottom: 52, left: 64 };
     const plotWidth = width - margin.left - margin.right;
     const plotHeight = height - margin.top - margin.bottom;
     const scoreDomain = halfStepDomain(data.map((row) => row.绩点), { floor: 0, ceiling: 5 });
@@ -1079,7 +1103,7 @@
     svg.append(svgElement("line", { x1: margin.left, x2: width - margin.right, y1: medianY, y2: medianY, class: "quadrant-line" }));
     svg.append(svgElement("text", { x: margin.left + plotWidth / 2, y: height - (expanded ? 5 : 3), "text-anchor": "middle", class: "tick-label" }, "教学班排名百分位（对数刻度）"));
     const yAxisCenter = margin.top + plotHeight / 2;
-    const yAxisLabelX = expanded ? 22 : 16;
+    const yAxisLabelX = expanded ? 22 : compact ? 11 : 16;
     svg.append(svgElement("text", { x: yAxisLabelX, y: yAxisCenter, transform: `rotate(-90 ${yAxisLabelX} ${yAxisCenter})`, "text-anchor": "middle", class: "tick-label" }, "绩点"));
 
     if (width >= 620) {
@@ -1098,7 +1122,7 @@
     });
     svg.append(legend);
 
-    appendScatterCourseLabels(svg, data, x, y, (row) => row.绩点, margin, width, height, compact && !expanded);
+    appendScatterCourseLabels(svg, data, x, y, (row) => row.绩点, margin, width, height, compact && !expanded, expanded);
     data.forEach((row) => {
       const sampleScale = Math.log2((row.样本数 || 1) + 1) * 0.65;
       const marker = scatterSymbol(row.类别, x(row.rankPercentile), y(row.绩点), (3 + Math.sqrt(row.学分) * 1.15 + sampleScale) * (expanded ? 2.3 : 1.4), {
@@ -1149,13 +1173,18 @@
 
     const expanded = isYuScatterExpanded();
     const compact = window.innerWidth < 680;
-    const width = Math.max(compact ? 820 : 600, container.clientWidth || 720);
+    const availableWidth = Math.max(280, Math.floor(container.clientWidth || window.innerWidth - 58));
+    const width = expanded ? Math.max(600, availableWidth) : compact ? availableWidth : Math.max(600, availableWidth);
     const height = expanded
       ? Math.max(560, container.clientHeight || window.innerHeight - 84)
       : compact
-        ? 500
+        ? Math.round(Math.max(610, Math.min(740, width * 1.98)))
         : Math.max(460, Math.min(590, width * 0.45));
-    const margin = expanded ? { top: 76, right: 32, bottom: 72, left: 84 } : { top: 58, right: 20, bottom: 52, left: 64 };
+    const margin = expanded
+      ? { top: 76, right: 32, bottom: 72, left: 84 }
+      : compact
+        ? { top: 56, right: 8, bottom: 58, left: 44 }
+        : { top: 58, right: 20, bottom: 52, left: 64 };
     const plotWidth = width - margin.left - margin.right;
     const plotHeight = height - margin.top - margin.bottom;
     const minRank = 0.5;
@@ -1181,7 +1210,7 @@
     });
     svg.append(svgElement("text", { x: margin.left + plotWidth / 2, y: height - (expanded ? 5 : 3), "text-anchor": "middle", class: "tick-label" }, "教学班排名百分位（对数刻度）"));
     const yAxisCenter = margin.top + plotHeight / 2;
-    const yAxisLabelX = expanded ? 22 : 16;
+    const yAxisLabelX = expanded ? 22 : compact ? 11 : 16;
     svg.append(svgElement("text", { x: yAxisLabelX, y: yAxisCenter, transform: `rotate(-90 ${yAxisLabelX} ${yAxisCenter})`, "text-anchor": "middle", class: "tick-label" }, "Yu Index"));
 
     const benchmarkY = y(yuIndexBenchmark);
@@ -1201,7 +1230,7 @@
     });
     svg.append(legend);
 
-    appendScatterCourseLabels(svg, data, x, y, (row) => row["Yu Index"], margin, width, height, compact && !expanded);
+    appendScatterCourseLabels(svg, data, x, y, (row) => row["Yu Index"], margin, width, height, compact && !expanded, expanded);
     data.forEach((row) => {
       const sampleScale = Math.log2((row.样本数 || 1) + 1) * 0.65;
       const marker = scatterSymbol(row.类别, x(row.rankPercentile), y(row["Yu Index"]), (3 + Math.sqrt(row.学分) * 1.15 + sampleScale) * (expanded ? 2.3 : 1.4), {
@@ -1254,7 +1283,7 @@
       }
       const clone = source.cloneNode(true);
       const viewBox = source.viewBox.baseVal;
-      const titleHeight = 82;
+      const titleHeight = 96;
       const exportHeight = viewBox.height + titleHeight;
       const exportScale = Math.max(2, Math.min(3, 3600 / viewBox.width));
       clone.setAttribute("width", viewBox.width);
@@ -1268,20 +1297,20 @@
 
       const style = svgElement("style", {}, `
         svg { font-family: "Microsoft YaHei", "Noto Sans CJK SC", sans-serif; }
-        .tick-label { fill: #64748b; font-family: Consolas, monospace; font-size: 18px; }
-        .grid-line { stroke: #e7ebf2; stroke-width: 1.2; }
-        .quadrant-line { stroke: #94a3b8; stroke-dasharray: 5 5; stroke-width: 1.3; }
-        .quadrant-label { fill: #64748b; stroke: #ffffff; stroke-width: 4px; paint-order: stroke; font-size: 14px; letter-spacing: 0.02em; }
-        .yu-benchmark-line { stroke: #64748b; stroke-dasharray: 7 5; stroke-width: 1.4; }
-        .yu-benchmark-label, .yu-benchmark-value { fill: #475569; stroke: #ffffff; stroke-width: 4px; paint-order: stroke; font-size: 14px; }
+        .tick-label { fill: #64748b; font-family: Consolas, monospace; font-size: 23px; }
+        .grid-line { stroke: #e7ebf2; stroke-width: 1.35; }
+        .quadrant-line { stroke: #94a3b8; stroke-dasharray: 6 6; stroke-width: 1.5; }
+        .quadrant-label { fill: #64748b; stroke: #ffffff; stroke-width: 5px; paint-order: stroke; font-size: 19px; letter-spacing: 0.02em; }
+        .yu-benchmark-line { stroke: #64748b; stroke-dasharray: 8 6; stroke-width: 1.6; }
+        .yu-benchmark-label, .yu-benchmark-value { fill: #475569; stroke: #ffffff; stroke-width: 5px; paint-order: stroke; font-size: 19px; }
         .yu-benchmark-label { font-weight: 650; }
         .scatter-label-line { stroke: rgba(75, 87, 93, 0.42); stroke-width: 1.15; }
-        .scatter-course-label { fill: #334155; stroke: #ffffff; stroke-width: 5.5px; paint-order: stroke; font-size: 17px; }
-        .scatter-point { stroke-width: 1.6px; }
-        .export-title { fill: #10131a; font-size: 30px; font-weight: 700; letter-spacing: -0.01em; }
+        .scatter-course-label { fill: #334155; stroke: #ffffff; stroke-width: 7px; paint-order: stroke; font-size: 23px; font-weight: 520; }
+        .scatter-point { stroke-width: 1.9px; }
+        .export-title { fill: #10131a; font-size: 40px; font-weight: 700; letter-spacing: -0.02em; }
       `);
       clone.append(style);
-      clone.append(svgElement("text", { x: viewBox.width / 2, y: 52, "text-anchor": "middle", class: "export-title" }, expandedTitle));
+      clone.append(svgElement("text", { x: viewBox.width / 2, y: 62, "text-anchor": "middle", class: "export-title" }, expandedTitle));
       clone.append(chartGroup);
 
       const svgBlob = new Blob([new XMLSerializer().serializeToString(clone)], { type: "image/svg+xml;charset=utf-8" });

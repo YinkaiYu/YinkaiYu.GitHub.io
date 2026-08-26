@@ -133,12 +133,20 @@ th { color: #596375; background: #f1f4f9; }
 .contribution-actions .contribution-primary { border-color: var(--blue); background: var(--blue); }
 .contribution-actions a:hover, .contribution-actions a:focus-visible { border-color: var(--blue-dark); color: #fff; background: var(--blue-dark); transform: translateY(-2px); }
 .contribution-steps { border-color: var(--line); border-radius: 22px; background: #f5f7fb; box-shadow: none; }
-.contribution-steps li { grid-template-columns: 48px max-content minmax(0, 1fr); align-items: baseline; column-gap: 14px; transition: background-color 220ms var(--ease), transform 220ms var(--ease); }
+.contribution-steps li { grid-template-columns: 10px max-content minmax(0, 1fr); align-items: baseline; column-gap: 14px; transition: background-color 220ms var(--ease), transform 220ms var(--ease); }
+.contribution-steps li::before { align-self: center; }
 .contribution-steps li > span,
 .contribution-steps li > strong { align-self: baseline; line-height: 1.65; }
 .contribution-steps li:hover { background: var(--blue-soft); transform: translateX(4px); }
 .chart-donut .donut-layout { width: 100%; grid-template-columns: minmax(190px, .9fr) minmax(190px, 1.1fr); align-items: center; }
 .chart-donut .donut-wrap { align-self: center; justify-self: center; }
+.chart-donut .donut { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+.donut-center-value { fill: var(--ink); font-family: var(--font); font-size: 11px; font-weight: 720; letter-spacing: -.04em; pointer-events: none; }
+.donut-center-label { fill: var(--muted); font-family: var(--font); font-size: 5px; pointer-events: none; }
+.chart [data-chart-tooltip] { cursor: pointer; }
+.chart rect[data-chart-tooltip] { transition: filter 180ms var(--ease), opacity 180ms var(--ease); }
+.chart rect[data-chart-tooltip]:hover,
+.chart rect[data-chart-tooltip]:focus-visible { filter: brightness(1.05) drop-shadow(0 6px 9px rgba(33,85,245,.18)); opacity: .88; outline: none; }
 .chart-tooltip { border-color: rgba(255,255,255,.14); border-radius: 16px; color: #fff; background: rgba(16,19,26,.94); box-shadow: 0 18px 48px rgba(16,19,26,.24); backdrop-filter: blur(18px); }
 
 .site-footer { margin-top: 130px; padding: 38px 0 52px; border-top-color: var(--line); }
@@ -200,9 +208,9 @@ th { color: #596375; background: #f1f4f9; }
 @media (max-width: 900px) {
   html { scroll-padding-top: 124px; }
   .shell { width: min(100% - 30px,1540px); }
-  .header-inner { flex-wrap: wrap; gap: 0; padding: 10px 0 9px; }
-  .site-title { width: 100%; }
-  .main-navigation, .report-navigation { width: calc(100vw - 30px); gap: 18px; margin-top: 6px; overflow-x: auto; overscroll-behavior-inline: contain; padding-bottom: 3px; scrollbar-width: none; }
+  .header-inner { flex-wrap: nowrap; gap: 12px; padding: 9px 0; }
+  .site-title { width: auto; min-width: 0; flex: 0 1 auto; }
+  .main-navigation, .report-navigation { width: auto; flex: 0 0 auto; gap: 8px; margin: 0 0 0 auto; overflow: visible; padding: 0; }
   .main-navigation::-webkit-scrollbar, .report-navigation::-webkit-scrollbar { display: none; }
   .main-navigation a, .report-navigation a { display: inline-flex; flex: 0 0 auto; }
   .main-navigation a:not(.personal-home-link):not(.project-repo-link), .report-navigation > a:first-child { display: inline-flex; }
@@ -214,13 +222,14 @@ th { color: #596375; background: #f1f4f9; }
   .title-subject { font-size: clamp(31px,7.4vw,43px); }
   .section { padding-top: 104px; }
   .section:not(.intro-section)::before { top: 50px; }
-  .chart-card-full .chart-scatter { min-height: 470px; overflow-x: auto; overscroll-behavior-inline: contain; scrollbar-color: #b8c4d8 transparent; scrollbar-width: thin; }
-  .chart-card-full .chart-scatter svg { width: auto; min-width: 820px; max-width: none; }
+  .chart-card-full .chart-scatter { min-height: 470px; overflow: hidden; }
+  .chart-card-full .chart-scatter svg { width: 100%; min-width: 0; max-width: 100%; }
 }
 
 @media (max-width: 600px) {
-  .site-title { font-size: 15px; }
-  .site-title img { width: 32px; height: 32px; }
+  .site-title { gap: 6px; font-size: 13px; }
+  .site-title img { width: 28px; height: 28px; }
+  nav .project-repo-link, nav .personal-home-link { min-height: 32px; padding: 6px 9px; font-size: 12px; }
   .title-prefix { font-size: 38px; white-space: nowrap; }
   .title-subject { margin-top: 13px; font-size: 31px; line-height: 1.14; }
   h2 { font-size: 38px; }
@@ -229,14 +238,15 @@ th { color: #596375; background: #f1f4f9; }
   .hero-orbit-layer { height: 260px; margin-top: 24px; }
   .methodology-body, .report-article > p, .report-reference-list { font-size: 16px; }
   .methodology-body .yu-index-formula, .report-article .yu-index-formula { margin: 26px 0; font-size: 19px; overflow-x: auto; }
-  .yu-calculator, .chart-card-full, .chart-grid .chart-card, .contribution-layout { padding: 21px; border-radius: 21px; }
+  .yu-calculator, .chart-grid .chart-card, .contribution-layout { padding: 21px; border-radius: 21px; }
+  .chart-card-full { padding: 20px 14px; border-radius: 21px; }
   .chart-card-heading { align-items: flex-start; flex-direction: column; gap: 13px; }
-  .chart-card-full .chart-scatter { min-height: 390px; }
+  .chart-card-full .chart-scatter { min-height: 590px; }
   .overview-benchmark { min-height: 88px; }
   .chart-donut { min-height: 430px; }
   .chart-donut .donut-layout { min-height: 385px; grid-template-columns: 1fr; grid-template-rows: 205px auto; align-content: center; gap: 18px; }
   .chart-donut .donut-wrap { width: 190px; }
-  .contribution-steps li { grid-template-columns: 42px max-content minmax(0, 1fr); column-gap: 10px; }
+  .contribution-steps li { grid-template-columns: 10px max-content minmax(0, 1fr); column-gap: 10px; }
   .report-title-block h1 { font-size: 43px; }
   .report-article h2 { margin-top: 64px; }
   .site-footer { margin-top: 92px; }
