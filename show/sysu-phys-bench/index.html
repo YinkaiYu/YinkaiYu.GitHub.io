@@ -6,7 +6,7 @@
     <meta name="color-scheme" content="light" />
     <meta name="theme-color" content="#f6f7f5" />
     <title>SYSU-Phys-Bench</title>
-    <link rel="stylesheet" href="styles.css?v=20260826-18" />
+    <link rel="stylesheet" href="styles.css?v=20260826-19" />
   </head>
   <body>
     <header class="site-header">
@@ -16,6 +16,7 @@
           <a href="#yu-index">Yu Index</a>
           <a href="#benchmark">课程总览</a>
           <a href="#details">明细</a>
+          <a href="#contribute">贡献数据</a>
           <a href="#statistics">统计</a>
           <a class="project-repo-link" href="https://github.com/YinkaiYu/SYSU-Phys-Bench">GitHub <span aria-hidden="true">↗</span></a>
           <a class="personal-home-link" href="https://www.yykspace.com/">个人主页 <span aria-hidden="true">↗</span></a>
@@ -26,7 +27,7 @@
     <main id="top" class="shell">
       <section class="section section-first intro-section" aria-labelledby="page-title">
         <h1 id="page-title">SYSU-Phys-Bench: 中山大学物理学院本科课程给分基准测试</h1>
-        <p class="benchmark-source">实验数据为余荫铠 2020—2024 年实测数据</p>
+        <p class="benchmark-source">初始数据为余荫铠 2020—2024 年实测数据</p>
         <p class="author-note">我整理了我大学四年的成绩单，我想提供给我的学弟学妹们，方便他们参考选课，尤其是根据我的成绩和排名，可以看出这门课给分是否友好。不过，这绝对不是唯一的选课依据哈，该上的课还得上。</p>
       </section>
 
@@ -74,6 +75,13 @@
             <details id="scatter-category" class="multi-filter"><summary>全部类别</summary><div class="multi-filter-options"></div></details>
             <details id="scatter-year" class="multi-filter"><summary>全部学年</summary><div class="multi-filter-options"></div></details>
             <details id="scatter-term" class="multi-filter"><summary>全部学期</summary><div class="multi-filter-options"></div></details>
+            <label class="scatter-view-field">
+              <span class="sr-only">散点显示方式</span>
+              <select id="scatter-view-mode" aria-label="散点显示方式">
+                <option value="course">课程汇总</option>
+                <option value="record">全部样本</option>
+              </select>
+            </label>
             <label class="search-field scatter-search-field">
               <span class="sr-only">搜索课程或教师</span>
               <svg aria-hidden="true" viewBox="0 0 24 24">
@@ -151,9 +159,28 @@
         </div>
       </section>
 
+      <section id="contribute" class="section contribution-section" aria-labelledby="contribute-title">
+        <h2 id="contribute-title">贡献数据</h2>
+        <div class="contribution-layout">
+          <div class="contribution-body">
+            <p>SYSU-Phys-Bench 现开放收录更多中山大学物理学院本科课程数据。新的独立样本可以扩展课程覆盖，并使课程级 Yu Index 更稳定。</p>
+            <p>贡献采用标准 CSV 和 GitHub Pull Request。仓库会自动校验字段、取值范围、记录 ID 与网页数据是否同步。</p>
+            <div class="contribution-actions">
+              <a class="contribution-primary" href="https://github.com/YinkaiYu/SYSU-Phys-Bench/blob/main/CONTRIBUTING.md">阅读贡献指南 <span aria-hidden="true">↗</span></a>
+              <a href="https://github.com/YinkaiYu/SYSU-Phys-Bench/raw/refs/heads/main/data/submissions/template.csv">下载 CSV 模板</a>
+            </div>
+          </div>
+          <ol class="contribution-steps">
+            <li><span>01</span><strong>整理</strong>使用匿名贡献者 ID 填写课程记录</li>
+            <li><span>02</span><strong>校验</strong>运行仓库提供的数据校验与构建脚本</li>
+            <li><span>03</span><strong>提交</strong>创建 Pull Request，自动检查通过后进入数据集</li>
+          </ol>
+        </div>
+      </section>
+
       <section id="statistics" class="section" aria-labelledby="statistics-title">
         <h2 id="statistics-title">数据集统计</h2>
-        <div id="overview-benchmarks" class="overview-benchmarks dataset-benchmarks" aria-label="总绩点与总排名"></div>
+        <div id="overview-benchmarks" class="overview-benchmarks dataset-benchmarks" aria-label="数据集规模与总览指标"></div>
         <div class="chart-grid">
           <article class="chart-card chart-card-half">
             <h3>学分构成</h3>
@@ -164,7 +191,7 @@
             <div id="grade-distribution" class="chart chart-donut"></div>
           </article>
           <article class="chart-card chart-card-wide">
-            <h3>各学期绩点、排名与总绩点</h3>
+            <h3>初始样本各学期绩点、排名与总绩点</h3>
             <div id="gpa-trend" class="chart chart-line"></div>
           </article>
           <article class="chart-card chart-card-small">
@@ -181,6 +208,7 @@
     </footer>
 
     <script src="data.js"></script>
-    <script src="app.js?v=20260826-8"></script>
+    <script src="community-data.js?v=20260826-1"></script>
+    <script src="app.js?v=20260826-9"></script>
   </body>
 </html>

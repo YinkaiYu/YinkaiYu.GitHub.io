@@ -6,7 +6,7 @@
     <meta name="color-scheme" content="light" />
     <meta name="theme-color" content="#f6f7f5" />
     <title>Yu Index 技术报告 · SYSU-Phys-Bench</title>
-    <link rel="stylesheet" href="styles.css?v=20260826-18" />
+    <link rel="stylesheet" href="styles.css?v=20260826-19" />
   </head>
   <body>
     <header class="site-header">
@@ -84,7 +84,7 @@
 
         <h2>4. 典型班内绩点标准差</h2>
         <p>每门课程只有一个人的绩点与排名，不能同时估计该课程的均值和标准差。SYSU-Phys-Bench 因此为所有课程使用统一的典型班内绩点标准差 <i>σ</i><sub>0</sub>。</p>
-        <p>对成绩单中 63 门同时具有绩点与教学班排名的课程，先由排名计算正态位置 <i>z</i><sub>j</sub>，再拟合：</p>
+        <p>对成绩单中 63 条同时具有绩点与教学班排名的课程记录，先由排名计算正态位置 <i>z</i><sub>j</sub>，再拟合：</p>
         <div class="yu-index-formula">
           <math display="block">
             <mrow><msub><mi>G</mi><mi>j</mi></msub><mo>=</mo><mi>a</mi><mo>+</mo><msub><mi>σ</mi><mn>0</mn></msub><msub><mi>z</mi><mi>j</mi></msub><mo>+</mo><msub><mi>ε</mi><mi>j</mi></msub></mrow>
@@ -93,7 +93,7 @@
         <p>拟合得到 <i>σ</i><sub>0</sub> ≈ 0.341。公开定义取与该估计接近且形式简洁的 <i>σ</i><sub>0</sub> = 1/3，从而得到最终公式。</p>
 
         <h2>5. 数据校验</h2>
-        <p>在 63 门课程的数据中，Yu Index 与教学班名次占比的皮尔逊相关系数约为 −0.0004，与个人绩点的相关系数约为 0.840。前者表明 Yu Index 并不是教学班排名的线性复述，后者表明该指标仍然保留了绝对成绩信息。</p>
+        <p>在这 63 条课程记录中，Yu Index 与教学班名次占比的皮尔逊相关系数约为 −0.0004，与个人绩点的相关系数约为 0.840。前者表明 Yu Index 并不是教学班排名的线性复述，后者表明该指标仍然保留了绝对成绩信息。</p>
         <div class="table-frame report-table">
           <table aria-label="Yu Index 相关性检验">
             <thead>
@@ -107,7 +107,22 @@
         </div>
         <p>Yu Index 使用排名估计个人相对表现，再从绩点中扣除这一部分，以获得课程给分水平的估计值。</p>
 
-        <h2>6. 计算示例</h2>
+        <h2>6. 多样本课程级估计</h2>
+        <p>同一课程收集到多位贡献者或多个学期的有效记录后，先分别计算每条记录的 Yu Index。设课程 <i>c</i> 在当前筛选范围内共有 <i>m</i><sub>c</sub> 条记录，则课程级 Yu Index 定义为：</p>
+        <div class="yu-index-formula">
+          <math display="block">
+            <mrow>
+              <msub><mover><mi>Y</mi><mo>¯</mo></mover><mi>c</mi></msub>
+              <mo>=</mo>
+              <mfrac><mn>1</mn><msub><mi>m</mi><mi>c</mi></msub></mfrac>
+              <munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><msub><mi>m</mi><mi>c</mi></msub></munderover>
+              <msub><mi>Y</mi><mi>i</mi></msub>
+            </mrow>
+          </math>
+        </div>
+        <p>每条观测在课程级平均中权重相同。网页同时报告样本数与独立贡献者数量；类别、学年和学期筛选先作用于观测记录，再计算当前视图的课程汇总值。随着独立样本增加，单个学生相对表现带来的随机误差会在课程级平均中减小。</p>
+
+        <h2>7. 计算示例</h2>
         <p>“热力学与统计物理”的个人绩点为 3.8，教学班排名为 2/43。由 Blom 位置得到 <i>p</i> ≈ 0.9624，进而得到 <i>z</i> ≈ 1.7796：</p>
         <div class="yu-index-formula">
           <math display="block">
@@ -128,12 +143,12 @@
           </table>
         </div>
 
-        <h2>7. 指标意义</h2>
+        <h2>8. 指标意义</h2>
         <p>Yu Index 将“绝对绩点”和“班内相对表现”分开：排名越靠前，个人绩点中被解释为相对表现的部分越多；排名越靠后却仍取得较高绩点，模型反推出的课程平均绩点越高。</p>
         <p>它回答的问题是“根据这份个人成绩与教学班名次，这门课程的整体给分大约处于什么水平”。不同课程的 Yu Index 可以直接按 GPA 尺度比较，也更适合比较明显的给分区间差异。</p>
 
-        <h2>8. 方法关系</h2>
-        <p>教育测量研究长期关注原始 GPA 混合学生表现、课程选择与评分尺度的问题。Adjusted GPA<a class="citation" href="#ref-2" aria-label="参考文献 2">[2]</a>、Achievement Index<a class="citation" href="#ref-3" aria-label="参考文献 3">[3]</a>、Grade Lift<a class="citation" href="#ref-4" aria-label="参考文献 4">[4]</a> 与 calibrated GPA<a class="citation" href="#ref-5" aria-label="参考文献 5">[5]</a> 等方法都试图分离学生水平和课程给分差异。Yu Index 面向只有“一个人的绩点与教学班排名”的数据条件，以正态顺序统计量提供的相对位置信息完成课程平均绩点估计。</p>
+        <h2>9. 方法关系</h2>
+        <p>教育测量研究长期关注原始 GPA 混合学生表现、课程选择与评分尺度的问题。Adjusted GPA<a class="citation" href="#ref-2" aria-label="参考文献 2">[2]</a>、Achievement Index<a class="citation" href="#ref-3" aria-label="参考文献 3">[3]</a>、Grade Lift<a class="citation" href="#ref-4" aria-label="参考文献 4">[4]</a> 与 calibrated GPA<a class="citation" href="#ref-5" aria-label="参考文献 5">[5]</a> 等方法都试图分离学生水平和课程给分差异。Yu Index 面向只有绩点与教学班排名的单条观测，以正态顺序统计量提供的相对位置信息完成课程平均绩点估计，并可通过多条独立观测形成课程级汇总。</p>
 
         <h2>参考文献</h2>
         <ol class="report-reference-list">

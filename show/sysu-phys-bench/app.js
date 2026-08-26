@@ -3,20 +3,41 @@
 
   const overviewRows = window.GRADE_DATA.overview;
   const detailRows = window.GRADE_DATA.details;
-  const detailDisplayHeaders = ["课程", "Yu Index", "教师", "学年", "学期", "学分", "最终成绩", "绩点", "教学班排名", "类别"];
-  const rows = detailRows.slice(1).map((row, index) => ({
-    index,
-    类别: row[0],
-    课程: row[1],
-    教师: row[2] ?? "",
-    学年: row[3],
-    学期: row[4],
-    学分: Number(row[5]),
-    最终成绩: row[6],
-    绩点: Number(row[7]),
-    教学班排名: row[8],
-    "Yu Index": computeYuIndex(Number(row[7]), row[8]),
-  }));
+  const communityDataset = window.COMMUNITY_GRADE_DATA;
+  const communityRecords = communityDataset?.records ?? [];
+  const detailDisplayHeaders = ["课程", "Yu Index", "教师", "学年", "学期", "学分", "最终成绩", "绩点", "教学班排名", "贡献者", "类别"];
+  const rows = communityRecords.length
+    ? communityRecords.map((record, index) => ({
+      index,
+      记录ID: record.record_id,
+      贡献者: record.contributor_id,
+      类别: record.category,
+      课程: record.course_name,
+      教师: record.teacher ?? "",
+      学年: record.academic_year,
+      学期: record.semester,
+      学期标识: record.term_id,
+      学分: Number(record.credits),
+      最终成绩: record.final_grade,
+      绩点: Number(record.grade_point),
+      教学班排名: `${record.class_rank}/${record.class_size}`,
+      "Yu Index": computeYuIndex(Number(record.grade_point), `${record.class_rank}/${record.class_size}`),
+    }))
+    : detailRows.slice(1).map((row, index) => ({
+      index,
+      记录ID: `yyk-2020-2024-${String(index + 1).padStart(3, "0")}`,
+      贡献者: "yyk-2020-2024",
+      类别: row[0],
+      课程: row[1],
+      教师: row[2] ?? "",
+      学年: row[3],
+      学期: row[4],
+      学分: Number(row[5]),
+      最终成绩: row[6],
+      绩点: Number(row[7]),
+      教学班排名: row[8],
+      "Yu Index": computeYuIndex(Number(row[7]), row[8]),
+    }));
 
   const gradePalette = ["#244e61", "#386b81", "#5f8798", "#8da8b3", "#c5d2d7"];
   const categoryColors = {
@@ -24,21 +45,23 @@
     专必: "#c45d32",
     公选: "#a55f7a",
     专选: "#74813f",
+    其他: "#687178",
   };
-  const categorySymbols = { 公必: "circle", 专必: "square", 公选: "diamond", 专选: "triangle" };
+  const categorySymbols = { 公必: "circle", 专必: "square", 公选: "diamond", 专选: "triangle", 其他: "circle" };
   const scatterDefaultTitle = "课程绩点与排名分布图";
   const scatterExpandedTitle = "SYSU-Phys-Bench: 课程绩点与排名分布图";
   const yuScatterDefaultTitle = "Yu Index 与排名分布图";
   const yuScatterExpandedTitle = "SYSU-Phys-Bench: Yu Index 与排名分布图";
-  const yearOrder = ["大一", "大二", "大三", "大四"];
-  const termOrder = ["第一学期", "第二学期"];
+  const yearOrder = ["大一", "大二", "大三", "大四", "其他"];
+  const termOrder = ["第一学期", "第二学期", "暑期", "其他"];
   const semesterOrder = yearOrder.flatMap((year) => termOrder.map((term) => `${year}${term}`));
 
   let sortState = { key: "index", direction: "asc" };
   let pinnedTooltipTarget = null;
+  let scatterViewMode = "course";
   const scatterEligibleRows = rows.filter((row) => Number.isFinite(row.绩点) && Number.isFinite(row["Yu Index"]));
-  const yuIndexBenchmark = medianValue(scatterEligibleRows.map((row) => row["Yu Index"]));
-  const scatterSelected = new Set(scatterEligibleRows.map((row) => row.index));
+  const yuIndexBenchmark = medianValue(aggregateCourseRows(scatterEligibleRows).map((row) => row["Yu Index"]));
+  const scatterSelected = new Set(scatterEligibleRows.map((row) => row.课程));
   const detailMultiFilters = {};
   const scatterMultiFilters = {};
 
@@ -128,6 +151,64 @@
     return sorted.length % 2 ? sorted[middle] : (sorted[middle - 1] + sorted[middle]) / 2;
   }
 
+  function averageValue(values) {
+    const valid = values.filter(Number.isFinite);
+    return valid.length ? valid.reduce((sum, value) => sum + value, 0) / valid.length : NaN;
+  }
+
+  function halfStepDomain(values, { floor = -Infinity, ceiling = Infinity, minimumSpan = 1.5 } = {}) {
+    const valid = values.filter(Number.isFinite);
+    if (!valid.length) return { min: 0, max: 5, ticks: [0, 1, 2, 3, 4, 5] };
+    const rawMin = Math.min(...valid);
+    const rawMax = Math.max(...valid);
+    let min = Math.floor((rawMin - 0.2) * 2) / 2;
+    let max = Math.ceil((rawMax + 0.2) * 2) / 2;
+    if (max - min < minimumSpan) {
+      const center = (rawMin + rawMax) / 2;
+      min = Math.floor((center - minimumSpan / 2) * 2) / 2;
+      max = Math.ceil((center + minimumSpan / 2) * 2) / 2;
+    }
+    min = Math.max(floor, min);
+    max = Math.min(ceiling, max);
+    if (max <= min) max = min + 0.5;
+    const ticks = [];
+    for (let value = min; value <= max + 0.001; value += 0.5) ticks.push(Number(value.toFixed(1)));
+    return { min, max, ticks };
+  }
+
+  function aggregateCourseRows(sourceRows) {
+    const groups = new Map();
+    sourceRows.forEach((row) => {
+      const key = `${row.类别}\u0000${row.课程}`;
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(row);
+    });
+
+    return [...groups.entries()].map(([key, records]) => {
+      const first = records[0];
+      const percentiles = records.map((record) => parseRank(record.教学班排名).percentile).filter((value) => value > 0);
+      const rankPercentile = percentiles.length
+        ? 10 ** averageValue(percentiles.map((value) => Math.log10(value)))
+        : NaN;
+      const contributors = [...new Set(records.map((record) => record.贡献者))];
+      const teachers = [...new Set(records.flatMap((record) => String(record.教师 || "").split(",")).filter(Boolean))];
+      return {
+        ...first,
+        index: `course:${key}`,
+        教师: teachers.join(","),
+        学分: averageValue(records.map((record) => record.学分)),
+        最终成绩: records.length === 1 ? first.最终成绩 : `${records.length} 条样本`,
+        绩点: averageValue(records.map((record) => record.绩点)),
+        教学班排名: records.length === 1 ? first.教学班排名 : "—",
+        "Yu Index": averageValue(records.map((record) => record["Yu Index"])),
+        rankPercentile,
+        样本数: records.length,
+        贡献者数量: contributors.length,
+        贡献者: contributors.join(", "),
+      };
+    });
+  }
+
   function setupYuCalculator() {
     const form = $("#yu-calculator-form");
     const gpaInput = $("#yu-calculator-gpa");
@@ -185,9 +266,14 @@
     benchmarks.replaceChildren();
     const totalRow = overviewRows.find((row) => row[0] === "合计");
     const specialRow = overviewRows.find((row) => typeof row[0] === "string" && row[0].includes("|"));
+    const contributorCount = new Set(rows.map((row) => row.贡献者)).size;
+    const courseCount = new Set(rows.map((row) => row.课程)).size;
     [
-      ["总绩点", totalRow?.[3]],
-      ["总排名", specialRow?.[3]],
+      ["初始样本总绩点", totalRow?.[3]],
+      ["初始样本总排名", specialRow?.[3]],
+      ["贡献者", contributorCount],
+      ["课程记录", rows.length],
+      ["覆盖课程", courseCount],
     ].forEach(([label, value]) => {
       const card = document.createElement("div");
       card.className = "overview-benchmark";
@@ -277,32 +363,44 @@
     });
   }
 
+  function visibleScatterCourses() {
+    const groups = new Map();
+    scatterFilterRows().forEach((row) => {
+      if (!groups.has(row.课程)) groups.set(row.课程, []);
+      groups.get(row.课程).push(row);
+    });
+    return [...groups.entries()].map(([course, records]) => ({
+      course,
+      records,
+      teachers: [...new Set(records.flatMap((row) => String(row.教师 || "").split(",")).filter(Boolean))],
+    }));
+  }
+
   function renderScatterCourseOptions() {
-    const visibleRows = scatterFilterRows();
+    const visibleCourses = visibleScatterCourses();
     const options = $("#scatter-course-options");
     options.replaceChildren();
-    visibleRows.forEach((row) => {
+    visibleCourses.forEach((item) => {
       const label = document.createElement("label");
       const input = document.createElement("input");
       input.type = "checkbox";
-      input.value = row.index;
-      input.checked = scatterSelected.has(row.index);
+      input.value = item.course;
+      input.checked = scatterSelected.has(item.course);
       input.addEventListener("change", () => {
-        if (input.checked) scatterSelected.add(row.index);
-        else scatterSelected.delete(row.index);
+        if (input.checked) scatterSelected.add(item.course);
+        else scatterSelected.delete(item.course);
         refreshScatterSelection();
       });
       const text = document.createElement("span");
-      text.textContent = row.课程;
-      if (row.教师) {
-        const teacher = document.createElement("small");
-        teacher.textContent = truncateText(row.教师, 18);
-        text.append(teacher);
-      }
+      text.textContent = item.course;
+      const metadata = document.createElement("small");
+      const teacherText = item.teachers.length ? truncateText(item.teachers.join(","), 14) : "教师未填写";
+      metadata.textContent = `${teacherText} · ${item.records.length} 条样本`;
+      text.append(metadata);
       label.append(input, text);
       options.append(label);
     });
-    if (!visibleRows.length) {
+    if (!visibleCourses.length) {
       const empty = document.createElement("p");
       empty.className = "scatter-options-empty";
       empty.textContent = "无匹配课程";
@@ -312,8 +410,9 @@
   }
 
   function updateScatterSelectionCount() {
-    const active = scatterFilterRows().filter((row) => scatterSelected.has(row.index)).length;
-    $("#scatter-selection-count").textContent = `显示 ${active} / ${scatterFilterRows().length}`;
+    const visibleCourses = visibleScatterCourses();
+    const active = visibleCourses.filter((item) => scatterSelected.has(item.course)).length;
+    $("#scatter-selection-count").textContent = `显示 ${active} / ${visibleCourses.length}`;
   }
 
   function refreshScatterSelection() {
@@ -332,13 +431,17 @@
     scatterMultiFilters.year = setupMultiFilter("#scatter-year", yearOrder.filter((value) => scatterEligibleRows.some((row) => row.学年 === value)), "全部学年", onMultiFilterChange);
     scatterMultiFilters.term = setupMultiFilter("#scatter-term", termOrder.filter((value) => scatterEligibleRows.some((row) => row.学期 === value)), "全部学期", onMultiFilterChange);
     $("#scatter-search").addEventListener("input", onMultiFilterChange);
+    $("#scatter-view-mode").addEventListener("change", (event) => {
+      scatterViewMode = event.target.value;
+      refreshScatterSelection();
+    });
     $("#scatter-select-visible").addEventListener("click", () => {
-      scatterFilterRows().forEach((row) => scatterSelected.add(row.index));
+      visibleScatterCourses().forEach((item) => scatterSelected.add(item.course));
       renderScatterCourseOptions();
       refreshScatterSelection();
     });
     $("#scatter-clear-visible").addEventListener("click", () => {
-      scatterFilterRows().forEach((row) => scatterSelected.delete(row.index));
+      visibleScatterCourses().forEach((item) => scatterSelected.delete(item.course));
       renderScatterCourseOptions();
       refreshScatterSelection();
     });
@@ -346,7 +449,9 @@
       $("#scatter-search").value = "";
       Object.values(scatterMultiFilters).forEach(resetMultiFilter);
       scatterSelected.clear();
-      scatterEligibleRows.forEach((row) => scatterSelected.add(row.index));
+      scatterEligibleRows.forEach((row) => scatterSelected.add(row.课程));
+      scatterViewMode = "course";
+      $("#scatter-view-mode").value = "course";
       renderScatterCourseOptions();
       refreshScatterSelection();
     });
@@ -441,7 +546,7 @@
     const data = filteredRows();
     const tbody = $("#details-table tbody");
     tbody.replaceChildren();
-    $("#result-count").textContent = `${data.length} / ${rows.length} 门课程`;
+    $("#result-count").textContent = `${data.length} / ${rows.length} 条记录`;
 
     if (!data.length) {
       const tr = document.createElement("tr");
@@ -473,6 +578,7 @@
         if (["学分", "绩点"].includes(header) || typeof value === "number") td.classList.add("numeric");
         if (header === "课程") td.classList.add("course-cell");
         if (header === "教师") td.classList.add("teacher-cell");
+        if (header === "贡献者") td.classList.add("contributor-cell");
         tr.append(td);
       });
       tbody.append(tr);
@@ -589,12 +695,14 @@
   }
 
   function renderCreditDonut() {
-    const sourceRows = overviewRows.slice(1, 5).map((row) => ({
-      label: row[0],
-      value: Number(row[2]),
-      color: categoryColors[row[0]],
-    }));
-    renderDonutChart("#credit-composition", sourceRows, "学分", "", "各类别学分构成");
+    const sourceRows = Object.keys(categoryColors)
+      .filter((category) => rows.some((row) => row.类别 === category))
+      .map((category) => ({
+        label: category,
+        value: rows.filter((row) => row.类别 === category).reduce((sum, row) => sum + row.学分, 0),
+        color: categoryColors[category],
+      }));
+    renderDonutChart("#credit-composition", sourceRows, "学分", "", "各类别课程记录学分构成");
   }
 
   function renderHorizontalBars(containerSelector, items, options = {}) {
@@ -675,7 +783,7 @@
         accrued.push(...semesterRows);
         const items = cumulative ? accrued : semesterRows;
         return {
-          label: `${year}${term === "第一学期" ? "上" : "下"}`,
+          label: `${year}${term === "第一学期" ? "上" : term === "第二学期" ? "下" : term}`,
           fullLabel: `${year} ${term}`,
           gpa: weightedAverage(items, (row) => row.绩点),
           rank: weightedAverage(items, (row) => parseRank(row.教学班排名).rank),
@@ -895,9 +1003,15 @@
   }
 
   function selectedScatterRows() {
-    return scatterFilterRows()
-      .filter((row) => scatterSelected.has(row.index))
-      .map((row) => ({ ...row, rankPercentile: parseRank(row.教学班排名).percentile }));
+    const selectedRecords = scatterFilterRows()
+      .filter((row) => scatterSelected.has(row.课程))
+      .map((row) => ({
+        ...row,
+        rankPercentile: parseRank(row.教学班排名).percentile,
+        样本数: 1,
+        贡献者数量: 1,
+      }));
+    return scatterViewMode === "course" ? aggregateCourseRows(selectedRecords) : selectedRecords;
   }
 
   function renderScatter() {
@@ -917,8 +1031,9 @@
     const margin = expanded ? { top: 76, right: 32, bottom: 72, left: 84 } : { top: 58, right: 20, bottom: 52, left: 64 };
     const plotWidth = width - margin.left - margin.right;
     const plotHeight = height - margin.top - margin.bottom;
-    const minScore = 2.5;
-    const maxScore = 5;
+    const scoreDomain = halfStepDomain(data.map((row) => row.绩点), { floor: 0, ceiling: 5 });
+    const minScore = scoreDomain.min;
+    const maxScore = scoreDomain.max;
     const minRank = 0.5;
     const maxRank = 100;
     const logMin = Math.log10(minRank);
@@ -947,7 +1062,7 @@
       svg.append(svgElement("line", { x1: xPos, x2: xPos, y1: margin.top, y2: height - margin.bottom, class: "grid-line" }));
       svg.append(svgElement("text", { x: xPos, y: height - (expanded ? 29 : 19), "text-anchor": "middle", class: "tick-label" }, `${value}%`));
     });
-    [2.5, 3, 3.5, 4, 4.5, 5].forEach((value) => {
+    scoreDomain.ticks.forEach((value) => {
       const yPos = y(value);
       svg.append(svgElement("line", { x1: margin.left, x2: width - margin.right, y1: yPos, y2: yPos, class: "grid-line" }));
       svg.append(svgElement("text", { x: margin.left - 8, y: yPos + 4, "text-anchor": "end", class: "tick-label" }, value.toFixed(1)));
@@ -965,9 +1080,10 @@
     }
 
     const legendStep = expanded ? 92 : 70;
-    const legendWidth = legendStep * Object.keys(categoryColors).length;
+    const legendItems = Object.entries(categoryColors).filter(([label]) => data.some((row) => row.类别 === label));
+    const legendWidth = legendStep * legendItems.length;
     const legend = svgElement("g", { transform: `translate(${Math.max(margin.left, width - margin.right - legendWidth)},${expanded ? 32 : 24})` });
-    Object.entries(categoryColors).forEach(([label, color], index) => {
+    legendItems.forEach(([label, color], index) => {
       const offset = index * legendStep;
       legend.append(scatterSymbol(label, offset + (expanded ? 7 : 5), 0, expanded ? 5.5 : 4, { fill: color }));
       legend.append(svgElement("text", { x: offset + (expanded ? 17 : 12), y: expanded ? 5 : 4, class: "tick-label" }, label));
@@ -976,22 +1092,33 @@
 
     appendScatterCourseLabels(svg, data, x, y, (row) => row.绩点, margin, width, height, !expanded);
     data.forEach((row) => {
-      const marker = scatterSymbol(row.类别, x(row.rankPercentile), y(row.绩点), (3 + Math.sqrt(row.学分) * 1.15) * (expanded ? 1.8 : 1), {
+      const sampleScale = Math.log2((row.样本数 || 1) + 1) * 0.65;
+      const marker = scatterSymbol(row.类别, x(row.rankPercentile), y(row.绩点), (3 + Math.sqrt(row.学分) * 1.15 + sampleScale) * (expanded ? 1.8 : 1), {
         class: "scatter-point",
         stroke: "#ffffff",
         "stroke-width": expanded ? 1.5 : 1,
         opacity: 0.78,
         tabindex: 0,
       });
-      const tooltipLines = [
-        ...(row.教师 ? [`教师 ${truncateText(row.教师)}`] : []),
-        `最终成绩 ${row.最终成绩}`,
-        `绩点 ${row.绩点.toFixed(1)}`,
-        `教学班排名 ${row.教学班排名}`,
-        `排名百分位 ${row.rankPercentile.toFixed(2)}%`,
-        `Yu Index ${row["Yu Index"].toFixed(2)}`,
-        `${row.学分} 学分 · ${row.类别}`,
-      ];
+      const tooltipLines = scatterViewMode === "course"
+        ? [
+          ...(row.教师 ? [`教师 ${truncateText(row.教师)}`] : []),
+          `${row.样本数} 条样本 · ${row.贡献者数量} 位贡献者`,
+          `平均绩点 ${row.绩点.toFixed(2)}`,
+          `排名百分位几何平均 ${row.rankPercentile.toFixed(2)}%`,
+          `课程 Yu Index ${row["Yu Index"].toFixed(2)}`,
+          `${formatValue(row.学分, 1)} 学分 · ${row.类别}`,
+        ]
+        : [
+          ...(row.教师 ? [`教师 ${truncateText(row.教师)}`] : []),
+          `贡献者 ${row.贡献者}`,
+          `最终成绩 ${row.最终成绩}`,
+          `绩点 ${row.绩点.toFixed(1)}`,
+          `教学班排名 ${row.教学班排名}`,
+          `排名百分位 ${row.rankPercentile.toFixed(2)}%`,
+          `Yu Index ${row["Yu Index"].toFixed(2)}`,
+          `${row.学分} 学分 · ${row.类别}`,
+        ];
       bindChartTooltip(marker, row.课程, tooltipLines);
       marker.addEventListener("focus", () => marker.setAttribute("opacity", "1"));
       marker.addEventListener("blur", () => marker.setAttribute("opacity", "0.78"));
@@ -1023,8 +1150,9 @@
     const logMin = Math.log10(minRank);
     const logMax = Math.log10(maxRank);
     const x = (rank) => margin.left + ((logMax - Math.log10(rank)) / (logMax - logMin)) * plotWidth;
-    const minYuIndex = 2.5;
-    const maxYuIndex = 5;
+    const yuDomain = halfStepDomain(data.map((row) => row["Yu Index"]));
+    const minYuIndex = yuDomain.min;
+    const maxYuIndex = yuDomain.max;
     const y = (value) => margin.top + ((maxYuIndex - value) / (maxYuIndex - minYuIndex)) * plotHeight;
     const svg = svgElement("svg", { viewBox: `0 0 ${width} ${height}`, role: "img", "aria-label": "横轴为对数刻度教学班排名百分位、纵轴为 Yu Index 估计平均绩点的课程散点图" });
 
@@ -1033,7 +1161,7 @@
       svg.append(svgElement("line", { x1: xPos, x2: xPos, y1: margin.top, y2: height - margin.bottom, class: "grid-line" }));
       svg.append(svgElement("text", { x: xPos, y: height - (expanded ? 29 : 19), "text-anchor": "middle", class: "tick-label" }, `${value}%`));
     });
-    [2.5, 3, 3.5, 4, 4.5, 5].forEach((value) => {
+    yuDomain.ticks.forEach((value) => {
       const yPos = y(value);
       svg.append(svgElement("line", { x1: margin.left, x2: width - margin.right, y1: yPos, y2: yPos, class: "grid-line" }));
       svg.append(svgElement("text", { x: margin.left - 8, y: yPos + 4, "text-anchor": "end", class: "tick-label" }, value.toFixed(1)));
@@ -1050,9 +1178,10 @@
     svg.append(svgElement("text", { x: margin.left + 7, y: benchmarkY - (expanded ? 10 : 7), class: "yu-benchmark-value" }, `数据集中位数 ${yuIndexBenchmark.toFixed(2)}`));
 
     const legendStep = expanded ? 92 : 70;
-    const legendWidth = legendStep * Object.keys(categoryColors).length;
+    const legendItems = Object.entries(categoryColors).filter(([label]) => data.some((row) => row.类别 === label));
+    const legendWidth = legendStep * legendItems.length;
     const legend = svgElement("g", { transform: `translate(${Math.max(margin.left, width - margin.right - legendWidth)},${expanded ? 32 : 24})` });
-    Object.entries(categoryColors).forEach(([label, color], index) => {
+    legendItems.forEach(([label, color], index) => {
       const offset = index * legendStep;
       legend.append(scatterSymbol(label, offset + (expanded ? 7 : 5), 0, expanded ? 5.5 : 4, { fill: color }));
       legend.append(svgElement("text", { x: offset + (expanded ? 17 : 12), y: expanded ? 5 : 4, class: "tick-label" }, label));
@@ -1061,21 +1190,33 @@
 
     appendScatterCourseLabels(svg, data, x, y, (row) => row["Yu Index"], margin, width, height, !expanded);
     data.forEach((row) => {
-      const marker = scatterSymbol(row.类别, x(row.rankPercentile), y(row["Yu Index"]), (3 + Math.sqrt(row.学分) * 1.15) * (expanded ? 1.8 : 1), {
+      const sampleScale = Math.log2((row.样本数 || 1) + 1) * 0.65;
+      const marker = scatterSymbol(row.类别, x(row.rankPercentile), y(row["Yu Index"]), (3 + Math.sqrt(row.学分) * 1.15 + sampleScale) * (expanded ? 1.8 : 1), {
         class: "scatter-point",
         stroke: "#ffffff",
         "stroke-width": expanded ? 1.5 : 1,
         opacity: 0.8,
         tabindex: 0,
       });
-      bindChartTooltip(marker, row.课程, [
-        ...(row.教师 ? [`教师 ${truncateText(row.教师)}`] : []),
-        `Yu Index ${row["Yu Index"].toFixed(2)}`,
-        `绩点 ${row.绩点.toFixed(1)}`,
-        `教学班排名 ${row.教学班排名}`,
-        `排名百分位 ${row.rankPercentile.toFixed(2)}%`,
-        `${row.学分} 学分 · ${row.类别}`,
-      ], "#yu-chart-tooltip");
+      const tooltipLines = scatterViewMode === "course"
+        ? [
+          ...(row.教师 ? [`教师 ${truncateText(row.教师)}`] : []),
+          `${row.样本数} 条样本 · ${row.贡献者数量} 位贡献者`,
+          `课程 Yu Index ${row["Yu Index"].toFixed(2)}`,
+          `平均绩点 ${row.绩点.toFixed(2)}`,
+          `排名百分位几何平均 ${row.rankPercentile.toFixed(2)}%`,
+          `${formatValue(row.学分, 1)} 学分 · ${row.类别}`,
+        ]
+        : [
+          ...(row.教师 ? [`教师 ${truncateText(row.教师)}`] : []),
+          `贡献者 ${row.贡献者}`,
+          `Yu Index ${row["Yu Index"].toFixed(2)}`,
+          `绩点 ${row.绩点.toFixed(1)}`,
+          `教学班排名 ${row.教学班排名}`,
+          `排名百分位 ${row.rankPercentile.toFixed(2)}%`,
+          `${row.学分} 学分 · ${row.类别}`,
+        ];
+      bindChartTooltip(marker, row.课程, tooltipLines, "#yu-chart-tooltip");
       svg.append(marker);
     });
     container.append(svg);
