@@ -39,14 +39,14 @@
       "Yu Index": computeYuIndex(Number(row[7]), row[8]),
     }));
 
-  const gradePalette = ["#244e61", "#386b81", "#5f8798", "#8da8b3", "#c5d2d7"];
+  const gradePalette = ["#2155f5", "#22a06b", "#eab308", "#f97316", "#ef4444"];
   const categoryColors = {
-    公必: "#2f6f8f",
-    专必: "#c45d32",
-    公选: "#a55f7a",
-    专选: "#74813f",
-    荣誉课程: "#a17832",
-    其他: "#687178",
+    公必: "#0ea5e9",
+    专必: "#f97316",
+    公选: "#a855f7",
+    专选: "#22a06b",
+    荣誉课程: "#eab308",
+    其他: "#64748b",
   };
   const categorySymbols = { 公必: "circle", 专必: "square", 公选: "diamond", 专选: "triangle", 荣誉课程: "diamond", 其他: "circle" };
   const scatterDefaultTitle = "课程绩点与排名分布图";
@@ -844,14 +844,14 @@
     gpaScale.ticks.slice().reverse().forEach((gpaValue) => {
       const yPos = gpaY(gpaValue);
       svg.append(svgElement("line", { x1: margin.left, x2: width - margin.right, y1: yPos, y2: yPos, class: "grid-line" }));
-      svg.append(svgElement("text", { x: margin.left - 9, y: yPos + 4, "text-anchor": "end", class: "tick-label", fill: "#386b81" }, gpaValue.toFixed(gpaDigits)));
+      svg.append(svgElement("text", { x: margin.left - 9, y: yPos + 4, "text-anchor": "end", class: "tick-label", fill: "#2155f5" }, gpaValue.toFixed(gpaDigits)));
     });
     rankScale.ticks.forEach((rankValue) => {
       const yPos = rankY(rankValue);
-      svg.append(svgElement("text", { x: width - margin.right + 9, y: yPos + 4, "text-anchor": "start", class: "tick-label", fill: "#748061" }, formatValue(rankValue, rankScale.step < 1 ? 1 : 0)));
+      svg.append(svgElement("text", { x: width - margin.right + 9, y: yPos + 4, "text-anchor": "start", class: "tick-label", fill: "#22a06b" }, formatValue(rankValue, rankScale.step < 1 ? 1 : 0)));
     });
-    svg.append(svgElement("text", { x: margin.left, y: 12, class: "tick-label", fill: "#386b81" }, "绩点"));
-    svg.append(svgElement("text", { x: width - margin.right, y: 12, "text-anchor": "end", class: "tick-label", fill: "#748061" }, "排名"));
+    svg.append(svgElement("text", { x: margin.left, y: 12, class: "tick-label", fill: "#2155f5" }, "绩点"));
+    svg.append(svgElement("text", { x: width - margin.right, y: 12, "text-anchor": "end", class: "tick-label", fill: "#22a06b" }, "排名"));
 
     const semesterPoints = semesterData.map((item, index) => [x(index), gpaY(item.gpa)]);
     const cumulativePoints = cumulativeData.map((item, index) => [x(index), gpaY(item.gpa)]);
@@ -1098,10 +1098,10 @@
     });
     svg.append(legend);
 
-    appendScatterCourseLabels(svg, data, x, y, (row) => row.绩点, margin, width, height, !expanded);
+    appendScatterCourseLabels(svg, data, x, y, (row) => row.绩点, margin, width, height, compact && !expanded);
     data.forEach((row) => {
       const sampleScale = Math.log2((row.样本数 || 1) + 1) * 0.65;
-      const marker = scatterSymbol(row.类别, x(row.rankPercentile), y(row.绩点), (3 + Math.sqrt(row.学分) * 1.15 + sampleScale) * (expanded ? 1.8 : 1), {
+      const marker = scatterSymbol(row.类别, x(row.rankPercentile), y(row.绩点), (3 + Math.sqrt(row.学分) * 1.15 + sampleScale) * (expanded ? 2.3 : 1.4), {
         class: "scatter-point",
         stroke: "#ffffff",
         "stroke-width": expanded ? 1.5 : 1,
@@ -1201,10 +1201,10 @@
     });
     svg.append(legend);
 
-    appendScatterCourseLabels(svg, data, x, y, (row) => row["Yu Index"], margin, width, height, !expanded);
+    appendScatterCourseLabels(svg, data, x, y, (row) => row["Yu Index"], margin, width, height, compact && !expanded);
     data.forEach((row) => {
       const sampleScale = Math.log2((row.样本数 || 1) + 1) * 0.65;
-      const marker = scatterSymbol(row.类别, x(row.rankPercentile), y(row["Yu Index"]), (3 + Math.sqrt(row.学分) * 1.15 + sampleScale) * (expanded ? 1.8 : 1), {
+      const marker = scatterSymbol(row.类别, x(row.rankPercentile), y(row["Yu Index"]), (3 + Math.sqrt(row.学分) * 1.15 + sampleScale) * (expanded ? 2.3 : 1.4), {
         class: "scatter-point",
         stroke: "#ffffff",
         "stroke-width": expanded ? 1.5 : 1,
@@ -1268,17 +1268,17 @@
 
       const style = svgElement("style", {}, `
         svg { font-family: "Microsoft YaHei", "Noto Sans CJK SC", sans-serif; }
-        .tick-label { fill: #737c82; font-family: Consolas, monospace; font-size: 16px; }
-        .grid-line { stroke: #e8ebe9; stroke-width: 1.2; }
-        .quadrant-line { stroke: #7d878c; stroke-dasharray: 5 5; stroke-width: 1.3; }
-        .quadrant-label { fill: #7b858a; stroke: #ffffff; stroke-width: 4px; paint-order: stroke; font-size: 14px; letter-spacing: 0.02em; }
-        .yu-benchmark-line { stroke: #667278; stroke-dasharray: 7 5; stroke-width: 1.4; }
-        .yu-benchmark-label, .yu-benchmark-value { fill: #59666c; stroke: #ffffff; stroke-width: 4px; paint-order: stroke; font-size: 14px; }
+        .tick-label { fill: #64748b; font-family: Consolas, monospace; font-size: 18px; }
+        .grid-line { stroke: #e7ebf2; stroke-width: 1.2; }
+        .quadrant-line { stroke: #94a3b8; stroke-dasharray: 5 5; stroke-width: 1.3; }
+        .quadrant-label { fill: #64748b; stroke: #ffffff; stroke-width: 4px; paint-order: stroke; font-size: 14px; letter-spacing: 0.02em; }
+        .yu-benchmark-line { stroke: #64748b; stroke-dasharray: 7 5; stroke-width: 1.4; }
+        .yu-benchmark-label, .yu-benchmark-value { fill: #475569; stroke: #ffffff; stroke-width: 4px; paint-order: stroke; font-size: 14px; }
         .yu-benchmark-label { font-weight: 650; }
         .scatter-label-line { stroke: rgba(75, 87, 93, 0.42); stroke-width: 1.15; }
-        .scatter-course-label { fill: #34434a; stroke: #ffffff; stroke-width: 5px; paint-order: stroke; font-size: 15px; }
+        .scatter-course-label { fill: #334155; stroke: #ffffff; stroke-width: 5.5px; paint-order: stroke; font-size: 17px; }
         .scatter-point { stroke-width: 1.6px; }
-        .export-title { fill: #1f3139; font-size: 30px; font-weight: 700; letter-spacing: -0.01em; }
+        .export-title { fill: #10131a; font-size: 30px; font-weight: 700; letter-spacing: -0.01em; }
       `);
       clone.append(style);
       clone.append(svgElement("text", { x: viewBox.width / 2, y: 52, "text-anchor": "middle", class: "export-title" }, expandedTitle));
@@ -1389,41 +1389,204 @@
     renderYuRankScatter();
   }
 
+  function setupParticleField(canvas, host, reducedMotion) {
+    if (!canvas || !host) return { setScroll() {} };
+
+    const context = canvas.getContext("2d", { alpha: true, desynchronized: true });
+    if (!context) return { setScroll() {} };
+
+    const colors = ["#2155f5", "#3573ff", "#66a3ff", "#9bc3ff"];
+    const particles = [];
+    const pointer = { x: 0, y: 0, active: false };
+    let width = 0;
+    let height = 0;
+    let dpr = 1;
+    let scrollOffset = 0;
+    let frame = 0;
+    let visible = true;
+    let seed = 28062026;
+
+    const random = () => {
+      seed = (seed * 1664525 + 1013904223) >>> 0;
+      return seed / 4294967296;
+    };
+
+    const rebuild = () => {
+      particles.length = 0;
+      seed = 28062026;
+      const density = width < 640 ? 105 : Math.min(245, Math.max(155, Math.round(width * 0.19)));
+      for (let index = 0; index < density; index += 1) {
+        const ring = Math.floor(random() * 8);
+        particles.push({
+          angle: random() * Math.PI * 2,
+          ring,
+          speed: 0.42 + random() * 0.76,
+          phase: random() * Math.PI * 2,
+          pulse: 0.55 + random() * 1.1,
+          radius: 0.85 + random() * (ring > 4 ? 1.9 : 2.8),
+          opacity: 0.3 + random() * 0.62,
+          color: colors[Math.floor(random() * colors.length)],
+          depth: 0.35 + ring / 10,
+        });
+      }
+    };
+
+    const resize = () => {
+      const bounds = host.getBoundingClientRect();
+      width = Math.max(1, bounds.width);
+      height = Math.max(1, bounds.height);
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.round(width * dpr);
+      canvas.height = Math.round(height * dpr);
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+      rebuild();
+      if (reducedMotion) draw(0);
+    };
+
+    const orbitalPoint = (particle, time) => {
+      const compact = width < 720;
+      const centerX = width * (compact ? 0.52 : 0.58);
+      const centerY = height * (compact ? 0.5 : 0.48) + Math.min(scrollOffset * 0.035, 24);
+      const ringProgress = (particle.ring + 1) / 8;
+      const rx = width * (compact ? 0.19 : 0.13) + width * ringProgress * (compact ? 0.43 : 0.41);
+      const ry = height * (compact ? 0.075 : 0.055) + height * ringProgress * (compact ? 0.29 : 0.34);
+      const angle = particle.angle + time * 0.00011 * particle.speed;
+      const wave = Math.sin(time * 0.0012 * particle.pulse + particle.phase + particle.ring * 0.7) * (2.5 + particle.ring * 0.72);
+      const localX = Math.cos(angle) * (rx + wave);
+      const localY = Math.sin(angle) * (ry + wave * 0.34);
+      const rotation = compact ? -0.2 : -0.28;
+      let x = centerX + localX * Math.cos(rotation) - localY * Math.sin(rotation);
+      let y = centerY + localX * Math.sin(rotation) + localY * Math.cos(rotation);
+
+      if (pointer.active) {
+        const deltaX = x - pointer.x;
+        const deltaY = y - pointer.y;
+        const distance = Math.hypot(deltaX, deltaY);
+        const radius = compact ? 112 : 150;
+        if (distance > 0 && distance < radius) {
+          const influence = Math.pow(1 - distance / radius, 2) * (compact ? 24 : 38) * particle.depth;
+          x += (deltaX / distance) * influence;
+          y += (deltaY / distance) * influence;
+        }
+      }
+
+      return { x, y, rx, ry, centerX, centerY, rotation };
+    };
+
+    const drawOrbit = (ring, time) => {
+      const ghost = {
+        ring,
+        angle: 0,
+        speed: 0,
+        phase: ring * 0.71,
+        pulse: 0.7,
+        depth: 1,
+      };
+      const point = orbitalPoint(ghost, time);
+      context.save();
+      context.translate(point.centerX, point.centerY);
+      context.rotate(point.rotation);
+      context.beginPath();
+      context.ellipse(0, 0, point.rx, point.ry, 0, 0, Math.PI * 2);
+      context.strokeStyle = `rgba(33, 85, 245, ${0.045 + ring * 0.009})`;
+      context.lineWidth = ring % 3 === 0 ? 1.2 : 0.8;
+      context.stroke();
+      context.restore();
+    };
+
+    const draw = (time) => {
+      context.setTransform(1, 0, 0, 1, 0, 0);
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      context.scale(dpr, dpr);
+
+      const compact = width < 720;
+      const haloX = width * (compact ? 0.52 : 0.6);
+      const haloY = height * 0.48;
+      const halo = context.createRadialGradient(haloX, haloY, 0, haloX, haloY, Math.max(width, height) * 0.46);
+      halo.addColorStop(0, "rgba(33, 85, 245, 0.12)");
+      halo.addColorStop(0.45, "rgba(82, 145, 255, 0.055)");
+      halo.addColorStop(1, "rgba(255, 255, 255, 0)");
+      context.fillStyle = halo;
+      context.fillRect(0, 0, width, height);
+
+      for (let ring = 0; ring < 8; ring += 1) drawOrbit(ring, time);
+
+      particles.forEach((particle) => {
+        const position = orbitalPoint(particle, time);
+        const pulse = 1 + Math.sin(time * 0.0015 * particle.pulse + particle.phase) * 0.16;
+        const radius = particle.radius * pulse;
+        context.beginPath();
+        context.arc(position.x, position.y, radius, 0, Math.PI * 2);
+        context.globalAlpha = particle.opacity;
+        context.fillStyle = particle.color;
+        context.fill();
+      });
+
+      const centerX = width * (compact ? 0.52 : 0.58);
+      const centerY = height * (compact ? 0.5 : 0.48) + Math.min(scrollOffset * 0.035, 24);
+      context.globalAlpha = 1;
+      context.beginPath();
+      context.arc(centerX, centerY, compact ? 4.5 : 5.5, 0, Math.PI * 2);
+      context.fillStyle = "#10131a";
+      context.fill();
+    };
+
+    const animate = (time) => {
+      if (visible) draw(time);
+      frame = window.requestAnimationFrame(animate);
+    };
+
+    const updatePointer = (event) => {
+      const bounds = host.getBoundingClientRect();
+      pointer.x = event.clientX - bounds.left;
+      pointer.y = event.clientY - bounds.top;
+      pointer.active = true;
+    };
+
+    host.addEventListener("pointermove", updatePointer, { passive: true });
+    host.addEventListener("pointerdown", updatePointer, { passive: true });
+    host.addEventListener("pointerleave", () => {
+      pointer.active = false;
+    });
+    host.addEventListener("pointerup", (event) => {
+      if (event.pointerType === "touch") pointer.active = false;
+    }, { passive: true });
+
+    const resizeObserver = new ResizeObserver(resize);
+    resizeObserver.observe(host);
+    const visibilityObserver = new IntersectionObserver((entries) => {
+      visible = entries[0]?.isIntersecting ?? true;
+    }, { rootMargin: "180px" });
+    visibilityObserver.observe(host);
+    resize();
+    if (!reducedMotion) frame = window.requestAnimationFrame(animate);
+
+    return {
+      setScroll(value) {
+        scrollOffset = value;
+        if (reducedMotion) draw(0);
+      },
+    };
+  }
+
   function setupOrbitalMotion() {
     const header = $(".site-header");
     const hero = $(".intro-section");
     const orbit = $(".hero-orbit-layer");
+    const particleCanvas = $("#hero-particle-field");
     const sections = $$("main > .section");
     const navigationLinks = $$(".main-navigation a[href^='#']");
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const particleField = setupParticleField(particleCanvas, orbit, reducedMotion);
 
     const updateHeader = () => {
       header?.classList.toggle("is-scrolled", window.scrollY > 16);
-      if (orbit && !reducedMotion && window.innerWidth > 820) {
-        orbit.style.setProperty("--orbit-scroll", `${Math.min(window.scrollY * 0.055, 28)}px`);
-      }
+      particleField.setScroll(window.scrollY);
     };
 
     updateHeader();
     window.addEventListener("scroll", updateHeader, { passive: true });
-
-    if (hero && orbit && !reducedMotion && window.matchMedia("(pointer: fine)").matches) {
-      let motionFrame = 0;
-      hero.addEventListener("pointermove", (event) => {
-        if (motionFrame) window.cancelAnimationFrame(motionFrame);
-        motionFrame = window.requestAnimationFrame(() => {
-          const bounds = hero.getBoundingClientRect();
-          const x = ((event.clientX - bounds.left) / bounds.width - 0.5) * 18;
-          const y = ((event.clientY - bounds.top) / bounds.height - 0.5) * 12;
-          orbit.style.setProperty("--orbit-x", `${x.toFixed(2)}px`);
-          orbit.style.setProperty("--orbit-y", `${y.toFixed(2)}px`);
-        });
-      });
-      hero.addEventListener("pointerleave", () => {
-        orbit.style.setProperty("--orbit-x", "0px");
-        orbit.style.setProperty("--orbit-y", "0px");
-      });
-    }
 
     if (!("IntersectionObserver" in window) || reducedMotion) {
       sections.forEach((section) => section.classList.add("is-visible"));
