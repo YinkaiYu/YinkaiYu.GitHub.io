@@ -158,13 +158,13 @@
     return valid.length ? valid.reduce((sum, value) => sum + value, 0) / valid.length : NaN;
   }
 
-  function halfStepDomain(values, { floor = -Infinity, ceiling = Infinity, minimumSpan = 1.5 } = {}) {
+  function halfStepDomain(values, { floor = -Infinity, ceiling = Infinity, minimumSpan = 1.5, padding = 0.05 } = {}) {
     const valid = values.filter(Number.isFinite);
     if (!valid.length) return { min: 0, max: 5, ticks: [0, 1, 2, 3, 4, 5] };
     const rawMin = Math.min(...valid);
     const rawMax = Math.max(...valid);
-    let min = Math.floor((rawMin - 0.2) * 2) / 2;
-    let max = Math.ceil((rawMax + 0.2) * 2) / 2;
+    let min = Math.floor((rawMin - padding) * 2) / 2;
+    let max = Math.ceil((rawMax + padding) * 2) / 2;
     if (max - min < minimumSpan) {
       const center = (rawMin + rawMax) / 2;
       min = Math.floor((center - minimumSpan / 2) * 2) / 2;
