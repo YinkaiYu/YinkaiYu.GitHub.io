@@ -102,6 +102,24 @@ nav .personal-home-link {
   box-shadow: 0 4px 14px rgba(36, 78, 97, 0.08);
 }
 
+nav .project-repo-link {
+  padding: 7px 12px;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  color: #ffffff;
+  background: var(--ink);
+  font-weight: 650;
+  line-height: 1.2;
+}
+
+nav .project-repo-link:hover,
+nav .project-repo-link:focus-visible {
+  border-color: var(--blue-dark);
+  color: #ffffff;
+  background: var(--blue-dark);
+  outline: none;
+}
+
 nav .personal-home-link:hover,
 nav .personal-home-link:focus-visible {
   border-color: var(--blue-dark);
@@ -1568,7 +1586,8 @@ body.chart-expanded {
     font-size: 14px;
   }
 
-  .main-navigation a:not(.personal-home-link) {
+  .main-navigation a:not(.personal-home-link):not(.project-repo-link),
+  .report-navigation > a:first-child {
     display: none;
   }
 
