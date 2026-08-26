@@ -495,6 +495,12 @@ h1 {
   line-height: 1.85;
 }
 
+.author-signature {
+  display: block;
+  margin-top: 6px;
+  text-align: right;
+}
+
 h2 {
   font-size: clamp(24px, 3vw, 32px);
   line-height: 1.2;

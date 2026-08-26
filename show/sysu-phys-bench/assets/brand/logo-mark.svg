@@ -1,22 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" role="img" aria-labelledby="title description">
   <title id="title">SYSU-Phys-Bench 标志</title>
-  <desc id="description">两组观测汇入 Yu Index 标尺的抽象 Y 形标志</desc>
+  <desc id="description">课程给分偏差与个人表现分离后回到共同中轴的抽象 Phi 标志</desc>
   <defs>
-    <linearGradient id="bg" x1="18" y1="12" x2="112" y2="118" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#183845"/>
-      <stop offset="1" stop-color="#0d2028"/>
+    <linearGradient id="background" x1="22" y1="14" x2="108" y2="116" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1f4c5c"/>
+      <stop offset="1" stop-color="#0c2028"/>
     </linearGradient>
-    <linearGradient id="stem" x1="64" y1="30" x2="64" y2="101" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#f4f8f9"/>
-      <stop offset="1" stop-color="#b8d2dc"/>
+    <linearGradient id="axis" x1="64" y1="22" x2="64" y2="106" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#c7dce4"/>
     </linearGradient>
   </defs>
-  <rect x="4" y="4" width="120" height="120" rx="28" fill="url(#bg)"/>
-  <path d="M20 31H108M20 64H108M20 97H108M31 20V108M64 20V108M97 20V108" fill="none" stroke="#d9edf3" stroke-opacity=".075"/>
-  <path d="M35 34C39 47 49 55 64 64C79 55 89 47 93 34" fill="none" stroke="url(#stem)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M64 64V96" fill="none" stroke="url(#stem)" stroke-width="7" stroke-linecap="round"/>
-  <path d="M45 99H83" fill="none" stroke="#d9aa58" stroke-width="4" stroke-linecap="round"/>
-  <circle cx="35" cy="34" r="7" fill="#62a9c4" stroke="#f7fbfc" stroke-width="2"/>
-  <circle cx="93" cy="34" r="7" fill="#dd784e" stroke="#f7fbfc" stroke-width="2"/>
-  <circle cx="64" cy="64" r="7" fill="#d9aa58" stroke="#fff7e8" stroke-width="2"/>
+  <circle cx="64" cy="64" r="59" fill="url(#background)"/>
+  <circle cx="64" cy="64" r="58.5" fill="none" stroke="#d9edf3" stroke-opacity=".16"/>
+  <path d="M64 34C42 34 28 46 28 64S42 94 64 94" fill="none" stroke="#66abc4" stroke-width="9" stroke-linecap="round"/>
+  <path d="M64 34C86 34 100 46 100 64S86 94 64 94" fill="none" stroke="#d8a64f" stroke-width="9" stroke-linecap="round"/>
+  <path d="M64 22V106" fill="none" stroke="url(#axis)" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="64" cy="64" r="5" fill="#ffffff"/>
 </svg>

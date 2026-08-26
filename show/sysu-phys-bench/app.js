@@ -67,6 +67,7 @@
   const scatterMultiFilters = {};
 
   const $ = (selector) => document.querySelector(selector);
+  const $$ = (selector) => [...document.querySelectorAll(selector)];
   const svgNS = "http://www.w3.org/2000/svg";
 
   function svgElement(name, attributes = {}, text = "") {
@@ -786,6 +787,7 @@
         return {
           label: `${year}${term === "第一学期" ? "上" : term === "第二学期" ? "下" : term}`,
           fullLabel: `${year} ${term}`,
+          semesterCount: semesterRows.length,
           gpa: weightedAverage(items, (row) => row.绩点),
           rank: weightedAverage(items, (row) => parseRank(row.教学班排名).rank),
           percentile: weightedAverage(items, (row) => parseRank(row.教学班排名).percentile),
@@ -793,7 +795,7 @@
           count: items.length,
         };
       })
-      .filter((item) => item.count);
+      .filter((item) => item.semesterCount);
   }
 
   function renderGpaTrend(containerSelector, semesterData, cumulativeData) {
@@ -1027,8 +1029,13 @@
       container.append(empty);
       return;
     }
-    const width = Math.max(360, container.clientWidth || 720);
-    const height = expanded ? Math.max(560, container.clientHeight || window.innerHeight - 84) : width < 520 ? 320 : 350;
+    const compact = window.innerWidth < 680;
+    const width = Math.max(compact ? 820 : 600, container.clientWidth || 720);
+    const height = expanded
+      ? Math.max(560, container.clientHeight || window.innerHeight - 84)
+      : compact
+        ? 470
+        : Math.max(430, Math.min(560, width * 0.42));
     const margin = expanded ? { top: 76, right: 32, bottom: 72, left: 84 } : { top: 58, right: 20, bottom: 52, left: 64 };
     const plotWidth = width - margin.left - margin.right;
     const plotHeight = height - margin.top - margin.bottom;
@@ -1141,8 +1148,13 @@
     }
 
     const expanded = isYuScatterExpanded();
-    const width = Math.max(360, container.clientWidth || 720);
-    const height = expanded ? Math.max(560, container.clientHeight || window.innerHeight - 84) : width < 520 ? 330 : 390;
+    const compact = window.innerWidth < 680;
+    const width = Math.max(compact ? 820 : 600, container.clientWidth || 720);
+    const height = expanded
+      ? Math.max(560, container.clientHeight || window.innerHeight - 84)
+      : compact
+        ? 500
+        : Math.max(460, Math.min(590, width * 0.45));
     const margin = expanded ? { top: 76, right: 32, bottom: 72, left: 84 } : { top: 58, right: 20, bottom: 52, left: 64 };
     const plotWidth = width - margin.left - margin.right;
     const plotHeight = height - margin.top - margin.bottom;
@@ -1377,6 +1389,75 @@
     renderYuRankScatter();
   }
 
+  function setupOrbitalMotion() {
+    const header = $(".site-header");
+    const hero = $(".intro-section");
+    const orbit = $(".hero-orbit-layer");
+    const sections = $$("main > .section");
+    const navigationLinks = $$(".main-navigation a[href^='#']");
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const updateHeader = () => {
+      header?.classList.toggle("is-scrolled", window.scrollY > 16);
+      if (orbit && !reducedMotion && window.innerWidth > 820) {
+        orbit.style.setProperty("--orbit-scroll", `${Math.min(window.scrollY * 0.055, 28)}px`);
+      }
+    };
+
+    updateHeader();
+    window.addEventListener("scroll", updateHeader, { passive: true });
+
+    if (hero && orbit && !reducedMotion && window.matchMedia("(pointer: fine)").matches) {
+      let motionFrame = 0;
+      hero.addEventListener("pointermove", (event) => {
+        if (motionFrame) window.cancelAnimationFrame(motionFrame);
+        motionFrame = window.requestAnimationFrame(() => {
+          const bounds = hero.getBoundingClientRect();
+          const x = ((event.clientX - bounds.left) / bounds.width - 0.5) * 18;
+          const y = ((event.clientY - bounds.top) / bounds.height - 0.5) * 12;
+          orbit.style.setProperty("--orbit-x", `${x.toFixed(2)}px`);
+          orbit.style.setProperty("--orbit-y", `${y.toFixed(2)}px`);
+        });
+      });
+      hero.addEventListener("pointerleave", () => {
+        orbit.style.setProperty("--orbit-x", "0px");
+        orbit.style.setProperty("--orbit-y", "0px");
+      });
+    }
+
+    if (!("IntersectionObserver" in window) || reducedMotion) {
+      sections.forEach((section) => section.classList.add("is-visible"));
+    } else {
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-visible");
+          revealObserver.unobserve(entry.target);
+        });
+      }, { rootMargin: "0px 0px -10%", threshold: 0.08 });
+      sections.forEach((section) => revealObserver.observe(section));
+    }
+
+    if (navigationLinks.length && "IntersectionObserver" in window) {
+      const sectionById = new Map(sections.filter((section) => section.id).map((section) => [section.id, section]));
+      const activeObserver = new IntersectionObserver((entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (!visible) return;
+        navigationLinks.forEach((link) => {
+          const active = link.getAttribute("href") === `#${visible.target.id}`;
+          link.classList.toggle("is-active", active);
+          if (active) link.setAttribute("aria-current", "location");
+          else link.removeAttribute("aria-current");
+        });
+      }, { rootMargin: "-22% 0px -62%", threshold: [0.02, 0.2, 0.5] });
+      sectionById.forEach((section) => activeObserver.observe(section));
+    }
+
+    document.body.classList.add("motion-ready");
+  }
+
   renderOverviewBenchmarks();
   setupYuCalculator();
   renderDetailsHead();
@@ -1386,6 +1467,7 @@
   renderDetailsBody();
   setupScatterFullscreen();
   renderCharts();
+  setupOrbitalMotion();
 
   document.addEventListener("pointerdown", (event) => {
     if (pinnedTooltipTarget && !event.target.closest("[data-chart-tooltip]")) {
