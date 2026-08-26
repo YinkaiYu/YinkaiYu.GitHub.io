@@ -45,9 +45,10 @@
     专必: "#c45d32",
     公选: "#a55f7a",
     专选: "#74813f",
+    荣誉课程: "#a17832",
     其他: "#687178",
   };
-  const categorySymbols = { 公必: "circle", 专必: "square", 公选: "diamond", 专选: "triangle", 其他: "circle" };
+  const categorySymbols = { 公必: "circle", 专必: "square", 公选: "diamond", 专选: "triangle", 荣誉课程: "diamond", 其他: "circle" };
   const scatterDefaultTitle = "课程绩点与排名分布图";
   const scatterExpandedTitle = "SYSU-Phys-Bench: 课程绩点与排名分布图";
   const yuScatterDefaultTitle = "Yu Index 与排名分布图";

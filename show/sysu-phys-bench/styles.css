@@ -67,11 +67,20 @@ select {
 }
 
 .site-title {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 9px;
   color: var(--ink);
   font-size: 16px;
   font-weight: 680;
   letter-spacing: 0.02em;
   text-decoration: none;
+}
+
+.site-title img {
+  width: 31px;
+  height: 31px;
 }
 
 nav {
@@ -444,6 +453,28 @@ h3 {
 h1 {
   font-size: clamp(32px, 5vw, 48px);
   line-height: 1.12;
+}
+
+.intro-brand {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  align-items: center;
+  gap: 28px;
+}
+
+.intro-brand-mark {
+  display: block;
+  width: 112px;
+  height: 112px;
+}
+
+.brand-slogan {
+  margin: 20px 0 0;
+  color: var(--blue-dark);
+  font-size: clamp(20px, 2.4vw, 27px);
+  font-weight: 620;
+  letter-spacing: -0.015em;
+  line-height: 1.45;
 }
 
 .benchmark-source {
@@ -1555,6 +1586,37 @@ body.chart-expanded {
   font-size: 13px;
 }
 
+.footer-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.footer-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink);
+  font-weight: 680;
+}
+
+.footer-brand img {
+  width: 28px;
+  height: 28px;
+}
+
+.site-footer a {
+  color: var(--blue-dark);
+  text-decoration: none;
+}
+
+.site-footer a:hover,
+.site-footer a:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -1622,6 +1684,24 @@ body.chart-expanded {
     padding-top: 48px;
   }
 
+  .intro-brand {
+    grid-template-columns: 78px minmax(0, 1fr);
+    gap: 18px;
+  }
+
+  .intro-brand-mark {
+    width: 78px;
+    height: 78px;
+  }
+
+  .brand-slogan {
+    margin-top: 13px;
+  }
+
+  .footer-inner {
+    flex-wrap: wrap;
+  }
+
   .chart-grid {
     gap: 14px;
   }
@@ -1686,8 +1766,28 @@ body.chart-expanded {
     font-size: 14px;
   }
 
+  .site-title img {
+    width: 27px;
+    height: 27px;
+  }
+
   h1 {
     font-size: 34px;
+  }
+
+  .intro-brand {
+    grid-template-columns: 1fr;
+  }
+
+  .intro-brand-mark {
+    width: 72px;
+    height: 72px;
+  }
+
+  .footer-inner {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
   }
 
   .overview-benchmarks {

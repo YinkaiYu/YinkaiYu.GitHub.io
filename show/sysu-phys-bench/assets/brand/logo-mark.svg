@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" role="img" aria-labelledby="title description">
+  <title id="title">SYSU-Phys-Bench 标志</title>
+  <desc id="description">两组观测汇入 Yu Index 标尺的抽象 Y 形标志</desc>
+  <defs>
+    <linearGradient id="bg" x1="18" y1="12" x2="112" y2="118" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#183845"/>
+      <stop offset="1" stop-color="#0d2028"/>
+    </linearGradient>
+    <linearGradient id="stem" x1="64" y1="30" x2="64" y2="101" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f4f8f9"/>
+      <stop offset="1" stop-color="#b8d2dc"/>
+    </linearGradient>
+  </defs>
+  <rect x="4" y="4" width="120" height="120" rx="28" fill="url(#bg)"/>
+  <path d="M20 31H108M20 64H108M20 97H108M31 20V108M64 20V108M97 20V108" fill="none" stroke="#d9edf3" stroke-opacity=".075"/>
+  <path d="M35 34C39 47 49 55 64 64C79 55 89 47 93 34" fill="none" stroke="url(#stem)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M64 64V96" fill="none" stroke="url(#stem)" stroke-width="7" stroke-linecap="round"/>
+  <path d="M45 99H83" fill="none" stroke="#d9aa58" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="35" cy="34" r="7" fill="#62a9c4" stroke="#f7fbfc" stroke-width="2"/>
+  <circle cx="93" cy="34" r="7" fill="#dd784e" stroke="#f7fbfc" stroke-width="2"/>
+  <circle cx="64" cy="64" r="7" fill="#d9aa58" stroke="#fff7e8" stroke-width="2"/>
+</svg>
