@@ -1,0 +1,31 @@
+{
+  "title": "王希孟《千里江山图》 / A Thousand Li of Rivers and Mountains",
+  "artist": "Wang Ximeng 王希孟",
+  "date": "1113",
+  "collection": "The Palace Museum, Beijing / 故宫博物院",
+  "accession": "新00146004",
+  "downloaded_file": "qianli-jiangshan-full-original.jpg",
+  "dimensions_px": [
+    39974,
+    1600
+  ],
+  "file_size_bytes": 14724731,
+  "sha1": "9214316b2e7efbd3f16d49cfd6b6b166287b8c3c",
+  "checksum_matches_commons": true,
+  "source_page_url": "https://commons.wikimedia.org/wiki/File:Wang_Ximeng._A_Thousand_Li_of_Rivers_and_Mountains._(Complete,_51,3x1191,5_cm)._1113._Palace_museum,_Beijing.jpg",
+  "direct_image_url": "https://upload.wikimedia.org/wikipedia/commons/3/37/Wang_Ximeng._A_Thousand_Li_of_Rivers_and_Mountains._%28Complete%2C_51%2C3x1191%2C5_cm%29._1113._Palace_museum%2C_Beijing.jpg",
+  "museum_catalogue_url": "https://www.dpm.org.cn/collection/paint/228354.html",
+  "museum_digitized_work_url": "https://minghuaji.dpm.org.cn/paint/detail?id=b0a15b3767a5c12089ec45563741112b",
+  "downloaded_utc_date": "2026-09-05",
+  "rights_as_labeled_by_commons": "Public domain; Public Domain Mark 1.0; PD-Art (PD-old-100-expired), faithful photographic reproduction of a two-dimensional public-domain work.",
+  "suggested_credit": "王希孟《千里江山图》（1113），故宫博物院藏。图像来源：Wikimedia Commons，公有领域。",
+  "file_description": "Complete full-resolution source JPG, including inscriptions and seals at the ends. This is the original file offered on the cited Commons JPG page. A separate newer 153767 x 6110 PNG (1.85 GB) exists on Commons and was not downloaded.",
+  "higher_resolution_alternative_page": "https://commons.wikimedia.org/wiki/File:%E7%8E%8B%E5%B8%8C%E5%AD%9F%E5%8D%83%E9%87%8C%E6%B1%9F%E5%B1%B1%E5%9B%BE%E5%8D%B7.png",
+  "derivatives_note": "The display preview is resized from the original. The silk weave and rock brushwork textures isolate local monochrome surface detail from the original painting for 3D material use.",
+  "files": {
+    "original": "qianli-jiangshan-full-original.jpg",
+    "preview": "qianli-jiangshan-preview.jpg",
+    "silk_texture": "../textures/silk-weave.webp",
+    "rock_texture": "../textures/rock-brushwork.webp"
+  }
+}
